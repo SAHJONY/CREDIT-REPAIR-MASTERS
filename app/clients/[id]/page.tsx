@@ -22,6 +22,7 @@ export default async function ClientWorkspace({ params }: { params: Promise<{ id
     store.listAudit(session.organizationId, 50)
   ]);
   const clientAudit = audit.filter((entry) => entry.resourceId === client.id || entry.metadata?.clientId === client.id).slice(0, 12);
+  const vaultConfigured = Boolean(process.env.BLOB_READ_WRITE_TOKEN?.trim());
 
   return (
     <main>
@@ -37,7 +38,7 @@ export default async function ClientWorkspace({ params }: { params: Promise<{ id
         <div className="card span3"><div className="label">Live bureau data</div><div className="value">—</div><div className="small">provider not connected</div></div>
 
         <div className="card span6"><div className="label">Consent control</div><h2>Record authorization</h2><ConsentForm clientId={client.id} /></div>
-        <div className="card span6"><div className="label">Evidence vault</div><h2>Upload private evidence</h2><EvidenceUploadForm clientId={client.id} /><div className="small" style={{ marginTop: 10 }}>Uploads remain unverified until a separate verification step is completed.</div></div>
+        <div className="card span6"><div className="label">Evidence vault</div><h2>Upload private evidence</h2>{vaultConfigured ? <><EvidenceUploadForm clientId={client.id} /><div className="small" style={{ marginTop: 10 }}>Uploads remain unverified until a separate verification step is completed.</div></> : <div className="emptyState">Private evidence upload is disabled until the Vercel Blob credential is configured. Existing metadata remains visible, but no document bytes are stored insecurely.</div>}</div>
 
         <div className="card span6"><div className="label">Consent ledger</div><h2>Recorded consent</h2>
           {consents.length ? consents.map((item) => <div className="listRow" key={item.id}><div><strong>{item.scope.replaceAll('_', ' ')}</strong><div className="small">{item.source} · {new Date(item.grantedAt).toLocaleString()}</div></div><span className={`pill ${item.granted ? 'low' : 'high'}`}>{item.granted ? 'granted' : 'denied'}</span></div>) : <div className="emptyState">No consent records yet.</div>}

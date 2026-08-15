@@ -2,7 +2,7 @@ name: Credit OS Quality Gate
 
 on:
   push:
-    branches: [main]
+    branches: [main, "feat/**"]
   pull_request:
     branches: [main]
 
@@ -19,6 +19,7 @@ jobs:
     timeout-minutes: 15
     env:
       NEXT_TELEMETRY_DISABLED: "1"
+      APP_ENV: demo
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -27,7 +28,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "22"
-          cache: npm
 
       - name: Install dependencies
         run: npm install --no-audit --no-fund

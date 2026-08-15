@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { SignInForm } from '@/components/sign-in-form';
 import { getBusinessSession } from '@/lib/session-access';
@@ -15,7 +16,8 @@ export default async function SignInPage() {
         <h1>Owner sign in</h1>
         <p className="subtitle">Secure access to tenant-scoped clients, consents, evidence, audit history and agent operations.</p>
         <SignInForm />
-        <div className="guardrail">Only active organization members can access business data. Public sign-up is disabled.</div>
+        <div className="guardrail">Only active organization members can access business data. Public business access is disabled.</div>
+        <div style={{ marginTop: 16 }}><Link className="secondaryButton" href="/auth/activate">First time? Activate approved owner access</Link></div>
       </section>
     </main>
   );

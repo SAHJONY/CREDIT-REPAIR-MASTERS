@@ -42,7 +42,9 @@ export class NeonPlatformStore implements PlatformStore {
   async upsertClient(organizationId: string, client: ClientProfile): Promise<ClientProfile> {
     assertTenant(organizationId, client.organizationId);
     await this.sql`insert into clients (id, organization_id, display_name, kind, state, status, created_at, updated_at) values (${client.id}, ${organizationId}, ${client.displayName}, ${client.kind}, ${client.state}, ${client.status}, ${client.createdAt}, ${client.updatedAt}) on conflict (id) do update set display_name = excluded.display_name, kind = excluded.kind, state = excluded.state, status = excluded.status, updated_at = excluded.updated_at where clients.organization_id = ${organizationId}`;
-    return client;
+    const persisted = await this.getClient(organizationId, client.id);
+    if (!persisted) throw new Error("TENANT_SCOPED_UPSERT_REJECTED");
+    return persisted;
   }
 
   async listConsents(organizationId: string, clientId: string): Promise<ConsentRecord[]> {
@@ -88,8 +90,11 @@ export class NeonPlatformStore implements PlatformStore {
   }
 }
 
-export async function pingNeon(databaseUrl: string) {
+export async function checkNeonHealth(databaseUrl: string) {
   const sql = neon(databaseUrl);
-  const rows = await sql`select 1 as ok`;
-  return Number(rows[0]?.ok) === 1;
+  const rows = await sql`select 1 as ok, to_regclass('public.organizations') as organizations, to_regclass('public.clients') as clients, to_regclass('public.audit_records') as audit_records, to_regclass('public.agent_run_records') as agent_run_records`;
+  const row = rows[0];
+  const connected = Number(row?.ok) === 1;
+  const schemaReady = connected && Boolean(row?.organizations && row?.clients && row?.audit_records && row?.agent_run_records);
+  return { connected, schemaReady };
 }

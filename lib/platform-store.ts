@@ -4,6 +4,7 @@ import { NeonPlatformStore } from "./neon-store";
 
 export interface PlatformStore {
   getOrganization(id: string): Promise<Organization | null>;
+  upsertOrganization(organization: Organization): Promise<Organization>;
   listUsers(organizationId: string): Promise<AppUser[]>;
   listClients(organizationId: string): Promise<ClientProfile[]>;
   getClient(organizationId: string, id: string): Promise<ClientProfile | null>;
@@ -29,13 +30,15 @@ const demoClients: ClientProfile[] = [
 ];
 
 class MemoryPlatformStore implements PlatformStore {
+  private organization = demoOrg;
   private clients = [...demoClients];
   private consents: ConsentRecord[] = [];
   private evidence: EvidenceRecord[] = [];
   private audit: AuditRecord[] = [];
   private agentRuns: AgentRunRecord[] = [];
 
-  async getOrganization(id: string) { return id === demoOrg.id ? demoOrg : null; }
+  async getOrganization(id: string) { return id === this.organization.id ? this.organization : null; }
+  async upsertOrganization(organization: Organization) { this.organization = organization; return organization; }
   async listUsers(organizationId: string) { return demoUsers.filter((u) => u.organizationId === organizationId); }
   async listClients(organizationId: string) { return this.clients.filter((c) => c.organizationId === organizationId); }
   async getClient(organizationId: string, id: string) { return this.clients.find((c) => c.organizationId === organizationId && c.id === id) ?? null; }

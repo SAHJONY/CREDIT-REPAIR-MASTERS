@@ -1,19 +1,32 @@
 import { createNeonAuth } from "@neondatabase/auth/next/server";
 
-function required(name: "NEON_AUTH_BASE_URL" | "NEON_AUTH_COOKIE_SECRET") {
-  const value = process.env[name]?.trim();
-  if (!value) throw new Error(`${name}_NOT_CONFIGURED`);
-  return value;
+function authBaseUrl() {
+  return process.env.NEON_AUTH_BASE_URL?.trim() || process.env.VITE_NEON_AUTH_URL?.trim() || "";
+}
+
+function authCookieSecret() {
+  return process.env.NEON_AUTH_COOKIE_SECRET?.trim() || process.env.AUTH_SECRET?.trim() || "";
 }
 
 export function neonAuthConfigured() {
-  return Boolean(process.env.NEON_AUTH_BASE_URL?.trim() && process.env.NEON_AUTH_COOKIE_SECRET?.trim());
+  return Boolean(authBaseUrl() && authCookieSecret());
 }
 
 export function getNeonAuth() {
+  const baseUrl = authBaseUrl();
+  const cookieSecret = authCookieSecret();
+
+  if (!baseUrl) {
+    throw new Error("NEON_AUTH_BASE_URL_NOT_CONFIGURED");
+  }
+
+  if (!cookieSecret) {
+    throw new Error("NEON_AUTH_COOKIE_SECRET_NOT_CONFIGURED");
+  }
+
   return createNeonAuth({
-    baseUrl: required("NEON_AUTH_BASE_URL"),
-    cookies: { secret: required("NEON_AUTH_COOKIE_SECRET") },
+    baseUrl,
+    cookies: { secret: cookieSecret },
     logLevel: "warn"
   });
 }

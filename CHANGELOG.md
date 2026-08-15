@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.8.0 — Neon Data Plane
+- Added a real Neon/PostgreSQL `PlatformStore` adapter using the serverless driver.
+- Added lazy database activation: no `DATABASE_URL` means demo-memory; no build-time connection attempt is made.
+- Made client, consent, evidence, audit, and agent-run storage methods explicitly tenant-scoped by `organizationId`.
+- Added tenant mismatch guards on write operations.
+- Added `/api/storage-health` to distinguish configured, connected, and production-active persistence states.
+- Kept database schema application and production activation fail-closed.
+
 ## 0.7.0 — Durable Operations
 - Added the official Vercel Workflow runtime integration.
 - Added durable credit-case workflows with retryable steps and persisted run state.

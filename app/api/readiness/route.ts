@@ -1,7 +1,9 @@
 import { NextResponse } from "next/server";
-import { readinessChecks, readinessSummary } from "@/lib/readiness";
+import { getReadinessChecks, readinessSummary } from "@/lib/readiness";
 
 export async function GET() {
-  const summary = readinessSummary();
-  return NextResponse.json({ mode: "demo-safe", ...summary, checks: readinessChecks }, { status: summary.productionReady ? 200 : 503 });
+  const checks = getReadinessChecks();
+  const summary = readinessSummary(checks);
+  const mode = summary.productionReady ? "production-ready" : "controlled-live";
+  return NextResponse.json({ mode, ...summary, checks }, { status: summary.productionReady ? 200 : 503 });
 }

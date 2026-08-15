@@ -1,5 +1,7 @@
 import { timingSafeEqual } from "node:crypto";
 
+const DEFAULT_PRODUCTION_ORG = "org_credit_repair_masters";
+
 export type OperatorAuthResult =
   | { ok: true; actorId: string; organizationId: string; mode: "token" | "demo" }
   | { ok: false; status: 401 | 403 | 503; error: string };
@@ -21,19 +23,20 @@ function safeEqual(left: string, right: string): boolean {
   return timingSafeEqual(a, b);
 }
 
+export function configuredOrganizationId() {
+  const env = environment();
+  const isProduction = env.VERCEL_ENV === "production" || env.APP_ENV === "production";
+  return env.CREDIT_OS_ORGANIZATION_ID?.trim() || (isProduction ? DEFAULT_PRODUCTION_ORG : "org_demo");
+}
+
 export function authenticateOperator(request: Request): OperatorAuthResult {
   const env = environment();
   const expected = env.CREDIT_OS_API_TOKEN;
-  const configuredOrganizationId = env.CREDIT_OS_ORGANIZATION_ID?.trim();
   const isProduction = env.VERCEL_ENV === "production" || env.APP_ENV === "production";
 
   if (!expected) {
     if (isProduction) return { ok: false, status: 503, error: "OPERATOR_AUTH_NOT_CONFIGURED" };
     return { ok: true, actorId: "demo-operator", organizationId: "org_demo", mode: "demo" };
-  }
-
-  if (isProduction && !configuredOrganizationId) {
-    return { ok: false, status: 503, error: "OPERATOR_ORGANIZATION_NOT_CONFIGURED" };
   }
 
   const supplied = bearerToken(request);
@@ -45,7 +48,7 @@ export function authenticateOperator(request: Request): OperatorAuthResult {
   return {
     ok: true,
     actorId,
-    organizationId: configuredOrganizationId || "org_demo",
+    organizationId: configuredOrganizationId(),
     mode: "token"
   };
 }

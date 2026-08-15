@@ -1,19 +1,20 @@
 declare const process: { env: Record<string, string | undefined> };
 import type { AgentRunRecord, AppUser, AuditRecord, ClientProfile, ConsentRecord, EvidenceRecord, Organization } from "./platform-types";
+import { NeonPlatformStore } from "./neon-store";
 
 export interface PlatformStore {
   getOrganization(id: string): Promise<Organization | null>;
   listUsers(organizationId: string): Promise<AppUser[]>;
   listClients(organizationId: string): Promise<ClientProfile[]>;
-  getClient(id: string): Promise<ClientProfile | null>;
-  upsertClient(client: ClientProfile): Promise<ClientProfile>;
-  listConsents(clientId: string): Promise<ConsentRecord[]>;
-  appendConsent(record: ConsentRecord): Promise<void>;
-  listEvidence(clientId: string): Promise<EvidenceRecord[]>;
-  appendEvidence(record: EvidenceRecord): Promise<void>;
-  appendAudit(record: AuditRecord): Promise<void>;
+  getClient(organizationId: string, id: string): Promise<ClientProfile | null>;
+  upsertClient(organizationId: string, client: ClientProfile): Promise<ClientProfile>;
+  listConsents(organizationId: string, clientId: string): Promise<ConsentRecord[]>;
+  appendConsent(organizationId: string, record: ConsentRecord): Promise<void>;
+  listEvidence(organizationId: string, clientId: string): Promise<EvidenceRecord[]>;
+  appendEvidence(organizationId: string, record: EvidenceRecord): Promise<void>;
+  appendAudit(organizationId: string, record: AuditRecord): Promise<void>;
   listAudit(organizationId: string, limit?: number): Promise<AuditRecord[]>;
-  appendAgentRun(record: AgentRunRecord): Promise<void>;
+  appendAgentRun(organizationId: string, record: AgentRunRecord): Promise<void>;
   listAgentRuns(organizationId: string, limit?: number): Promise<AgentRunRecord[]>;
 }
 
@@ -37,30 +38,33 @@ class MemoryPlatformStore implements PlatformStore {
   async getOrganization(id: string) { return id === demoOrg.id ? demoOrg : null; }
   async listUsers(organizationId: string) { return demoUsers.filter((u) => u.organizationId === organizationId); }
   async listClients(organizationId: string) { return this.clients.filter((c) => c.organizationId === organizationId); }
-  async getClient(id: string) { return this.clients.find((c) => c.id === id) ?? null; }
-  async upsertClient(client: ClientProfile) {
-    const idx = this.clients.findIndex((c) => c.id === client.id);
+  async getClient(organizationId: string, id: string) { return this.clients.find((c) => c.organizationId === organizationId && c.id === id) ?? null; }
+  async upsertClient(organizationId: string, client: ClientProfile) {
+    if (organizationId !== client.organizationId) throw new Error("TENANT_SCOPE_MISMATCH");
+    const idx = this.clients.findIndex((c) => c.organizationId === organizationId && c.id === client.id);
     if (idx >= 0) this.clients[idx] = client; else this.clients.push(client);
     return client;
   }
-  async listConsents(clientId: string) { return this.consents.filter((c) => c.clientId === clientId); }
-  async appendConsent(record: ConsentRecord) { this.consents.push(record); }
-  async listEvidence(clientId: string) { return this.evidence.filter((e) => e.clientId === clientId); }
-  async appendEvidence(record: EvidenceRecord) { this.evidence.push(record); }
-  async appendAudit(record: AuditRecord) { this.audit.push(record); }
+  async listConsents(organizationId: string, clientId: string) { return this.consents.filter((c) => c.organizationId === organizationId && c.clientId === clientId); }
+  async appendConsent(organizationId: string, record: ConsentRecord) { if (organizationId !== record.organizationId) throw new Error("TENANT_SCOPE_MISMATCH"); this.consents.push(record); }
+  async listEvidence(organizationId: string, clientId: string) { return this.evidence.filter((e) => e.organizationId === organizationId && e.clientId === clientId); }
+  async appendEvidence(organizationId: string, record: EvidenceRecord) { if (organizationId !== record.organizationId) throw new Error("TENANT_SCOPE_MISMATCH"); this.evidence.push(record); }
+  async appendAudit(organizationId: string, record: AuditRecord) { if (organizationId !== record.organizationId) throw new Error("TENANT_SCOPE_MISMATCH"); this.audit.push(record); }
   async listAudit(organizationId: string, limit = 100) { return this.audit.filter((a) => a.organizationId === organizationId).slice(-limit).reverse(); }
-  async appendAgentRun(record: AgentRunRecord) { this.agentRuns.push(record); }
+  async appendAgentRun(organizationId: string, record: AgentRunRecord) { if (organizationId !== record.organizationId) throw new Error("TENANT_SCOPE_MISMATCH"); this.agentRuns.push(record); }
   async listAgentRuns(organizationId: string, limit = 100) { return this.agentRuns.filter((r) => r.organizationId === organizationId).slice(-limit).reverse(); }
 }
 
 const memoryStore = new MemoryPlatformStore();
+let neonStore: NeonPlatformStore | null = null;
 
 export function getPlatformStore(): PlatformStore {
-  // Production DB adapter is intentionally fail-closed until DATABASE_URL + adapter are configured.
-  // This prevents accidental claims of persistence when the app is running in demo-safe mode.
-  return memoryStore;
+  const url = process.env.DATABASE_URL;
+  if (!url) return memoryStore;
+  if (!neonStore) neonStore = new NeonPlatformStore(url);
+  return neonStore;
 }
 
 export function storageMode() {
-  return process.env.DATABASE_URL ? "adapter-required" : "demo-memory";
+  return process.env.DATABASE_URL ? "neon-postgres" : "demo-memory";
 }

@@ -20,6 +20,30 @@ export interface ResolvedPolicyContext {
   now?: Date;
 }
 
+function actionEvidence(action: ProposedAction): string[] {
+  switch (action.kind) {
+    case "analyze":
+    case "draft_dispute":
+    case "submit_dispute":
+    case "identity_theft_claim":
+      return action.evidence ?? [];
+    default:
+      return [];
+  }
+}
+
+function actionConsentId(action: ProposedAction): string | undefined {
+  switch (action.kind) {
+    case "submit_dispute":
+    case "make_payment":
+    case "open_credit":
+    case "identity_theft_claim":
+      return action.consentId;
+    default:
+      return undefined;
+  }
+}
+
 export function evaluateAction(action: ProposedAction): PolicyEvaluation {
   if (action.kind === "analyze") {
     return { allowed: true, approval: false, reason: "Read-only analysis." };
@@ -73,7 +97,7 @@ export function evaluateResolvedAction(action: ProposedAction, context: Resolved
   if (!structural.allowed) return structural;
   if (action.kind === "analyze") return structural;
 
-  const requestedEvidence = new Set(action.evidence ?? []);
+  const requestedEvidence = new Set(actionEvidence(action));
   const linkedEvidence = context.evidence.filter((item) => requestedEvidence.has(item.id));
   const verifiedEvidence = linkedEvidence.filter((item) => item.verification === "verified");
 
@@ -92,7 +116,8 @@ export function evaluateResolvedAction(action: ProposedAction, context: Resolved
 
   const scope = requiredConsentScope(action);
   if (scope) {
-    if (!action.consentId || !context.consent || context.consent.id !== action.consentId) {
+    const consentId = actionConsentId(action);
+    if (!consentId || !context.consent || context.consent.id !== consentId) {
       return { allowed: false, approval: false, reason: `Action blocked: ${scope} consent was not resolved for this client.` };
     }
     if (!consentIsValid(context.consent, scope, context.now ?? new Date())) {

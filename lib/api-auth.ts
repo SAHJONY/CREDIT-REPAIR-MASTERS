@@ -1,9 +1,12 @@
 import { timingSafeEqual } from "node:crypto";
+import { getNeonAuth, neonAuthConfigured } from "./auth/server";
+import { getPlatformStore } from "./platform-store";
+import type { Role } from "./platform-types";
 
 const DEFAULT_PRODUCTION_ORG = "org_credit_repair_masters";
 
 export type OperatorAuthResult =
-  | { ok: true; actorId: string; organizationId: string; mode: "token" | "demo" }
+  | { ok: true; actorId: string; organizationId: string; mode: "session" | "token" | "demo"; role: Role }
   | { ok: false; status: 401 | 403 | 503; error: string };
 
 function environment() {
@@ -36,7 +39,7 @@ export function authenticateOperator(request: Request): OperatorAuthResult {
 
   if (!expected) {
     if (isProduction) return { ok: false, status: 503, error: "OPERATOR_AUTH_NOT_CONFIGURED" };
-    return { ok: true, actorId: "demo-operator", organizationId: "org_demo", mode: "demo" };
+    return { ok: true, actorId: "demo-operator", organizationId: "org_demo", mode: "demo", role: "owner" };
   }
 
   const supplied = bearerToken(request);
@@ -49,6 +52,65 @@ export function authenticateOperator(request: Request): OperatorAuthResult {
     ok: true,
     actorId,
     organizationId: configuredOrganizationId(),
-    mode: "token"
+    mode: "token",
+    role: "owner"
   };
+}
+
+function sessionUser(data: unknown): { id: string; email: string } | null {
+  if (!data || typeof data !== "object") return null;
+  const candidate = data as { user?: unknown };
+  if (!candidate.user || typeof candidate.user !== "object") return null;
+  const user = candidate.user as { id?: unknown; email?: unknown };
+  if (typeof user.id !== "string" || typeof user.email !== "string") return null;
+  const id = user.id.trim();
+  const email = user.email.trim().toLowerCase();
+  return id && email ? { id, email } : null;
+}
+
+export async function authenticateBusinessUser(request: Request): Promise<OperatorAuthResult> {
+  const env = environment();
+  const suppliedToken = bearerToken(request);
+  const expectedToken = env.CREDIT_OS_API_TOKEN?.trim();
+
+  if (neonAuthConfigured()) {
+    try {
+      const result = await getNeonAuth().getSession();
+      const data = result && typeof result === "object" && "data" in result
+        ? (result as { data?: unknown }).data
+        : null;
+      const session = sessionUser(data);
+
+      if (session) {
+        const organizationId = configuredOrganizationId();
+        const users = await getPlatformStore().listUsers(organizationId);
+        const member = users.find((user) => user.status === "active" && user.email.trim().toLowerCase() === session.email);
+        if (!member) return { ok: false, status: 403, error: "AUTH_MEMBERSHIP_REQUIRED" };
+
+        return {
+          ok: true,
+          actorId: member.id || session.id,
+          organizationId,
+          mode: "session",
+          role: member.role
+        };
+      }
+    } catch {
+      if (!(suppliedToken && expectedToken)) {
+        return { ok: false, status: 503, error: "AUTH_SESSION_UNAVAILABLE" };
+      }
+    }
+
+    if (!(suppliedToken || expectedToken)) {
+      return { ok: false, status: 401, error: "AUTH_SESSION_REQUIRED" };
+    }
+  }
+
+  return authenticateOperator(request);
+}
+
+export function authorizeRoles(auth: OperatorAuthResult, roles: readonly Role[]): OperatorAuthResult {
+  if (!auth.ok) return auth;
+  if (!roles.includes(auth.role)) return { ok: false, status: 403, error: "ROLE_NOT_AUTHORIZED" };
+  return auth;
 }

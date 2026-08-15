@@ -10,6 +10,10 @@ function requiresCase(action: ProposedAction): boolean {
   return action.kind === "draft_dispute" || action.kind === "submit_dispute" || action.kind === "identity_theft_claim";
 }
 
+function actionConsentId(action: ProposedAction): string | undefined {
+  return "consentId" in action ? action.consentId : undefined;
+}
+
 export async function POST(request: NextRequest) {
   const op = startOperation(request, "/api/policy", "policy.evaluate");
   const auth = authenticateOperator(request);
@@ -41,7 +45,8 @@ export async function POST(request: NextRequest) {
       store.listConsents(auth.organizationId, client.id)
     ]);
     const evidence = body.caseId ? allEvidence.filter((item) => item.caseId === body.caseId) : allEvidence;
-    const consent = body.action.consentId ? consents.find((item) => item.id === body.action?.consentId) : undefined;
+    const consentId = actionConsentId(body.action);
+    const consent = consentId ? consents.find((item) => item.id === consentId) : undefined;
     const resolved = evaluateResolvedAction(body.action, { evidence, consent });
     const event = policyDecision(body.profileId, body.action, auth.actorId, body.caseId, resolved);
 

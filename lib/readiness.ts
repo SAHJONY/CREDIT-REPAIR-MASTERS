@@ -19,7 +19,7 @@ export function getReadinessChecks(): ReadinessCheck[] {
   const sessionAuthConfigured = authUrlConfigured && authCookieSecretConfigured;
   const mfaEnforced = process.env.AUTH_MFA_ENFORCED === "true";
   const providerConfigured = configured("CREDIT_DATA_PROVIDER") || configured("CREDIT_PROVIDER_API_KEY");
-  const vaultConfigured = configured("EVIDENCE_VAULT_PROVIDER") || configured("BLOB_READ_WRITE_TOKEN");
+  const privateBlobConfigured = configured("BLOB_READ_WRITE_TOKEN");
   const stateRulesConfigured = configured("STATE_RULES_VERSION") || configured("STATE_RULES_PROVIDER");
 
   return [
@@ -34,7 +34,7 @@ export function getReadinessChecks(): ReadinessCheck[] {
     { id: "auth-runtime", label: "Neon session authentication + membership gate", status: sessionAuthConfigured && databaseConfigured ? "ready" : "setup", requiredForProduction: true, detail: sessionAuthConfigured && databaseConfigured ? "Neon Auth runtime and tenant membership store configured" : "Neon Auth URL/cookie secret or production database missing" },
     { id: "mfa", label: "MFA enforcement for privileged operators", status: mfaEnforced ? "ready" : "setup", requiredForProduction: true, detail: mfaEnforced ? "MFA enforcement declared active" : "MFA enforcement not yet verified" },
     { id: "bureau", label: "Authorized credit data provider", status: providerConfigured ? "ready" : "setup", requiredForProduction: true, detail: providerConfigured ? "provider configured" : "authorized provider not configured" },
-    { id: "vault", label: "Encrypted evidence document vault", status: vaultConfigured ? "ready" : "setup", requiredForProduction: true, detail: vaultConfigured ? "vault configured" : "evidence vault not configured" },
+    { id: "vault", label: "Private evidence document vault", status: privateBlobConfigured ? "ready" : "setup", requiredForProduction: true, detail: privateBlobConfigured ? "Vercel Private Blob credential configured" : "private Blob store/credential not configured" },
     { id: "state-rules", label: "State-by-state compliance rules", status: stateRulesConfigured ? "ready" : "setup", requiredForProduction: true, detail: stateRulesConfigured ? "state rules configured" : "state rules runtime not configured" },
     { id: "external-actions", label: "External action adapters", status: "blocked", requiredForProduction: false, detail: "intentionally approval-gated" }
   ];

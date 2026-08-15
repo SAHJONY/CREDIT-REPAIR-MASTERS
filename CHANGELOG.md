@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.7.0 — Durable Operations
+- Added the official Vercel Workflow runtime integration.
+- Added durable credit-case workflows with retryable steps and persisted run state.
+- Added type-safe human approval hooks for sensitive credit actions.
+- Added workflow start, approval-resume, and run-status APIs.
+- Approval never enables direct external execution; approved sensitive work remains marked for manual/controlled execution.
+- Wrapped Next.js configuration with the Workflow integration.
+
 ## 0.6.0 — Agentic Control Plane
 - Added a 12-agent registry with explicit authority, risk ceilings, tool budgets, missions, and evidence requirements.
 - Added risk-aware task routing across report, dispute, payment, business-credit, identity, and monitoring workflows.

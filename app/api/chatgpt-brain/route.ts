@@ -3,8 +3,11 @@ import { demoEvidence, demoProfile } from "@/lib/demo";
 import { buildBrainSnapshot } from "@/lib/orchestrator";
 import { runChatGPTBrain } from "@/lib/openai-brain";
 import { clearMemory, getMemory } from "@/lib/brain-memory";
+import { authenticateOperator } from "@/lib/api-auth";
 
 export async function POST(request: NextRequest) {
+  const auth = authenticateOperator(request);
+  if (!auth.ok) return NextResponse.json({ error: auth.error }, { status: auth.status });
   const body = await request.json().catch(() => ({})) as { message?: string; clearMemory?: boolean };
   if (body.clearMemory) clearMemory(demoProfile.id);
   const snapshot = buildBrainSnapshot(demoProfile, demoEvidence);
@@ -13,6 +16,7 @@ export async function POST(request: NextRequest) {
     engine: "ChatGPT / OpenAI Responses API",
     architecture: "tool-using-credit-ceo",
     execution: "advisory-only",
+    requestedBy: auth.actorId,
     complianceAuthority: "local-policy-engine",
     externalSideEffects: false,
     result
@@ -25,6 +29,7 @@ export async function GET() {
   return NextResponse.json({
     engine: "ChatGPT / OpenAI Responses API",
     configured,
+    operatorAuthConfigured: Boolean(env.CREDIT_OS_API_TOKEN),
     model: env.OPENAI_MODEL || "gpt-5.6",
     store: false,
     toolCalling: true,

@@ -24,7 +24,7 @@ export function OwnerActivationForm() {
       const response = await fetch('/api/auth/activate-owner', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ email: form.get('email'), password })
+        body: JSON.stringify({ email: form.get('email'), password, activationCode: form.get('activationCode') })
       });
       const payload = await response.json();
       if (!response.ok) {
@@ -43,6 +43,7 @@ export function OwnerActivationForm() {
   return (
     <form className="appForm" onSubmit={submit}>
       <label>Authorized owner email<input name="email" type="email" autoComplete="email" required /></label>
+      <label>One-time activation code<input name="activationCode" type="password" minLength={16} autoComplete="one-time-code" required /></label>
       <label>Create password<input name="password" type="password" minLength={12} autoComplete="new-password" required /></label>
       <label>Confirm password<input name="confirm" type="password" minLength={12} autoComplete="new-password" required /></label>
       {error ? <div className="formError">{error}</div> : null}

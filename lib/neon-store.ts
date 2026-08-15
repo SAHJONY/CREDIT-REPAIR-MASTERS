@@ -1,4 +1,4 @@
-import { neon } from "@neondatabase/serverless";
+import { neon, type NeonQueryFunction } from "@neondatabase/serverless";
 import type { AgentRunRecord, AppUser, AuditRecord, ClientProfile, ConsentRecord, EvidenceRecord, Organization } from "./platform-types";
 import type { PlatformStore } from "./platform-store";
 
@@ -11,7 +11,7 @@ function assertTenant(expected: string, actual: string) {
 }
 
 export class NeonPlatformStore implements PlatformStore {
-  private readonly sql: ReturnType<typeof neon>;
+  private readonly sql: NeonQueryFunction<false, false>;
 
   constructor(databaseUrl: string) {
     this.sql = neon(databaseUrl);

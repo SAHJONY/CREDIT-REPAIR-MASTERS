@@ -39,13 +39,14 @@ export async function GET() {
   const env = (globalThis as typeof globalThis & { process?: { env?: Record<string, string | undefined> } }).process?.env ?? {};
   const configured = Boolean(env.OPENAI_API_KEY);
   return NextResponse.json({
+    version: "1.2.0",
     engine: "ChatGPT / OpenAI Responses API",
     configured,
     operatorAuthConfigured: Boolean(env.CREDIT_OS_API_TOKEN),
     model: env.OPENAI_MODEL || "gpt-5.6",
     store: false,
     toolCalling: true,
-    tools: ["inspect_snapshot", "inspect_case", "calculate_paydown", "evaluate_policy"],
+    tools: ["inspect_snapshot", "inspect_case", "calculate_paydown", "evaluate_policy", "evaluate_dispute_claim"],
     memory: { mode: "ephemeral-server", turns: getMemory(demoProfile.id).turns.length, piiMinimized: true },
     authorityBoundary: {
       chatgpt: "reason, prioritize, inspect internal state, propose",

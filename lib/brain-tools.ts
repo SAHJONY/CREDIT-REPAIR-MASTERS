@@ -1,7 +1,8 @@
 import type { BrainSnapshot } from "./orchestrator";
 import { evaluateAction, type ProposedAction } from "./compliance";
+import { evaluateDisputeClaim, type DisputeIssueType } from "./dispute-intelligence";
 
-export type BrainToolName = "inspect_snapshot" | "inspect_case" | "calculate_paydown" | "evaluate_policy";
+export type BrainToolName = "inspect_snapshot" | "inspect_case" | "calculate_paydown" | "evaluate_policy" | "evaluate_dispute_claim";
 
 export interface BrainToolCall {
   name: BrainToolName;
@@ -59,6 +60,22 @@ export const brainTools = [
       },
       required: ["kind", "caseId"]
     }
+  },
+  {
+    type: "function",
+    name: "evaluate_dispute_claim",
+    description: "Evaluate whether a factual inaccuracy claim has verified linked evidence sufficient to prepare a reviewable draft. Accurate negatives and unsupported assertions are blocked. This tool never submits a dispute.",
+    strict: true,
+    parameters: {
+      type: "object",
+      additionalProperties: false,
+      properties: {
+        issueType: { type: "string", enum: ["accurate_negative", "wrong_balance", "wrong_payment_history", "duplicate_account", "identity_mismatch", "not_mine", "incorrect_dates", "incomplete_reporting", "other_inaccuracy"] },
+        assertion: { type: "string" },
+        evidenceIds: { type: "array", items: { type: "string" }, maxItems: 20 }
+      },
+      required: ["issueType", "assertion", "evidenceIds"]
+    }
   }
 ] as const;
 
@@ -112,6 +129,12 @@ export function executeBrainTool(snapshot: BrainSnapshot, call: BrainToolCall): 
         decision: !result.allowed ? "blocked" : result.approval ? "approval_required" : "allowed",
         reason: result.reason
       };
+    }
+    case "evaluate_dispute_claim": {
+      const issueType = String(call.arguments.issueType ?? "other_inaccuracy") as DisputeIssueType;
+      const assertion = String(call.arguments.assertion ?? "");
+      const evidenceIds = Array.isArray(call.arguments.evidenceIds) ? call.arguments.evidenceIds.map(String) : [];
+      return evaluateDisputeClaim({ issueType, assertion, evidenceIds }, snapshot.evidence);
     }
     default:
       return { error: "unsupported_tool" };

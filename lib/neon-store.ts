@@ -23,6 +23,13 @@ export class NeonPlatformStore implements PlatformStore {
     return row ? { id: String(row.id), name: String(row.name), mode: row.mode as Organization["mode"], createdAt: iso(row.created_at) } : null;
   }
 
+  async upsertOrganization(organization: Organization): Promise<Organization> {
+    await this.sql`insert into organizations (id, name, mode, created_at) values (${organization.id}, ${organization.name}, ${organization.mode}, ${organization.createdAt}) on conflict (id) do update set name = excluded.name, mode = excluded.mode`;
+    const persisted = await this.getOrganization(organization.id);
+    if (!persisted) throw new Error("ORGANIZATION_UPSERT_FAILED");
+    return persisted;
+  }
+
   async listUsers(organizationId: string): Promise<AppUser[]> {
     const rows = await this.sql`select id, organization_id, email, role, status, created_at from app_users where organization_id = ${organizationId} order by created_at desc`;
     return rows.map((row) => ({ id: String(row.id), organizationId: String(row.organization_id), email: String(row.email), role: row.role as AppUser["role"], status: row.status as AppUser["status"], createdAt: iso(row.created_at) }));

@@ -1,10 +1,10 @@
 import { randomUUID } from "node:crypto";
 import { NextRequest, NextResponse } from "next/server";
-import { authenticateOperator } from "@/lib/api-auth";
+import { authenticateBusinessUser, authorizeRoles } from "@/lib/api-auth";
 import { getPlatformStore } from "@/lib/platform-store";
 
 export async function POST(request: NextRequest) {
-  const auth = authenticateOperator(request);
+  const auth = authorizeRoles(await authenticateBusinessUser(request), ["owner", "admin"]);
   if (!auth.ok) return NextResponse.json({ error: auth.error }, { status: auth.status });
 
   try {
@@ -30,7 +30,7 @@ export async function POST(request: NextRequest) {
       resourceType: "organization",
       resourceId: organization.id,
       decision: "allowed",
-      metadata: { mode: organization.mode },
+      metadata: { mode: organization.mode, authMode: auth.mode },
       createdAt: new Date().toISOString()
     });
 

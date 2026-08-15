@@ -32,16 +32,6 @@ The model is deliberately separated from execution authority:
 
 This design prevents prompt injection or model error from directly causing a bureau submission, payment, account opening, or identity-theft allegation.
 
-## v0.4 Agentic Brain Control Plane
+## v0.5 Production Foundation
 
-The model is deliberately separated from execution authority:
-
-1. **Credit Digital Twin** produces deterministic state.
-2. **AI Credit CEO** may inspect internal state through strict function tools.
-3. **Tool Registry** exposes only read-only calculation/inspection and policy-evaluation tools.
-4. **Local Policy Engine** independently evaluates proposed sensitive actions.
-5. **Agent Council** provides deterministic strategy/evidence/risk cross-checking.
-6. **Trace Layer** records model rounds, tool calls, policy checks and fallback state.
-7. **Executor Boundary** is absent from the model tool list until production integrations, consent enforcement and security controls are verified.
-
-This design prevents prompt injection or model error from directly causing a bureau submission, payment, account opening, or identity-theft allegation.
+The application now separates domain persistence from infrastructure using a `PlatformStore` contract. Demo mode uses an in-memory adapter; production must supply an authenticated encrypted database adapter before `productionPersistenceActive` can become true. The SQL schema includes organizations, users, clients, consent, evidence metadata, audit records, and agent-run records. RBAC is explicit and independent from model reasoning.

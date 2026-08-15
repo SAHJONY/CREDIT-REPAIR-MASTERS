@@ -1,5 +1,5 @@
 import { analyzeProfile, paydownPlan, utilization } from "./credit-engine";
-import { evaluateAction, type ProposedAction } from "./compliance";
+import { evaluateAction, type PolicyEvaluation, type ProposedAction } from "./compliance";
 import { casesFromFindings, type AuditEvent, type CreditCase, type EvidenceItem } from "./case-types";
 import type { CreditProfile } from "./types";
 
@@ -28,13 +28,14 @@ function averageScore(profile: CreditProfile) {
 export function buildBrainSnapshot(profile: CreditProfile, evidence: EvidenceItem[] = []): BrainSnapshot {
   const findings = analyzeProfile(profile);
   const cases = casesFromFindings(profile.id, findings);
-  const evidenceByCase = new Map<string, number>();
-  evidence.forEach((item) => evidenceByCase.set(item.caseId, (evidenceByCase.get(item.caseId) ?? 0) + 1));
+  const verifiedEvidence = evidence.filter((item) => item.verified);
+  const verifiedEvidenceByCase = new Map<string, number>();
+  verifiedEvidence.forEach((item) => verifiedEvidenceByCase.set(item.caseId, (verifiedEvidenceByCase.get(item.caseId) ?? 0) + 1));
 
   const hydratedCases = cases.map((item) => ({
     ...item,
-    evidenceIds: evidence.filter((ev) => ev.caseId === item.id).map((ev) => ev.id),
-    status: evidenceByCase.get(item.id) ? (item.status === "evidence_required" ? "ready_to_draft" : item.status) : item.status
+    evidenceIds: verifiedEvidence.filter((ev) => ev.caseId === item.id).map((ev) => ev.id),
+    status: verifiedEvidenceByCase.get(item.id) ? (item.status === "evidence_required" ? "ready_to_draft" : item.status) : item.status
   })) as CreditCase[];
 
   const evidenceCases = hydratedCases.filter((item) => item.evidenceIds.length > 0).length;
@@ -61,8 +62,14 @@ export function buildBrainSnapshot(profile: CreditProfile, evidence: EvidenceIte
   };
 }
 
-export function policyDecision(profileId: string, action: ProposedAction, actor = "AI Credit CEO", caseId?: string): AuditEvent {
-  const result = evaluateAction(action);
+export function policyDecision(
+  profileId: string,
+  action: ProposedAction,
+  actor = "AI Credit CEO",
+  caseId?: string,
+  resolvedEvaluation?: PolicyEvaluation
+): AuditEvent {
+  const result = resolvedEvaluation ?? evaluateAction(action);
   return {
     id: `AUD-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
     profileId,

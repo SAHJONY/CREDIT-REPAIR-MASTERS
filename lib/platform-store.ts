@@ -58,13 +58,21 @@ class MemoryPlatformStore implements PlatformStore {
 const memoryStore = new MemoryPlatformStore();
 let neonStore: NeonPlatformStore | null = null;
 
+export function isProductionEnvironment(): boolean {
+  return process.env.VERCEL_ENV === "production" || process.env.APP_ENV === "production";
+}
+
 export function getPlatformStore(): PlatformStore {
   const url = process.env.DATABASE_URL;
-  if (!url) return memoryStore;
+  if (!url) {
+    if (isProductionEnvironment()) throw new Error("PRODUCTION_DATABASE_NOT_CONFIGURED");
+    return memoryStore;
+  }
   if (!neonStore) neonStore = new NeonPlatformStore(url);
   return neonStore;
 }
 
 export function storageMode() {
-  return process.env.DATABASE_URL ? "neon-postgres" : "demo-memory";
+  if (process.env.DATABASE_URL) return "neon-postgres";
+  return isProductionEnvironment() ? "unavailable" : "demo-memory";
 }

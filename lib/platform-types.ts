@@ -32,6 +32,7 @@ export type ConsentScope =
   | "dispute_drafting"
   | "dispute_submission"
   | "financial_action"
+  | "new_credit"
   | "identity_theft_workflow";
 
 export interface ConsentRecord {

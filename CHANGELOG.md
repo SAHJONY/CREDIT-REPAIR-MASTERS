@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.6.0 — Agentic Control Plane
+- Added a 12-agent registry with explicit authority, risk ceilings, tool budgets, missions, and evidence requirements.
+- Added risk-aware task routing across report, dispute, payment, business-credit, identity, and monitoring workflows.
+- Added deterministic workflow plans with security, evidence, policy, approval, blocked, and ready states.
+- Added prompt-injection detection and PII minimization before model-bound text is used.
+- Added model round/tool/prompt/completion budget guards.
+- Added a deterministic agent safety eval suite for dispute evidence, financial consent, identity claims, prompt injection, PII redaction, and external-execution boundaries.
+- Added `/api/agents`, `/api/agent-router`, `/api/security-guard`, `/api/evals`, and `/api/agentic-status`.
+- Updated Next.js 16 typedRoutes configuration.
+- External execution remains disabled; this release strengthens orchestration and verification rather than bypassing approval controls.
+
 ## 0.5.0 — Production Foundation
 - Added multi-tenant organization/user/client domain models.
 - Added explicit RBAC permission matrix and fail-closed permission assertion.

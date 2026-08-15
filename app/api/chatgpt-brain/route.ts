@@ -4,23 +4,35 @@ import { buildBrainSnapshot } from "@/lib/orchestrator";
 import { runChatGPTBrain } from "@/lib/openai-brain";
 import { clearMemory, getMemory } from "@/lib/brain-memory";
 import { authenticateOperator } from "@/lib/api-auth";
+import { completeOperation, failOperation, startOperation } from "@/lib/telemetry";
 
 export async function POST(request: NextRequest) {
+  const op = startOperation(request, "/api/chatgpt-brain", "chatgpt_brain.run");
   const auth = authenticateOperator(request);
-  if (!auth.ok) return NextResponse.json({ error: auth.error }, { status: auth.status });
-  const body = await request.json().catch(() => ({})) as { message?: string; clearMemory?: boolean };
-  if (body.clearMemory) clearMemory(demoProfile.id);
-  const snapshot = buildBrainSnapshot(demoProfile, demoEvidence);
-  const result = await runChatGPTBrain(snapshot, body.message);
-  return NextResponse.json({
-    engine: "ChatGPT / OpenAI Responses API",
-    architecture: "tool-using-credit-ceo",
-    execution: "advisory-only",
-    requestedBy: auth.actorId,
-    complianceAuthority: "local-policy-engine",
-    externalSideEffects: false,
-    result
-  });
+  if (!auth.ok) {
+    failOperation(op, auth.error);
+    return NextResponse.json({ error: auth.error, requestId: op.requestId }, { status: auth.status });
+  }
+  try {
+    const body = await request.json().catch(() => ({})) as { message?: string; clearMemory?: boolean };
+    if (body.clearMemory) clearMemory(demoProfile.id);
+    const snapshot = buildBrainSnapshot(demoProfile, demoEvidence);
+    const result = await runChatGPTBrain(snapshot, body.message);
+    completeOperation(op, { authMode: auth.mode, engine: "openai", externalSideEffects: false });
+    return NextResponse.json({
+      requestId: op.requestId,
+      engine: "ChatGPT / OpenAI Responses API",
+      architecture: "tool-using-credit-ceo",
+      execution: "advisory-only",
+      requestedBy: auth.actorId,
+      complianceAuthority: "local-policy-engine",
+      externalSideEffects: false,
+      result
+    });
+  } catch (error) {
+    failOperation(op, "CHATGPT_BRAIN_FAILED", error);
+    return NextResponse.json({ error: "CHATGPT_BRAIN_FAILED", requestId: op.requestId }, { status: 500 });
+  }
 }
 
 export async function GET() {

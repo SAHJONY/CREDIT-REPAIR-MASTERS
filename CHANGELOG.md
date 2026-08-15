@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.1.0 — Autonomous Governance & Observability
+- Added structured server-side operation telemetry with request correlation and duration metrics.
+- Added a strict no-PII-payload logging policy to telemetry helpers.
+- Added Next.js runtime registration instrumentation.
+- Added `/api/operations-health` for governance and observability status.
+- Extended production operator authentication to every POST surface that can process client context: ChatGPT, agent routing, security guard, policy gateway, workflow start and approvals.
+- Added request IDs and audit-friendly failure codes to sensitive operations.
+
 ## 1.0.0 — Owner Command Center
 - Rebuilt the primary dashboard around the real v1 architecture instead of the original prototype messaging.
 - Surfaces the 12-agent workforce, AI safety evals, model budgets, durable workflows, Neon data plane, operator security and launch gates.
@@ -13,15 +21,12 @@
 - Protected ChatGPT inference, durable workflow start, and workflow approval routes.
 - Removed client-supplied reviewer identity from approval decisions; authenticated actor identity is injected server-side.
 - Added `/api/security-status` for authentication/readiness visibility.
-- Added `CREDIT_OS_API_TOKEN` server-side configuration.
 
 ## 0.8.0 — Neon Data Plane
-- Added a real Neon/PostgreSQL `PlatformStore` adapter using the serverless driver.
-- Added lazy database activation and explicit tenant scoping.
-- Added schema-aware storage health.
+- Added a real Neon/PostgreSQL PlatformStore adapter with tenant-scoped queries and schema-aware health.
 
 ## 0.7.0 — Durable Operations
-- Added Vercel Workflow runtime integration, retryable credit-case workflows and approval hooks.
+- Added Vercel Workflow runtime integration, retryable workflows and approval hooks.
 
 ## 0.6.0 — Agentic Control Plane
 - Added 12 specialized agents, risk routing, security/PII guard, model budgets and safety evals.

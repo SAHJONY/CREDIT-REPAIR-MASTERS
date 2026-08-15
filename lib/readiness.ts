@@ -14,8 +14,10 @@ function configured(name: string) {
 
 export function getReadinessChecks(): ReadinessCheck[] {
   const databaseConfigured = configured("DATABASE_URL");
-  const operatorAuthConfigured = configured("CREDIT_OS_API_TOKEN");
-  const neonAuthConfigured = configured("NEON_AUTH_URL") || configured("NEON_AUTH_JWKS_URL");
+  const authUrlConfigured = configured("NEON_AUTH_BASE_URL") || configured("VITE_NEON_AUTH_URL");
+  const authCookieSecretConfigured = configured("NEON_AUTH_COOKIE_SECRET") || configured("AUTH_SECRET");
+  const sessionAuthConfigured = authUrlConfigured && authCookieSecretConfigured;
+  const mfaEnforced = process.env.AUTH_MFA_ENFORCED === "true";
   const providerConfigured = configured("CREDIT_DATA_PROVIDER") || configured("CREDIT_PROVIDER_API_KEY");
   const vaultConfigured = configured("EVIDENCE_VAULT_PROVIDER") || configured("BLOB_READ_WRITE_TOKEN");
   const stateRulesConfigured = configured("STATE_RULES_VERSION") || configured("STATE_RULES_PROVIDER");
@@ -29,7 +31,8 @@ export function getReadinessChecks(): ReadinessCheck[] {
     { id: "rbac-model", label: "Role/permission model", status: "ready", requiredForProduction: true },
     { id: "ledger-model", label: "Consent/audit/agent-run ledger model", status: "ready", requiredForProduction: true },
     { id: "db", label: "Encrypted production database provisioned", status: databaseConfigured ? "ready" : "setup", requiredForProduction: true, detail: databaseConfigured ? "DATABASE_URL configured" : "DATABASE_URL missing" },
-    { id: "auth", label: "Production authentication + MFA", status: operatorAuthConfigured && neonAuthConfigured ? "ready" : "setup", requiredForProduction: true, detail: operatorAuthConfigured && neonAuthConfigured ? "operator token + Neon Auth configured" : "requires operator auth and Neon Auth runtime binding" },
+    { id: "auth-runtime", label: "Neon session authentication + membership gate", status: sessionAuthConfigured && databaseConfigured ? "ready" : "setup", requiredForProduction: true, detail: sessionAuthConfigured && databaseConfigured ? "Neon Auth runtime and tenant membership store configured" : "Neon Auth URL/cookie secret or production database missing" },
+    { id: "mfa", label: "MFA enforcement for privileged operators", status: mfaEnforced ? "ready" : "setup", requiredForProduction: true, detail: mfaEnforced ? "MFA enforcement declared active" : "MFA enforcement not yet verified" },
     { id: "bureau", label: "Authorized credit data provider", status: providerConfigured ? "ready" : "setup", requiredForProduction: true, detail: providerConfigured ? "provider configured" : "authorized provider not configured" },
     { id: "vault", label: "Encrypted evidence document vault", status: vaultConfigured ? "ready" : "setup", requiredForProduction: true, detail: vaultConfigured ? "vault configured" : "evidence vault not configured" },
     { id: "state-rules", label: "State-by-state compliance rules", status: stateRulesConfigured ? "ready" : "setup", requiredForProduction: true, detail: stateRulesConfigured ? "state rules configured" : "state rules runtime not configured" },

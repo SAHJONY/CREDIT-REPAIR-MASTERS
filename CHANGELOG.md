@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.9.0 — API Security Boundary
+- Added fail-closed operator authentication for sensitive production APIs.
+- Added constant-time API token comparison using Node crypto.
+- Protected ChatGPT inference, durable workflow start, and workflow approval routes.
+- Removed client-supplied reviewer identity from approval decisions; authenticated actor identity is injected server-side.
+- Added `/api/security-status` for authentication/readiness visibility.
+- Added `CREDIT_OS_API_TOKEN` server-side configuration.
+
 ## 0.8.0 — Neon Data Plane
 - Added a real Neon/PostgreSQL `PlatformStore` adapter using the serverless driver.
 - Added lazy database activation: no `DATABASE_URL` means demo-memory; no build-time connection attempt is made.

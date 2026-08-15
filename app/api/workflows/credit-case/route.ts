@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { start } from "workflow/api";
 import { z } from "zod";
 import { creditCaseWorkflow } from "@/workflows/credit-case-workflow";
+import { authenticateOperator } from "@/lib/api-auth";
 
 const inputSchema = z.object({
   clientId: z.string().min(1),
@@ -15,8 +16,10 @@ const inputSchema = z.object({
 });
 
 export async function POST(request: Request) {
+  const auth = authenticateOperator(request);
+  if (!auth.ok) return NextResponse.json({ error: auth.error }, { status: auth.status });
   const parsed = inputSchema.safeParse(await request.json());
   if (!parsed.success) return NextResponse.json({ error: "INVALID_WORKFLOW_INPUT", issues: parsed.error.issues }, { status: 400 });
   const run = await start(creditCaseWorkflow, [parsed.data]);
-  return NextResponse.json({ runId: run.runId, status: "queued", externalExecutionEnabled: false }, { status: 202 });
+  return NextResponse.json({ runId: run.runId, status: "queued", requestedBy: auth.actorId, externalExecutionEnabled: false }, { status: 202 });
 }

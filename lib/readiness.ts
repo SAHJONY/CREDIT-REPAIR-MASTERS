@@ -1,28 +1,46 @@
+declare const process: { env: Record<string, string | undefined> };
+
 export interface ReadinessCheck {
   id: string;
   label: string;
   status: "ready" | "setup" | "blocked";
   requiredForProduction: boolean;
+  detail?: string;
 }
 
-export const readinessChecks: ReadinessCheck[] = [
-  { id: "ui", label: "Owner command center", status: "ready", requiredForProduction: true },
-  { id: "brain", label: "AI decision engine", status: "ready", requiredForProduction: true },
-  { id: "policy", label: "Compliance policy gateway", status: "ready", requiredForProduction: true },
-  { id: "case-model", label: "Case/evidence state model", status: "ready", requiredForProduction: true },
-  { id: "storage-contract", label: "Production storage contract + SQL schema", status: "ready", requiredForProduction: true },
-  { id: "rbac-model", label: "Role/permission model", status: "ready", requiredForProduction: true },
-  { id: "ledger-model", label: "Consent/audit/agent-run ledger model", status: "ready", requiredForProduction: true },
-  { id: "db", label: "Encrypted production database provisioned", status: "setup", requiredForProduction: true },
-  { id: "auth", label: "Production authentication + MFA", status: "setup", requiredForProduction: true },
-  { id: "bureau", label: "Authorized credit data provider", status: "setup", requiredForProduction: true },
-  { id: "vault", label: "Encrypted evidence document vault", status: "setup", requiredForProduction: true },
-  { id: "state-rules", label: "State-by-state compliance rules", status: "setup", requiredForProduction: true },
-  { id: "external-actions", label: "External action adapters", status: "blocked", requiredForProduction: false }
-];
+function configured(name: string) {
+  return Boolean(process.env[name]?.trim());
+}
 
-export function readinessSummary() {
-  const required = readinessChecks.filter((item) => item.requiredForProduction);
+export function getReadinessChecks(): ReadinessCheck[] {
+  const databaseConfigured = configured("DATABASE_URL");
+  const operatorAuthConfigured = configured("CREDIT_OS_API_TOKEN");
+  const neonAuthConfigured = configured("NEON_AUTH_URL") || configured("NEON_AUTH_JWKS_URL");
+  const providerConfigured = configured("CREDIT_DATA_PROVIDER") || configured("CREDIT_PROVIDER_API_KEY");
+  const vaultConfigured = configured("EVIDENCE_VAULT_PROVIDER") || configured("BLOB_READ_WRITE_TOKEN");
+  const stateRulesConfigured = configured("STATE_RULES_VERSION") || configured("STATE_RULES_PROVIDER");
+
+  return [
+    { id: "ui", label: "Owner command center", status: "ready", requiredForProduction: true },
+    { id: "brain", label: "AI decision engine", status: "ready", requiredForProduction: true },
+    { id: "policy", label: "Compliance policy gateway", status: "ready", requiredForProduction: true },
+    { id: "case-model", label: "Case/evidence state model", status: "ready", requiredForProduction: true },
+    { id: "storage-contract", label: "Production storage contract + SQL schema", status: "ready", requiredForProduction: true },
+    { id: "rbac-model", label: "Role/permission model", status: "ready", requiredForProduction: true },
+    { id: "ledger-model", label: "Consent/audit/agent-run ledger model", status: "ready", requiredForProduction: true },
+    { id: "db", label: "Encrypted production database provisioned", status: databaseConfigured ? "ready" : "setup", requiredForProduction: true, detail: databaseConfigured ? "DATABASE_URL configured" : "DATABASE_URL missing" },
+    { id: "auth", label: "Production authentication + MFA", status: operatorAuthConfigured && neonAuthConfigured ? "ready" : "setup", requiredForProduction: true, detail: operatorAuthConfigured && neonAuthConfigured ? "operator token + Neon Auth configured" : "requires operator auth and Neon Auth runtime binding" },
+    { id: "bureau", label: "Authorized credit data provider", status: providerConfigured ? "ready" : "setup", requiredForProduction: true, detail: providerConfigured ? "provider configured" : "authorized provider not configured" },
+    { id: "vault", label: "Encrypted evidence document vault", status: vaultConfigured ? "ready" : "setup", requiredForProduction: true, detail: vaultConfigured ? "vault configured" : "evidence vault not configured" },
+    { id: "state-rules", label: "State-by-state compliance rules", status: stateRulesConfigured ? "ready" : "setup", requiredForProduction: true, detail: stateRulesConfigured ? "state rules configured" : "state rules runtime not configured" },
+    { id: "external-actions", label: "External action adapters", status: "blocked", requiredForProduction: false, detail: "intentionally approval-gated" }
+  ];
+}
+
+export const readinessChecks = getReadinessChecks();
+
+export function readinessSummary(checks = getReadinessChecks()) {
+  const required = checks.filter((item) => item.requiredForProduction);
   const ready = required.filter((item) => item.status === "ready").length;
   return {
     ready,

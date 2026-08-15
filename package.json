@@ -1,13 +1,13 @@
 {
   "name": "credit-repair-masters-os",
-  "version": "1.9.0",
+  "version": "2.0.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "tsc --noEmit",
-    "check:core": "tsc --noEmit --strict --skipLibCheck --target ES2022 --module ESNext --moduleResolution Bundler --lib ES2022,DOM lib/types.ts lib/case-types.ts lib/credit-engine.ts lib/compliance.ts lib/orchestrator.ts lib/brain-memory.ts lib/brain-tools.ts lib/brain-trace.ts lib/agent-council.ts lib/openai-brain.ts lib/platform-types.ts lib/rbac.ts lib/platform-store.ts lib/neon-store.ts lib/agent-registry.ts lib/agent-router.ts lib/security-guard.ts lib/workflow-engine.ts lib/model-budget.ts lib/agent-evals.ts lib/api-auth.ts lib/telemetry.ts lib/evidence-integrity.ts lib/dispute-intelligence.ts lib/readiness.ts lib/evidence-vault.ts"
+    "check:core": "tsc --noEmit --strict --skipLibCheck --target ES2022 --module ESNext --moduleResolution Bundler --lib ES2022,DOM lib/types.ts lib/case-types.ts lib/credit-engine.ts lib/compliance.ts lib/orchestrator.ts lib/brain-memory.ts lib/brain-tools.ts lib/brain-trace.ts lib/agent-council.ts lib/openai-brain.ts lib/platform-types.ts lib/rbac.ts lib/platform-store.ts lib/neon-store.ts lib/agent-registry.ts lib/agent-router.ts lib/security-guard.ts lib/workflow-engine.ts lib/model-budget.ts lib/agent-evals.ts lib/api-auth.ts lib/telemetry.ts lib/evidence-integrity.ts lib/dispute-intelligence.ts lib/readiness.ts lib/evidence-vault.ts lib/session-access.ts"
   },
   "dependencies": {
     "@neondatabase/auth": "0.4.2-beta",

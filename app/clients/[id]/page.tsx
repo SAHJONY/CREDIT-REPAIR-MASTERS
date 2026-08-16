@@ -61,7 +61,7 @@ export default async function ClientWorkspace({ params }: { params: Promise<{ id
                 <strong>{provider.name}</strong>
                 <div className="small" style={{ marginTop: 6 }}>{provider.notes}</div>
                 <div className="headerActions" style={{ marginTop: 10 }}>
-                  <a className="secondaryButton" href={provider.links.reportAccess || provider.officialUrl} target="_blank" rel="noreferrer">Get report</a>
+                  <a className="secondaryButton" href={provider.links.report || provider.officialUrl} target="_blank" rel="noreferrer">Get report</a>
                   {provider.links.dispute ? <a className="secondaryButton" href={provider.links.dispute} target="_blank" rel="noreferrer">Dispute</a> : null}
                   {provider.links.freeze ? <a className="secondaryButton" href={provider.links.freeze} target="_blank" rel="noreferrer">Freeze</a> : null}
                 </div>

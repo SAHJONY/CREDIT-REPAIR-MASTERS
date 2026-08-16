@@ -1,3 +1,5 @@
+import { stateComplianceRuntimeSummary } from "./state-compliance";
+
 declare const process: { env: Record<string, string | undefined> };
 
 export interface ReadinessCheck {
@@ -20,7 +22,7 @@ export function getReadinessChecks(): ReadinessCheck[] {
   const mfaEnforced = process.env.AUTH_MFA_ENFORCED === "true";
   const liveProviderConfigured = configured("CREDIT_DATA_PROVIDER") && configured("CREDIT_PROVIDER_API_KEY");
   const privateBlobConfigured = configured("BLOB_READ_WRITE_TOKEN");
-  const stateRulesConfigured = configured("STATE_RULES_VERSION") || configured("STATE_RULES_PROVIDER");
+  const stateRuntime = stateComplianceRuntimeSummary();
 
   return [
     { id: "ui", label: "Owner command center", status: "ready", requiredForProduction: true },
@@ -36,7 +38,7 @@ export function getReadinessChecks(): ReadinessCheck[] {
     { id: "free-credit-sources", label: "Free consumer credit disclosure sources", status: "ready", requiredForProduction: false, detail: "consumer-controlled import catalog available; does not satisfy unattended bureau API readiness" },
     { id: "bureau", label: "Authorized live credit data provider", status: liveProviderConfigured ? "ready" : "setup", requiredForProduction: true, detail: liveProviderConfigured ? "contracted provider name and API credential configured" : "contracted authorized provider + API credential not configured; free consumer imports remain available" },
     { id: "vault", label: "Private evidence document vault", status: privateBlobConfigured ? "ready" : "setup", requiredForProduction: true, detail: privateBlobConfigured ? "Vercel Private Blob credential configured" : "private Blob store/credential not configured" },
-    { id: "state-rules", label: "State-by-state compliance rules", status: stateRulesConfigured ? "ready" : "setup", requiredForProduction: true, detail: stateRulesConfigured ? "state rules configured" : "state rules runtime not configured" },
+    { id: "state-rules", label: "State compliance routing + fail-closed coverage", status: stateRuntime.runtimeReady ? "ready" : "setup", requiredForProduction: true, detail: stateRuntime.runtimeReady ? `${stateRuntime.jurisdictions} jurisdictions routed; ${stateRuntime.validated} state overlay validated; ${stateRuntime.manualReviewRequired} require manual compliance review; unsupported jurisdictions blocked` : "state compliance runtime incomplete" },
     { id: "external-actions", label: "External action adapters", status: "blocked", requiredForProduction: false, detail: "intentionally approval-gated" }
   ];
 }

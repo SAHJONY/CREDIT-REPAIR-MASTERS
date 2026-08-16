@@ -18,7 +18,7 @@ export function getReadinessChecks(): ReadinessCheck[] {
   const authCookieSecretConfigured = configured("NEON_AUTH_COOKIE_SECRET") || configured("AUTH_SECRET");
   const sessionAuthConfigured = authUrlConfigured && authCookieSecretConfigured;
   const mfaEnforced = process.env.AUTH_MFA_ENFORCED === "true";
-  const providerConfigured = configured("CREDIT_DATA_PROVIDER") || configured("CREDIT_PROVIDER_API_KEY");
+  const liveProviderConfigured = configured("CREDIT_DATA_PROVIDER") && configured("CREDIT_PROVIDER_API_KEY");
   const privateBlobConfigured = configured("BLOB_READ_WRITE_TOKEN");
   const stateRulesConfigured = configured("STATE_RULES_VERSION") || configured("STATE_RULES_PROVIDER");
 
@@ -33,7 +33,8 @@ export function getReadinessChecks(): ReadinessCheck[] {
     { id: "db", label: "Encrypted production database provisioned", status: databaseConfigured ? "ready" : "setup", requiredForProduction: true, detail: databaseConfigured ? "DATABASE_URL configured" : "DATABASE_URL missing" },
     { id: "auth-runtime", label: "Neon session authentication + membership gate", status: sessionAuthConfigured && databaseConfigured ? "ready" : "setup", requiredForProduction: true, detail: sessionAuthConfigured && databaseConfigured ? "Neon Auth runtime and tenant membership store configured" : "Neon Auth URL/cookie secret or production database missing" },
     { id: "mfa", label: "MFA enforcement for privileged operators", status: mfaEnforced ? "ready" : "setup", requiredForProduction: true, detail: mfaEnforced ? "MFA enforcement declared active" : "MFA enforcement not yet verified" },
-    { id: "bureau", label: "Authorized credit data provider", status: providerConfigured ? "ready" : "setup", requiredForProduction: true, detail: providerConfigured ? "provider configured" : "authorized provider not configured" },
+    { id: "free-credit-sources", label: "Free consumer credit disclosure sources", status: "ready", requiredForProduction: false, detail: "consumer-controlled import catalog available; does not satisfy unattended bureau API readiness" },
+    { id: "bureau", label: "Authorized live credit data provider", status: liveProviderConfigured ? "ready" : "setup", requiredForProduction: true, detail: liveProviderConfigured ? "contracted provider name and API credential configured" : "contracted authorized provider + API credential not configured; free consumer imports remain available" },
     { id: "vault", label: "Private evidence document vault", status: privateBlobConfigured ? "ready" : "setup", requiredForProduction: true, detail: privateBlobConfigured ? "Vercel Private Blob credential configured" : "private Blob store/credential not configured" },
     { id: "state-rules", label: "State-by-state compliance rules", status: stateRulesConfigured ? "ready" : "setup", requiredForProduction: true, detail: stateRulesConfigured ? "state rules configured" : "state rules runtime not configured" },
     { id: "external-actions", label: "External action adapters", status: "blocked", requiredForProduction: false, detail: "intentionally approval-gated" }

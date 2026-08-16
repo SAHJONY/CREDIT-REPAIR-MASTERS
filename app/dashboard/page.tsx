@@ -10,6 +10,7 @@ export const dynamic = 'force-dynamic';
 export default async function DashboardPage() {
   const session = await getBusinessSession();
   if (!session) redirect('/auth/sign-in');
+  if (session.mfaRequired && !session.mfaAssured) redirect('/auth/mfa');
 
   const store = getPlatformStore();
   const [organization, clients, audit, runs] = await Promise.all([
@@ -26,7 +27,7 @@ export default async function DashboardPage() {
   return (
     <main>
       <header className="appHeader">
-        <div><div className="kicker">{organization?.name || 'CREDIT REPAIR MASTERS'} / OWNER OS / v2.0</div><h1>Operations Command Center</h1><p className="subtitle">Live tenant data from Neon. Signed in as {session.email} · {session.member.role}.</p></div>
+        <div><div className="kicker">{organization?.name || 'CREDIT REPAIR MASTERS'} / OWNER OS / v2.0</div><h1>Operations Command Center</h1><p className="subtitle">Live tenant data from Neon. Signed in as {session.email} · {session.member.role} · MFA assured.</p></div>
         <div className="headerActions"><Link className="secondaryButton" href="/clients">Clients</Link><SignOutButton /></div>
       </header>
 

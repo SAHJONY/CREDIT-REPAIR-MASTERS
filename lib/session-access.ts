@@ -1,5 +1,7 @@
+import { cookies } from 'next/headers';
 import { getNeonAuth, neonAuthConfigured } from './auth/server';
 import { configuredOrganizationId } from './api-auth';
+import { hasMfaAssurance } from './mfa';
 import { getPlatformStore } from './platform-store';
 import type { AppUser } from './platform-types';
 
@@ -8,6 +10,8 @@ export type BusinessSession = {
   email: string;
   organizationId: string;
   member: AppUser;
+  mfaRequired: boolean;
+  mfaAssured: boolean;
 };
 
 export async function getBusinessSession(): Promise<BusinessSession | null> {
@@ -27,5 +31,12 @@ export async function getBusinessSession(): Promise<BusinessSession | null> {
   const member = members.find((candidate: AppUser) => candidate.status === 'active' && candidate.email.trim().toLowerCase() === email);
   if (!member) return null;
 
-  return { userId: id, email, organizationId, member };
+  const mfaRequired = member.role === 'owner' || member.role === 'admin';
+  let mfaAssured = !mfaRequired;
+  if (mfaRequired) {
+    const jar = await cookies();
+    mfaAssured = await hasMfaAssurance({ organizationId, userId: member.id, token: jar.get('crm_mfa')?.value });
+  }
+
+  return { userId: id, email, organizationId, member, mfaRequired, mfaAssured };
 }

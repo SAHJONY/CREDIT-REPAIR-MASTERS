@@ -10,6 +10,7 @@ export const dynamic = 'force-dynamic';
 export default async function ClientsPage() {
   const session = await getBusinessSession();
   if (!session) redirect('/auth/sign-in');
+  if (session.mfaRequired && !session.mfaAssured) redirect('/auth/mfa');
   const clients = await getPlatformStore().listClients(session.organizationId);
 
   return (

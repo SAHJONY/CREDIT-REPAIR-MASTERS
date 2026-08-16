@@ -18,6 +18,7 @@ function activeConsent(consent: { granted: boolean; revokedAt?: string; expiresA
 export default async function ClientWorkspace({ params }: { params: Promise<{ id: string }> }) {
   const session = await getBusinessSession();
   if (!session) redirect('/auth/sign-in');
+  if (session.mfaRequired && !session.mfaAssured) redirect('/auth/mfa');
   const { id } = await params;
   const store = getPlatformStore();
   const client = await store.getClient(session.organizationId, id);

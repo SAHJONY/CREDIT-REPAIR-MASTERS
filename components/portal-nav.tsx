@@ -16,6 +16,7 @@ export function PortalNav() {
       <Link className="secondaryButton" href="/portal/progress">Progress</Link>
       <Link className="secondaryButton" href="/portal/documents">Documents</Link>
       <Link className="secondaryButton" href="/portal/consents">Consents</Link>
+      <Link className="secondaryButton" href="/portal/payments">Payments</Link>
       <Link className="secondaryButton" href="/portal/account">Account</Link>
       <button className="secondaryButton" type="button" onClick={signOut}>Sign out</button>
     </div>

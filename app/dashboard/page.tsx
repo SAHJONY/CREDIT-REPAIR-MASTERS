@@ -28,8 +28,8 @@ export default async function DashboardPage() {
   return (
     <main>
       <header className="appHeader">
-        <div><div className="kicker">{organization?.name || 'CREDIT REPAIR MASTERS'} / OWNER OS / v3.1</div><h1>Operations Command Center</h1><p className="subtitle">Live tenant data from Neon. Signed in as {session.email} · {session.member.role} · MFA assured.</p></div>
-        <div className="headerActions"><Link className="secondaryButton" href="/billing">Billing</Link><Link className="secondaryButton" href="/clients">Clients</Link><SignOutButton /></div>
+        <div><div className="kicker">{organization?.name || 'CREDIT REPAIR MASTERS'} / OWNER OS / v3.2</div><h1>Operations Command Center</h1><p className="subtitle">Live tenant data from Neon. Signed in as {session.email} · {session.member.role} · MFA assured.</p></div>
+        <div className="headerActions"><Link className="secondaryButton" href="/demo">Demo OS</Link><Link className="secondaryButton" href="/billing">Billing</Link><Link className="secondaryButton" href="/clients">Clients</Link><SignOutButton /></div>
       </header>
 
       <section className="grid">
@@ -38,14 +38,18 @@ export default async function DashboardPage() {
         <div className="card span3"><div className="label">Recent audit events</div><div className="value">{audit.length}</div><div className="small">latest tenant activity</div></div>
         <div className="card span3"><div className="label">Recent agent runs</div><div className="value">{runs.length}</div><div className="small">latest execution records</div></div>
 
+        <div className="card span12">
+          <div className="row"><div><div className="label">Demo operating system</div><h2>Personal · Billing · Business</h2><div className="small">Three isolated fixtures demonstrate the full business lifecycle without representing real customers or real revenue.</div></div><Link className="primaryButton" href="/demo">Open Demo Command Center</Link></div>
+        </div>
+
         <div className="card span7">
-          <div className="row"><div><div className="label">Client pipeline</div><h2>Real client records</h2></div><Link className="primaryButton" href="/clients">Manage clients</Link></div>
+          <div className="row"><div><div className="label">Client pipeline</div><h2>Client records</h2></div><Link className="primaryButton" href="/clients">Manage clients</Link></div>
           {clients.length ? clients.slice(0, 8).map((client) => (
             <Link className="listRow" href={`/clients/${client.id}`} key={client.id}>
               <div><strong>{client.displayName}</strong><div className="small">{client.kind} · {client.state}</div></div>
-              <span className="pill low">{client.status}</span>
+              <span className={`pill ${client.displayName.startsWith('DEMO —') ? 'medium' : 'low'}`}>{client.displayName.startsWith('DEMO —') ? 'demo' : client.status}</span>
             </Link>
-          )) : <div className="emptyState">No real clients yet. Create the first client from Client Management.</div>}
+          )) : <div className="emptyState">No client records yet. Create the first client from Client Management.</div>}
         </div>
 
         <div className="card span5">

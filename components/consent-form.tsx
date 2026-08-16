@@ -48,8 +48,9 @@ export function ConsentForm({ clientId }: { clientId: string }) {
     <form className="appForm compactForm" onSubmit={submit}>
       <label>Scope<select name="scope" defaultValue="credit_report_analysis">{scopes.map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select></label>
       <label>Decision<select name="granted" defaultValue="true"><option value="true">Granted</option><option value="false">Denied / revoked</option></select></label>
+      <div className="small">This records a staff attestation that client authorization was documented. It is stored as <strong>staff_recorded</strong> and is not represented as client-originated portal consent.</div>
       {error ? <div className="formError">{error}</div> : null}
-      <button className="primaryButton" disabled={busy} type="submit">{busy ? 'Recording…' : 'Record consent'}</button>
+      <button className="primaryButton" disabled={busy} type="submit">{busy ? 'Recording…' : 'Record documented consent'}</button>
     </form>
   );
 }

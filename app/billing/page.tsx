@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
+import { BillingInvoiceActions } from '@/components/billing-invoice-actions';
 import { BillingInvoiceCreateForm } from '@/components/billing-invoice-create-form';
 import { SignOutButton } from '@/components/sign-out-button';
 import { listBillingInvoices } from '@/lib/billing-store';
@@ -30,6 +31,7 @@ export default async function BillingPage() {
   const billableClients = clients.filter((client) => client.status !== 'closed');
   const fixedServices = commercialServices.filter((service): service is typeof service & { priceCents: number } => typeof service.priceCents === 'number');
   const canIssue = ['owner', 'admin', 'credit_specialist'].includes(session.member.role);
+  const canVoid = ['owner', 'admin'].includes(session.member.role);
 
   return <main>
     <header className="appHeader">
@@ -39,7 +41,7 @@ export default async function BillingPage() {
     <section className="grid">
       <div className="card span3"><div className="label">Collected</div><div className="value">{money(collected)}</div><div className="small">verified paid invoices</div></div>
       <div className="card span3"><div className="label">Outstanding</div><div className="value">{money(outstanding)}</div><div className="small">eligible invoices awaiting settlement</div></div>
-      <div className="card span3"><div className="label">Invoices</div><div className="value">{invoices.length}</div><div className="small">all billing records</div></div>
+      <div className="card span3"><div className="label">Invoices</div><div className="value">{invoices.length}</div><div className="small">all billing records, including void history</div></div>
       <div className="card span3"><div className="label">Paid</div><div className="value">{invoices.filter((invoice) => invoice.status === 'paid').length}</div><div className="small">processor-verified settlements</div></div>
 
       {canIssue ? <div className="card span5"><div className="label">Issue invoice</div><h2>Bill only after the gate approves</h2><BillingInvoiceCreateForm clients={billableClients.map((client) => ({ id: client.id, name: client.displayName, state: client.state }))} services={fixedServices.map((service) => ({ id: service.id, name: service.name, priceCents: service.priceCents }))} /></div> : null}
@@ -47,11 +49,21 @@ export default async function BillingPage() {
       <div className={`card ${canIssue ? 'span7' : 'span12'}`}><div className="label">Invoice ledger</div><h2>Revenue history</h2>
         {invoices.length ? invoices.map((invoice) => {
           const client = clientMap.get(invoice.clientId);
-          return <div className="listRow" key={invoice.id}><div><strong>{client?.displayName || invoice.clientId}</strong><div className="small">{invoice.milestoneLabel} · {money(invoice.amountCents)} · {new Date(invoice.createdAt).toLocaleDateString()}</div></div><span className={`pill ${invoice.status === 'paid' ? 'low' : invoice.status === 'void' ? 'high' : 'medium'}`}>{invoice.status}</span></div>;
+          return <div className="listRow" key={invoice.id} style={{ alignItems: 'center' }}>
+            <div>
+              <strong>{client?.displayName || invoice.clientId}</strong>
+              <div className="small">{invoice.milestoneLabel} · {money(invoice.amountCents)} · {new Date(invoice.createdAt).toLocaleDateString()}</div>
+              <div className="small">Invoice {invoice.id} · {invoice.checkoutUrl ? 'Stripe checkout created' : invoice.status === 'open' ? 'Waiting for customer checkout' : 'No checkout link'}</div>
+            </div>
+            <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap', justifyContent: 'flex-end' }}>
+              <span className={`pill ${invoice.status === 'paid' ? 'low' : invoice.status === 'void' ? 'high' : 'medium'}`}>{invoice.status}</span>
+              {canVoid ? <BillingInvoiceActions invoiceId={invoice.id} status={invoice.status} checkoutUrl={invoice.checkoutUrl} /> : null}
+            </div>
+          </div>;
         }) : <div className="emptyState">No invoices yet. A bill is created only after the compliance gate confirms collection is permitted.</div>}
       </div>
 
-      <div className="card span12"><div className="label">Revenue controls</div><h2>Settlement is processor-verified</h2><div className="guardrail">Customer browser redirects never mark an invoice paid. Stripe must send a valid signed webhook, the invoice amount must match, and the checkout session must reconcile to the internal invoice before settlement is recorded.</div></div>
+      <div className="card span12"><div className="label">Revenue controls</div><h2>Settlement is processor-verified</h2><div className="guardrail">Customer browser redirects never mark an invoice paid. Stripe must send a valid signed webhook, the invoice amount must match, and the checkout session must reconcile to the internal invoice before settlement is recorded. Customers create secure checkout from their authenticated Payments & Receipts portal.</div></div>
     </section>
   </main>;
 }

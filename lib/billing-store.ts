@@ -12,7 +12,7 @@ export type BillingInvoice = {
   currency: 'usd';
   status: BillingInvoiceStatus;
   eligibilityDecision: 'eligible' | 'deferred' | 'manual_review' | 'blocked';
-  eligibilitySnapshot: Record<string, unknown>;
+  eligibilitySnapshot: unknown;
   provider?: string;
   providerSessionId?: string;
   providerPaymentId?: string;
@@ -34,7 +34,7 @@ type InvoiceRow = {
   currency: 'usd';
   status: BillingInvoiceStatus;
   eligibility_decision: BillingInvoice['eligibilityDecision'];
-  eligibility_snapshot: Record<string, unknown>;
+  eligibility_snapshot: unknown;
   provider: string | null;
   provider_session_id: string | null;
   provider_payment_id: string | null;
@@ -63,7 +63,7 @@ function mapInvoice(row: InvoiceRow): BillingInvoice {
     currency: row.currency,
     status: row.status,
     eligibilityDecision: row.eligibility_decision,
-    eligibilitySnapshot: row.eligibility_snapshot || {},
+    eligibilitySnapshot: row.eligibility_snapshot ?? {},
     provider: row.provider || undefined,
     providerSessionId: row.provider_session_id || undefined,
     providerPaymentId: row.provider_payment_id || undefined,
@@ -112,7 +112,7 @@ export async function createBillingInvoice(input: {
   milestoneLabel: string;
   amountCents: number;
   eligibilityDecision: BillingInvoice['eligibilityDecision'];
-  eligibilitySnapshot: Record<string, unknown>;
+  eligibilitySnapshot: unknown;
   createdBy: string;
   dueAt?: string;
 }) {

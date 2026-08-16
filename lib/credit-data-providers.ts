@@ -199,10 +199,10 @@ export const freeCreditDataProviders: CreditDataProvider[] = [
     modes: ["consumer_import"],
     freeConsumerDisclosure: true,
     unattendedProductionApi: false,
-    officialUrl: "https://www.askcertegy.com/consumer-services/",
+    officialUrl: "https://www.askcertegy.com/FACT.jsp",
     links: {
       home: "https://www.askcertegy.com/",
-      report: "https://www.askcertegy.com/consumer-services/"
+      report: "https://www.askcertegy.com/FACT.jsp"
     },
     notes: "Specialty check-risk consumer reporting disclosure."
   },

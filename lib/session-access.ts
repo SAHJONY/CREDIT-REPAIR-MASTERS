@@ -1,7 +1,7 @@
-import { getNeonAuth, neonAuthConfigured } from '@/lib/auth/server';
-import { configuredOrganizationId } from '@/lib/api-auth';
-import { getPlatformStore } from '@/lib/platform-store';
-import type { AppUser } from '@/lib/platform-types';
+import { getNeonAuth, neonAuthConfigured } from './auth/server';
+import { configuredOrganizationId } from './api-auth';
+import { getPlatformStore } from './platform-store';
+import type { AppUser } from './platform-types';
 
 export type BusinessSession = {
   userId: string;
@@ -24,7 +24,7 @@ export async function getBusinessSession(): Promise<BusinessSession | null> {
 
   const organizationId = configuredOrganizationId();
   const members = await getPlatformStore().listUsers(organizationId);
-  const member = members.find((candidate) => candidate.status === 'active' && candidate.email.trim().toLowerCase() === email);
+  const member = members.find((candidate: AppUser) => candidate.status === 'active' && candidate.email.trim().toLowerCase() === email);
   if (!member) return null;
 
   return { userId: id, email, organizationId, member };

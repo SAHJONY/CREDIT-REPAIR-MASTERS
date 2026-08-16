@@ -12,6 +12,7 @@ export interface CreditCaseWorkflowInput {
   assertion?: string;
   amount?: number;
   narrative?: string;
+  state?: string;
 }
 
 export const creditApprovalHook = defineHook({
@@ -35,7 +36,8 @@ async function runRoutingStep(input: CreditCaseWorkflowInput) {
     evidenceIds: input.evidenceIds,
     consentId: input.consentId,
     assertion: input.assertion,
-    amount: input.amount
+    amount: input.amount,
+    state: input.state
   };
   return routeAgentTask(context);
 }
@@ -50,20 +52,22 @@ export async function creditCaseWorkflow(input: CreditCaseWorkflowInput) {
 
   const route = await runRoutingStep(input);
   if (route.execution === "blocked") {
-    return { status: "blocked_policy", caseId: input.caseId, reason: route.policy.reason, externalExecutionEnabled: false };
+    return { status: "blocked_policy", caseId: input.caseId, reason: route.policy.reason, jurisdiction: route.jurisdiction.jurisdiction, externalExecutionEnabled: false };
   }
 
   if (route.execution === "approval_required") {
     const approval = creditApprovalHook.create({ token: `credit-approval:${input.caseId}:${input.intent}` });
     const decision = await approval;
     if (!decision.approved) {
-      return { status: "rejected_by_reviewer", caseId: input.caseId, reviewerId: decision.reviewerId, externalExecutionEnabled: false };
+      return { status: "rejected_by_reviewer", caseId: input.caseId, reviewerId: decision.reviewerId, jurisdiction: route.jurisdiction.jurisdiction, externalExecutionEnabled: false };
     }
     return {
       status: "approved_for_manual_execution",
       caseId: input.caseId,
       reviewerId: decision.reviewerId,
       note: decision.note,
+      jurisdiction: route.jurisdiction.jurisdiction,
+      jurisdictionMode: route.jurisdiction.mode,
       externalExecutionEnabled: false
     };
   }
@@ -73,6 +77,8 @@ export async function creditCaseWorkflow(input: CreditCaseWorkflowInput) {
     caseId: input.caseId,
     primaryAgent: route.primary.id,
     supportAgents: route.support.map((agent) => agent?.id).filter(Boolean),
+    jurisdiction: route.jurisdiction.jurisdiction,
+    jurisdictionMode: route.jurisdiction.mode,
     externalExecutionEnabled: false
   };
 }

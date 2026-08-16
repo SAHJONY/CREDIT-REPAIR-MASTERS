@@ -3,6 +3,7 @@ import { start } from "workflow/api";
 import { z } from "zod";
 import { creditCaseWorkflow } from "@/workflows/credit-case-workflow";
 import { authenticateOperator } from "@/lib/api-auth";
+import { getPlatformStore } from "@/lib/platform-store";
 import { completeOperation, failOperation, startOperation } from "@/lib/telemetry";
 
 const inputSchema = z.object({
@@ -29,9 +30,14 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "INVALID_WORKFLOW_INPUT", issues: parsed.error.issues, requestId: op.requestId }, { status: 400 });
   }
   try {
-    const run = await start(creditCaseWorkflow, [parsed.data]);
-    completeOperation(op, { authMode: auth.mode, intent: parsed.data.intent, status: "queued" });
-    return NextResponse.json({ runId: run.runId, status: "queued", requestedBy: auth.actorId, requestId: op.requestId, externalExecutionEnabled: false }, { status: 202 });
+    const client = await getPlatformStore().getClient(auth.organizationId, parsed.data.clientId);
+    if (!client) {
+      failOperation(op, "CLIENT_NOT_FOUND");
+      return NextResponse.json({ error: "CLIENT_NOT_FOUND", requestId: op.requestId }, { status: 404 });
+    }
+    const run = await start(creditCaseWorkflow, [{ ...parsed.data, state: client.state }]);
+    completeOperation(op, { authMode: auth.mode, intent: parsed.data.intent, state: client.state, status: "queued" });
+    return NextResponse.json({ runId: run.runId, status: "queued", requestedBy: auth.actorId, jurisdiction: client.state, requestId: op.requestId, externalExecutionEnabled: false }, { status: 202 });
   } catch (error) {
     failOperation(op, "WORKFLOW_START_FAILED", error);
     return NextResponse.json({ error: "WORKFLOW_START_FAILED", requestId: op.requestId }, { status: 500 });

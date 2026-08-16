@@ -1,7 +1,7 @@
 import { randomUUID } from "node:crypto";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
-import { authenticateOperator } from "@/lib/api-auth";
+import { authenticateBusinessUser, authorizeRoles } from "@/lib/api-auth";
 import { getPlatformStore } from "@/lib/platform-store";
 
 const consentSchema = z.object({
@@ -13,7 +13,10 @@ const consentSchema = z.object({
 });
 
 export async function POST(request: NextRequest) {
-  const auth = authenticateOperator(request);
+  const auth = authorizeRoles(
+    await authenticateBusinessUser(request),
+    ["owner", "admin", "credit_specialist", "compliance_reviewer"]
+  );
   if (!auth.ok) return NextResponse.json({ error: auth.error }, { status: auth.status });
 
   try {
@@ -46,7 +49,7 @@ export async function POST(request: NextRequest) {
       resourceType: "consent",
       resourceId: record.id,
       decision: parsed.data.granted ? "allowed" : "blocked",
-      metadata: { clientId: client.id, scope: record.scope, source: record.source, granted: record.granted },
+      metadata: { clientId: client.id, scope: record.scope, source: record.source, granted: record.granted, authMode: auth.mode },
       createdAt: now
     });
 

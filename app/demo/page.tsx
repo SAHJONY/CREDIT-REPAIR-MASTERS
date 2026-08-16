@@ -53,6 +53,7 @@ export default async function DemoCommandCenterPage() {
           <p className="subtitle">Three isolated fixtures demonstrate personal credit, billing, and business credit workflows without representing real customers or real revenue.</p>
         </div>
         <div className="headerActions">
+          <Link className="secondaryButton" href="/demo/documents">Document Examples</Link>
           <Link className="secondaryButton" href="/dashboard">Dashboard</Link>
           <Link className="secondaryButton" href="/billing">Billing</Link>
           <Link className="secondaryButton" href="/clients">Clients</Link>
@@ -65,6 +66,13 @@ export default async function DemoCommandCenterPage() {
           <div className="label">Guardrail</div>
           <h2>Demo data only</h2>
           <div className="guardrail">These fixtures are intentionally marked DEMO. They must never be presented as real customer records, real disputes, or real collected revenue. Payment status may only become PAID through the normal processor-verified settlement flow.</div>
+        </div>
+
+        <div className="card span12">
+          <div className="row">
+            <div><div className="label">Document library</div><h2>33 sample documents across the full operating lifecycle</h2><div className="small">Intake, identity, consent, agreements, reports, analysis, disputes, evidence, compliance, milestones, billing, business credit, and operations.</div></div>
+            <Link className="primaryButton" href="/demo/documents">Open Document Examples</Link>
+          </div>
         </div>
 
         {snapshots.map(({ client, consents, evidence, clientRuns, clientAudit, clientInvoices, outstanding }) => {

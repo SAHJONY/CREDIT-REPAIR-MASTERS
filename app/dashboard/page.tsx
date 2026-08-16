@@ -3,7 +3,7 @@ import { redirect } from 'next/navigation';
 import { SignOutButton } from '@/components/sign-out-button';
 import { getBusinessSession } from '@/lib/session-access';
 import { getPlatformStore } from '@/lib/platform-store';
-import { getReadinessChecks, readinessSummary } from '@/lib/readiness';
+import { resolveProductionReadiness } from '@/lib/production-readiness';
 
 export const dynamic = 'force-dynamic';
 
@@ -13,14 +13,15 @@ export default async function DashboardPage() {
   if (session.mfaRequired && !session.mfaAssured) redirect('/auth/mfa');
 
   const store = getPlatformStore();
-  const [organization, clients, audit, runs] = await Promise.all([
+  const [organization, clients, audit, runs, productionReadiness] = await Promise.all([
     store.getOrganization(session.organizationId),
     store.listClients(session.organizationId),
     store.listAudit(session.organizationId, 8),
-    store.listAgentRuns(session.organizationId, 8)
+    store.listAgentRuns(session.organizationId, 8),
+    resolveProductionReadiness(session.organizationId)
   ]);
-  const checks = getReadinessChecks();
-  const readiness = readinessSummary(checks);
+  const checks = productionReadiness.checks;
+  const readiness = productionReadiness.summary;
   const activeClients = clients.filter((client) => client.status === 'active').length;
   const onboarding = clients.filter((client) => client.status === 'onboarding').length;
 

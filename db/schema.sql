@@ -1,4 +1,4 @@
--- CREDIT REPAIR MASTERS OS v1.3 production schema (PostgreSQL/Neon compatible)
+-- CREDIT REPAIR MASTERS OS v2.7 production schema (PostgreSQL/Neon compatible)
 -- Apply only after production database provisioning and backup policy are approved.
 -- Tenant integrity is enforced with composite organization/client foreign keys.
 
@@ -16,7 +16,8 @@ create table if not exists app_users (
   role text not null check (role in ('owner','admin','credit_specialist','compliance_reviewer','client','auditor')),
   status text not null default 'active' check (status in ('active','suspended')),
   created_at timestamptz not null default now(),
-  unique (organization_id, email)
+  unique (organization_id, email),
+  unique (organization_id, id)
 );
 
 create table if not exists clients (
@@ -30,6 +31,21 @@ create table if not exists clients (
   updated_at timestamptz not null default now(),
   unique (organization_id, id)
 );
+
+create table if not exists customer_client_access (
+  id text primary key,
+  organization_id text not null references organizations(id) on delete cascade,
+  user_id text not null,
+  client_id text not null,
+  status text not null default 'active' check (status in ('active','suspended')),
+  created_at timestamptz not null default now(),
+  foreign key (organization_id, user_id) references app_users(organization_id, id) on delete cascade,
+  foreign key (organization_id, client_id) references clients(organization_id, id) on delete cascade,
+  unique (organization_id, user_id),
+  unique (organization_id, client_id)
+);
+
+create index if not exists customer_client_access_org_status_idx on customer_client_access (organization_id, status);
 
 create table if not exists consent_records (
   id text primary key,

@@ -1,5 +1,6 @@
 import { timingSafeEqual } from "node:crypto";
 import { getNeonAuth, neonAuthConfigured } from "./auth/server";
+import { hasMfaAssurance } from "./mfa";
 import { getPlatformStore } from "./platform-store";
 import type { Role } from "./platform-types";
 
@@ -17,6 +18,15 @@ function bearerToken(request: Request): string | null {
   const authorization = request.headers.get("authorization");
   if (authorization?.toLowerCase().startsWith("bearer ")) return authorization.slice(7).trim();
   return request.headers.get("x-credit-os-token")?.trim() || null;
+}
+
+function cookieValue(request: Request, name: string): string | null {
+  const cookie = request.headers.get('cookie') || '';
+  for (const part of cookie.split(';')) {
+    const [key, ...rest] = part.trim().split('=');
+    if (key === name) return decodeURIComponent(rest.join('='));
+  }
+  return null;
 }
 
 function safeEqual(left: string, right: string): boolean {
@@ -86,6 +96,11 @@ export async function authenticateBusinessUser(request: Request): Promise<Operat
         const users = await getPlatformStore().listUsers(organizationId);
         const member = users.find((user) => user.status === "active" && user.email.trim().toLowerCase() === session.email);
         if (!member) return { ok: false, status: 403, error: "AUTH_MEMBERSHIP_REQUIRED" };
+
+        if (member.role === 'owner' || member.role === 'admin') {
+          const assured = await hasMfaAssurance({ organizationId, userId: member.id, token: cookieValue(request, 'crm_mfa') });
+          if (!assured) return { ok: false, status: 403, error: 'MFA_REQUIRED' };
+        }
 
         return {
           ok: true,

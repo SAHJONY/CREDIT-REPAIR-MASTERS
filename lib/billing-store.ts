@@ -104,6 +104,19 @@ export async function getBillingInvoice(organizationId: string, invoiceId: strin
   }
 }
 
+export async function findActiveDuplicateInvoice(input: { organizationId: string; clientId: string; serviceId: string; milestoneLabel: string }) {
+  const sql = neon(databaseUrl());
+  const normalized = input.milestoneLabel.trim().toLowerCase();
+  const rows = await sql`select * from billing_invoices
+    where organization_id = ${input.organizationId}
+      and client_id = ${input.clientId}
+      and service_id = ${input.serviceId}
+      and lower(trim(milestone_label)) = ${normalized}
+      and status in ('open','checkout_pending')
+    order by created_at asc limit 1`;
+  return rows[0] ? mapInvoice(rows[0] as InvoiceRow) : null;
+}
+
 export async function createBillingInvoice(input: {
   id: string;
   organizationId: string;
@@ -126,6 +139,14 @@ export async function createBillingInvoice(input: {
     ${input.dueAt || null}, ${input.createdBy}, now(), now()
   ) returning *`;
   return mapInvoice(rows[0] as InvoiceRow);
+}
+
+export async function voidBillingInvoice(organizationId: string, invoiceId: string) {
+  const sql = neon(databaseUrl());
+  const rows = await sql`update billing_invoices set status = 'void', updated_at = now()
+    where organization_id = ${organizationId} and id = ${invoiceId} and status in ('open','checkout_pending')
+    returning *`;
+  return rows[0] ? mapInvoice(rows[0] as InvoiceRow) : null;
 }
 
 export async function attachCheckoutSession(organizationId: string, invoiceId: string, sessionId: string, checkoutUrl: string) {

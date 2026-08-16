@@ -17,6 +17,38 @@ function safeEqual(left: string, right: string) {
   return a.length === b.length && timingSafeEqual(a, b);
 }
 
+function providerErrorCode(value: unknown): string | null {
+  if (!value || typeof value !== 'object') return null;
+  const candidate = value as { code?: unknown; error?: unknown; message?: unknown };
+  const nested = candidate.error && typeof candidate.error === 'object'
+    ? candidate.error as { code?: unknown; message?: unknown }
+    : null;
+  const raw = typeof nested?.code === 'string'
+    ? nested.code
+    : typeof candidate.code === 'string'
+      ? candidate.code
+      : typeof nested?.message === 'string'
+        ? nested.message
+        : typeof candidate.message === 'string'
+          ? candidate.message
+          : '';
+  const normalized = raw.trim().toUpperCase().replace(/[^A-Z0-9_-]+/g, '_').slice(0, 96);
+  return normalized || null;
+}
+
+function activationFailure(providerCode: string | null) {
+  console.warn(JSON.stringify({
+    level: 'warn',
+    service: 'credit-repair-masters',
+    event: 'owner_activation.provider_rejected',
+    providerCode: providerCode || 'UNKNOWN'
+  }));
+  return NextResponse.json(
+    { error: 'OWNER_ACTIVATION_FAILED', providerCode: providerCode || 'UNKNOWN' },
+    { status: 409 }
+  );
+}
+
 export async function POST(request: NextRequest) {
   if (!neonAuthConfigured()) return NextResponse.json({ error: 'AUTH_NOT_CONFIGURED' }, { status: 503 });
   const expectedActivationCode = process.env.OWNER_ACTIVATION_SECRET?.trim();
@@ -38,10 +70,10 @@ export async function POST(request: NextRequest) {
       name: 'CREDIT REPAIR MASTERS Owner'
     });
     if (result && typeof result === 'object' && 'error' in result && result.error) {
-      return NextResponse.json({ error: 'OWNER_ACTIVATION_FAILED' }, { status: 409 });
+      return activationFailure(providerErrorCode(result));
     }
     return NextResponse.json({ activated: true, email: parsed.data.email }, { status: 201 });
-  } catch {
-    return NextResponse.json({ error: 'OWNER_ACTIVATION_FAILED' }, { status: 409 });
+  } catch (error) {
+    return activationFailure(providerErrorCode(error));
   }
 }

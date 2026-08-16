@@ -16,12 +16,12 @@ export function SignInForm() {
     try {
       const result = await authClient.signIn.email({ email, password });
       if (result.error) {
-        setError(result.error.message || 'Unable to sign in.');
+        setError(result.error.message || 'Unable to sign in. Use password recovery if this owner account has no working password yet.');
         return;
       }
       window.location.assign('/dashboard');
     } catch {
-      setError('Authentication service unavailable.');
+      setError('Unable to sign in. Check the credentials or use password recovery below.');
     } finally {
       setBusy(false);
     }

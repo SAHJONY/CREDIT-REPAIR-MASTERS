@@ -1,5 +1,6 @@
-import { evaluateAction, type ProposedAction } from "./compliance";
+import { evaluateAction, type ProposedAction, type PolicyEvaluation } from "./compliance";
 import { getAgent } from "./agent-registry";
+import { resolveStateCompliance } from "./state-compliance";
 
 export type AgentIntent =
   | "analyze_report"
@@ -17,6 +18,7 @@ export interface RoutingContext {
   consentId?: string;
   assertion?: string;
   amount?: number;
+  state?: string;
 }
 
 const routingMap: Record<AgentIntent, { primary: string; support: string[] }> = {
@@ -40,16 +42,31 @@ function toProposedAction(context: RoutingContext): ProposedAction {
   }
 }
 
+function jurisdictionPolicy(context: RoutingContext, base: PolicyEvaluation): PolicyEvaluation {
+  if (!base.allowed) return base;
+  if (!(["submit_dispute", "identity_theft_case", "execute_payment"] as AgentIntent[]).includes(context.intent)) return base;
+
+  const stateRule = resolveStateCompliance(context.state);
+  if (stateRule.mode === "blocked") {
+    return { allowed: false, approval: false, reason: `Jurisdiction blocked: ${stateRule.jurisdiction} is unknown or unsupported.` };
+  }
+  if (stateRule.mode === "manual_review_required") {
+    return { allowed: true, approval: true, reason: `Manual compliance review required for ${stateRule.name}; state-specific overlay is not yet validated.` };
+  }
+  return base;
+}
+
 export function routeAgentTask(context: RoutingContext) {
   const route = routingMap[context.intent];
   const primary = getAgent(route.primary);
   if (!primary) throw new Error(`AGENT_NOT_FOUND:${route.primary}`);
-  const policy = evaluateAction(toProposedAction(context));
+  const policy = jurisdictionPolicy(context, evaluateAction(toProposedAction(context)));
   return {
     intent: context.intent,
     primary,
     support: route.support.map((id) => getAgent(id)).filter(Boolean),
     policy,
+    jurisdiction: resolveStateCompliance(context.state),
     execution: !policy.allowed ? "blocked" : policy.approval ? "approval_required" : "autonomous",
     canExecuteExternally: false
   } as const;

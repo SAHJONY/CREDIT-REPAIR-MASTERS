@@ -1,7 +1,14 @@
+'use client';
+
 import Link from 'next/link';
-import { SignOutButton } from './sign-out-button';
+import { authClient } from '@/lib/auth/client';
 
 export function PortalNav() {
+  async function signOut() {
+    await authClient.signOut();
+    window.location.assign('/portal/sign-in');
+  }
+
   return (
     <div className="headerActions">
       <Link className="secondaryButton" href="/portal">Home</Link>
@@ -10,7 +17,7 @@ export function PortalNav() {
       <Link className="secondaryButton" href="/portal/documents">Documents</Link>
       <Link className="secondaryButton" href="/portal/consents">Consents</Link>
       <Link className="secondaryButton" href="/portal/account">Account</Link>
-      <SignOutButton />
+      <button className="secondaryButton" type="button" onClick={signOut}>Sign out</button>
     </div>
   );
 }

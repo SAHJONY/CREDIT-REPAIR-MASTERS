@@ -1,5 +1,16 @@
 export type CreditProviderMode = "consumer_import" | "consumer_authorized_fetch" | "commercial_api";
 
+export interface CreditProviderLinks {
+  home?: string;
+  report?: string;
+  dispute?: string;
+  freeze?: string;
+  fraudAlert?: string;
+  support?: string;
+  developer?: string;
+  directory?: string;
+}
+
 export interface CreditDataProvider {
   id: string;
   name: string;
@@ -8,6 +19,7 @@ export interface CreditDataProvider {
   freeConsumerDisclosure: boolean;
   unattendedProductionApi: boolean;
   officialUrl: string;
+  links: CreditProviderLinks;
   notes: string;
 }
 
@@ -15,6 +27,10 @@ export interface CreditDataProvider {
  * Lawful no-cost consumer disclosure sources that can feed CREDIT REPAIR MASTERS
  * through consumer-controlled import. Entries must never be treated as an
  * unattended bureau API unless a separate contracted commercial integration is configured.
+ *
+ * Links are official consumer/bureau resources only. Never automate identity
+ * verification, bypass authentication, or submit disputes without the consumer's
+ * authorization and the platform's approval/compliance gates.
  */
 export const freeCreditDataProviders: CreditDataProvider[] = [
   {
@@ -25,6 +41,10 @@ export const freeCreditDataProviders: CreditDataProvider[] = [
     freeConsumerDisclosure: true,
     unattendedProductionApi: false,
     officialUrl: "https://www.annualcreditreport.com/",
+    links: {
+      home: "https://www.annualcreditreport.com/",
+      report: "https://www.annualcreditreport.com/index.action"
+    },
     notes: "Federally authorized consumer portal for free Equifax, Experian and TransUnion credit reports. Consumer authentication is required."
   },
   {
@@ -35,6 +55,15 @@ export const freeCreditDataProviders: CreditDataProvider[] = [
     freeConsumerDisclosure: true,
     unattendedProductionApi: false,
     officialUrl: "https://www.equifax.com/personal/credit-report-services/",
+    links: {
+      home: "https://www.equifax.com/personal/",
+      report: "https://www.equifax.com/personal/credit-report-services/",
+      dispute: "https://www.equifax.com/personal/credit-report-services/credit-dispute/",
+      freeze: "https://www.equifax.com/personal/credit-report-services/credit-freeze/",
+      fraudAlert: "https://www.equifax.com/personal/credit-report-services/credit-fraud-alerts/",
+      support: "https://www.equifax.com/personal/help/",
+      developer: "https://developer.equifax.com/"
+    },
     notes: "Free consumer disclosure path is supported. Production API use requires a separate authorized commercial integration."
   },
   {
@@ -44,7 +73,16 @@ export const freeCreditDataProviders: CreditDataProvider[] = [
     modes: ["consumer_import", "commercial_api"],
     freeConsumerDisclosure: true,
     unattendedProductionApi: false,
-    officialUrl: "https://www.experian.com/consumer-products/free-credit-report.html",
+    officialUrl: "https://www.experian.com/",
+    links: {
+      home: "https://www.experian.com/",
+      report: "https://www.experian.com/consumer-products/free-credit-report.html",
+      dispute: "https://www.experian.com/disputes/main.html",
+      freeze: "https://www.experian.com/freeze/center.html",
+      fraudAlert: "https://www.experian.com/fraud/center.html",
+      support: "https://www.experian.com/help/contact/",
+      developer: "https://developer.experian.com/"
+    },
     notes: "Free consumer report access is distinct from Experian developer/commercial credit APIs."
   },
   {
@@ -54,7 +92,15 @@ export const freeCreditDataProviders: CreditDataProvider[] = [
     modes: ["consumer_import", "commercial_api"],
     freeConsumerDisclosure: true,
     unattendedProductionApi: false,
-    officialUrl: "https://www.transunion.com/annual-credit-report",
+    officialUrl: "https://www.transunion.com/",
+    links: {
+      home: "https://www.transunion.com/",
+      report: "https://www.transunion.com/annual-credit-report",
+      dispute: "https://www.transunion.com/credit-disputes/dispute-your-credit",
+      freeze: "https://www.transunion.com/credit-freeze",
+      fraudAlert: "https://www.transunion.com/fraud-alerts",
+      support: "https://www.transunion.com/customer-support/contact-us-consumers"
+    },
     notes: "Free consumer disclosure can be imported; commercial API access requires separate approval and credentials."
   },
   {
@@ -64,8 +110,14 @@ export const freeCreditDataProviders: CreditDataProvider[] = [
     modes: ["consumer_import"],
     freeConsumerDisclosure: true,
     unattendedProductionApi: false,
-    officialUrl: "https://www.innovis.com/personal/creditReport",
-    notes: "Supplementary consumer report available directly to the consumer."
+    officialUrl: "https://www.innovis.com/",
+    links: {
+      home: "https://www.innovis.com/",
+      report: "https://www.innovis.com/personal/creditReport",
+      dispute: "https://www.innovis.com/personal/disputeResolution",
+      freeze: "https://www.innovis.com/personal/securityFreeze"
+    },
+    notes: "Supplementary consumer report available directly to the consumer, with official dispute and security-freeze flows."
   },
   {
     id: "lexisnexis-risk-solutions",
@@ -75,6 +127,10 @@ export const freeCreditDataProviders: CreditDataProvider[] = [
     freeConsumerDisclosure: true,
     unattendedProductionApi: false,
     officialUrl: "https://consumer.risk.lexisnexis.com/",
+    links: {
+      home: "https://consumer.risk.lexisnexis.com/",
+      report: "https://consumer.risk.lexisnexis.com/"
+    },
     notes: "Consumer disclosure can include public-record and identity-related data useful for evidence reconciliation."
   },
   {
@@ -85,6 +141,10 @@ export const freeCreditDataProviders: CreditDataProvider[] = [
     freeConsumerDisclosure: true,
     unattendedProductionApi: false,
     officialUrl: "https://consumer.risk.lexisnexis.com/",
+    links: {
+      home: "https://consumer.risk.lexisnexis.com/",
+      report: "https://consumer.risk.lexisnexis.com/"
+    },
     notes: "Supplementary consumer disclosure source administered through LexisNexis Risk Solutions."
   },
   {
@@ -94,8 +154,13 @@ export const freeCreditDataProviders: CreditDataProvider[] = [
     modes: ["consumer_import"],
     freeConsumerDisclosure: true,
     unattendedProductionApi: false,
-    officialUrl: "https://www.chexsystems.com/request-reports/consumer-disclosure",
-    notes: "Consumer banking/checking account reporting disclosure."
+    officialUrl: "https://www.chexsystems.com/",
+    links: {
+      home: "https://www.chexsystems.com/",
+      report: "https://www.chexsystems.com/request-reports/consumer-disclosure",
+      support: "https://www.chexsystems.com/"
+    },
+    notes: "Consumer portal supports disclosure reports, security freezes, security alerts, disputes and blocks."
   },
   {
     id: "early-warning-services",
@@ -105,7 +170,13 @@ export const freeCreditDataProviders: CreditDataProvider[] = [
     freeConsumerDisclosure: true,
     unattendedProductionApi: false,
     officialUrl: "https://www.earlywarning.com/consumer-information",
-    notes: "Consumer deposit/payment account reporting disclosure."
+    links: {
+      home: "https://www.earlywarning.com/",
+      report: "https://www.earlywarning.com/consumer-information",
+      dispute: "https://www.earlywarning.com/consumer-information",
+      support: "https://www.earlywarning.com/consumer-information"
+    },
+    notes: "Consumer deposit/payment account reporting disclosure and dispute instructions."
   },
   {
     id: "telecheck",
@@ -115,6 +186,10 @@ export const freeCreditDataProviders: CreditDataProvider[] = [
     freeConsumerDisclosure: true,
     unattendedProductionApi: false,
     officialUrl: "https://getassistance.telecheck.com/consumer-file-report/",
+    links: {
+      home: "https://getassistance.telecheck.com/",
+      report: "https://getassistance.telecheck.com/consumer-file-report/"
+    },
     notes: "Specialty checking/payment consumer reporting disclosure."
   },
   {
@@ -125,6 +200,10 @@ export const freeCreditDataProviders: CreditDataProvider[] = [
     freeConsumerDisclosure: true,
     unattendedProductionApi: false,
     officialUrl: "https://www.askcertegy.com/consumer-services/",
+    links: {
+      home: "https://www.askcertegy.com/",
+      report: "https://www.askcertegy.com/consumer-services/"
+    },
     notes: "Specialty check-risk consumer reporting disclosure."
   },
   {
@@ -135,7 +214,12 @@ export const freeCreditDataProviders: CreditDataProvider[] = [
     freeConsumerDisclosure: true,
     unattendedProductionApi: false,
     officialUrl: "https://nctue.com/consumers/",
-    notes: "Telecom and utility payment-history consumer disclosure."
+    links: {
+      home: "https://nctue.com/",
+      report: "https://nctue.com/consumers/",
+      freeze: "https://nctue.com/consumers/"
+    },
+    notes: "Telecom and utility payment-history consumer disclosure and consumer freeze resources."
   },
   {
     id: "the-work-number",
@@ -144,7 +228,12 @@ export const freeCreditDataProviders: CreditDataProvider[] = [
     modes: ["consumer_import"],
     freeConsumerDisclosure: true,
     unattendedProductionApi: false,
-    officialUrl: "https://employees.theworknumber.com/employee-data-freeze",
+    officialUrl: "https://employees.theworknumber.com/",
+    links: {
+      home: "https://employees.theworknumber.com/",
+      report: "https://employees.theworknumber.com/employee-data-report",
+      freeze: "https://employees.theworknumber.com/employee-data-freeze"
+    },
     notes: "Employment/income consumer data access; use only with consumer authorization and applicable permissible purpose."
   },
   {
@@ -155,7 +244,11 @@ export const freeCreditDataProviders: CreditDataProvider[] = [
     freeConsumerDisclosure: true,
     unattendedProductionApi: false,
     officialUrl: "https://www.consumerfinance.gov/consumer-tools/credit-reports-and-scores/consumer-reporting-companies/companies-list/",
-    notes: "Authoritative directory for additional specialty consumer reporting companies and disclosure instructions."
+    links: {
+      home: "https://www.consumerfinance.gov/consumer-tools/credit-reports-and-scores/consumer-reporting-companies/",
+      directory: "https://www.consumerfinance.gov/consumer-tools/credit-reports-and-scores/consumer-reporting-companies/companies-list/"
+    },
+    notes: "Authoritative CFPB directory for additional specialty consumer reporting companies, report-access instructions, disputes and freezes."
   }
 ];
 

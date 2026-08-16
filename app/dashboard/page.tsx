@@ -28,8 +28,8 @@ export default async function DashboardPage() {
   return (
     <main>
       <header className="appHeader">
-        <div><div className="kicker">{organization?.name || 'CREDIT REPAIR MASTERS'} / OWNER OS / v2.0</div><h1>Operations Command Center</h1><p className="subtitle">Live tenant data from Neon. Signed in as {session.email} · {session.member.role} · MFA assured.</p></div>
-        <div className="headerActions"><Link className="secondaryButton" href="/clients">Clients</Link><SignOutButton /></div>
+        <div><div className="kicker">{organization?.name || 'CREDIT REPAIR MASTERS'} / OWNER OS / v3.1</div><h1>Operations Command Center</h1><p className="subtitle">Live tenant data from Neon. Signed in as {session.email} · {session.member.role} · MFA assured.</p></div>
+        <div className="headerActions"><Link className="secondaryButton" href="/billing">Billing</Link><Link className="secondaryButton" href="/clients">Clients</Link><SignOutButton /></div>
       </header>
 
       <section className="grid">

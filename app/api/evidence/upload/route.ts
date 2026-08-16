@@ -12,6 +12,11 @@ const fieldsSchema = z.object({
   label: z.string().trim().min(2).max(240)
 });
 
+function consentIsActive(consent: { granted: boolean; revokedAt?: string; expiresAt?: string }) {
+  if (!consent.granted || consent.revokedAt) return false;
+  return !consent.expiresAt || Date.parse(consent.expiresAt) > Date.now();
+}
+
 export async function POST(request: NextRequest) {
   const auth = authorizeRoles(
     await authenticateBusinessUser(request),
@@ -40,6 +45,27 @@ export async function POST(request: NextRequest) {
     const client = await store.getClient(auth.organizationId, parsed.data.clientId);
     if (!client) return NextResponse.json({ error: "CLIENT_NOT_FOUND" }, { status: 404 });
 
+    if (parsed.data.type === "credit_report") {
+      const consents = await store.listConsents(auth.organizationId, client.id);
+      const authorized = consents.some((consent) => consent.scope === "credit_report_analysis" && consentIsActive(consent));
+      if (!authorized) {
+        const now = new Date().toISOString();
+        await store.appendAudit(auth.organizationId, {
+          id: `audit_${randomUUID()}`,
+          organizationId: auth.organizationId,
+          actorType: "user",
+          actorId: auth.actorId,
+          action: "credit_report.import",
+          resourceType: "client",
+          resourceId: client.id,
+          decision: "blocked",
+          metadata: { clientId: client.id, reason: "credit_report_analysis_consent_required" },
+          createdAt: now
+        });
+        return NextResponse.json({ error: "CREDIT_REPORT_ANALYSIS_CONSENT_REQUIRED" }, { status: 403 });
+      }
+    }
+
     uploaded = await uploadPrivateEvidence({ organizationId: auth.organizationId, clientId: client.id, file });
     const now = new Date().toISOString();
     const record = {
@@ -61,7 +87,7 @@ export async function POST(request: NextRequest) {
       organizationId: auth.organizationId,
       actorType: "user",
       actorId: auth.actorId,
-      action: "evidence.private_upload",
+      action: parsed.data.type === "credit_report" ? "credit_report.import" : "evidence.private_upload",
       resourceType: "evidence",
       resourceId: record.id,
       decision: "allowed",

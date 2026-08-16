@@ -1,12 +1,19 @@
 import Link from 'next/link';
 import { notFound, redirect } from 'next/navigation';
 import { ConsentForm } from '@/components/consent-form';
+import { CreditReportImportForm } from '@/components/credit-report-import-form';
 import { EvidenceUploadForm } from '@/components/evidence-upload-form';
 import { SignOutButton } from '@/components/sign-out-button';
+import { freeCreditDataProviders } from '@/lib/credit-data-providers';
 import { getBusinessSession } from '@/lib/session-access';
 import { getPlatformStore } from '@/lib/platform-store';
 
 export const dynamic = 'force-dynamic';
+
+function activeConsent(consent: { granted: boolean; revokedAt?: string; expiresAt?: string }) {
+  if (!consent.granted || consent.revokedAt) return false;
+  return !consent.expiresAt || Date.parse(consent.expiresAt) > Date.now();
+}
 
 export default async function ClientWorkspace({ params }: { params: Promise<{ id: string }> }) {
   const session = await getBusinessSession();
@@ -23,6 +30,10 @@ export default async function ClientWorkspace({ params }: { params: Promise<{ id
   ]);
   const clientAudit = audit.filter((entry) => entry.resourceId === client.id || entry.metadata?.clientId === client.id).slice(0, 12);
   const vaultConfigured = Boolean(process.env.BLOB_READ_WRITE_TOKEN?.trim());
+  const creditAnalysisAuthorized = consents.some((item) => item.scope === 'credit_report_analysis' && activeConsent(item));
+  const creditReports = evidence.filter((item) => item.type === 'credit_report');
+  const reportProviders = freeCreditDataProviders.filter((provider) => provider.freeConsumerDisclosure);
+  const providerOptions = reportProviders.map(({ id: providerId, name }) => ({ id: providerId, name }));
 
   return (
     <main>
@@ -33,12 +44,40 @@ export default async function ClientWorkspace({ params }: { params: Promise<{ id
 
       <section className="grid">
         <div className="card span3"><div className="label">Evidence</div><div className="value">{evidence.length}</div><div className="small">{evidence.filter((item) => item.verification === 'verified').length} verified</div></div>
-        <div className="card span3"><div className="label">Consents</div><div className="value">{consents.length}</div><div className="small">{consents.filter((item) => item.granted).length} granted records</div></div>
-        <div className="card span3"><div className="label">Client status</div><div className="value statusValue">{client.status}</div><div className="small">updated {new Date(client.updatedAt).toLocaleString()}</div></div>
-        <div className="card span3"><div className="label">Live bureau data</div><div className="value">—</div><div className="small">provider not connected</div></div>
+        <div className="card span3"><div className="label">Credit reports</div><div className="value">{creditReports.length}</div><div className="small">consumer-controlled imports</div></div>
+        <div className="card span3"><div className="label">Analysis consent</div><div className="value statusValue">{creditAnalysisAuthorized ? 'ACTIVE' : 'REQUIRED'}</div><div className="small">credit_report_analysis</div></div>
+        <div className="card span3"><div className="label">Live bureau API</div><div className="value">—</div><div className="small">contracted provider still required</div></div>
 
         <div className="card span6"><div className="label">Consent control</div><h2>Record authorization</h2><ConsentForm clientId={client.id} /></div>
         <div className="card span6"><div className="label">Evidence vault</div><h2>Upload private evidence</h2>{vaultConfigured ? <><EvidenceUploadForm clientId={client.id} /><div className="small" style={{ marginTop: 10 }}>Uploads remain unverified until a separate verification step is completed.</div></> : <div className="emptyState">Private evidence upload is disabled until the Vercel Blob credential is configured. Existing metadata remains visible, but no document bytes are stored insecurely.</div>}</div>
+
+        <div className="card span12">
+          <div className="label">Credit report intake</div>
+          <h2>Free report sources + secure import</h2>
+          <p className="small">The client obtains the report directly from the reporting company. CREDIT REPAIR MASTERS does not scrape bureau portals or bypass consumer authentication.</p>
+          <div className="grid" style={{ marginTop: 14 }}>
+            {reportProviders.map((provider) => (
+              <div className="card span4" key={provider.id}>
+                <strong>{provider.name}</strong>
+                <div className="small" style={{ marginTop: 6 }}>{provider.notes}</div>
+                <div className="headerActions" style={{ marginTop: 10 }}>
+                  <a className="secondaryButton" href={provider.links.report || provider.officialUrl} target="_blank" rel="noreferrer">Get report</a>
+                  {provider.links.dispute ? <a className="secondaryButton" href={provider.links.dispute} target="_blank" rel="noreferrer">Dispute</a> : null}
+                  {provider.links.freeze ? <a className="secondaryButton" href={provider.links.freeze} target="_blank" rel="noreferrer">Freeze</a> : null}
+                </div>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 18 }}>
+            {!creditAnalysisAuthorized ? (
+              <div className="emptyState">Record active credit-report-analysis consent before importing a consumer report. The upload API enforces this requirement server-side.</div>
+            ) : !vaultConfigured ? (
+              <div className="emptyState">Credit report import is ready, but document bytes remain blocked until the private Vercel Blob vault credential is configured.</div>
+            ) : (
+              <CreditReportImportForm clientId={client.id} providers={providerOptions} />
+            )}
+          </div>
+        </div>
 
         <div className="card span6"><div className="label">Consent ledger</div><h2>Recorded consent</h2>
           {consents.length ? consents.map((item) => <div className="listRow" key={item.id}><div><strong>{item.scope.replaceAll('_', ' ')}</strong><div className="small">{item.source} · {new Date(item.grantedAt).toLocaleString()}</div></div><span className={`pill ${item.granted ? 'low' : 'high'}`}>{item.granted ? 'granted' : 'denied'}</span></div>) : <div className="emptyState">No consent records yet.</div>}

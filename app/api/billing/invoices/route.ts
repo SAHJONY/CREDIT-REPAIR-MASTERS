@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { authenticateBusinessUser, authorizeRoles } from '@/lib/api-auth';
 import { evaluateBillingEligibility } from '@/lib/billing-policy';
-import { createBillingInvoice, listBillingInvoices } from '@/lib/billing-store';
+import { createBillingInvoice, findActiveDuplicateInvoice, listBillingInvoices } from '@/lib/billing-store';
 import { getPlatformStore } from '@/lib/platform-store';
 import { getCommercialService } from '@/lib/service-catalog';
 
@@ -57,6 +57,16 @@ export async function POST(request: NextRequest) {
   }
 
   try {
+    const duplicate = await findActiveDuplicateInvoice({
+      organizationId: auth.organizationId,
+      clientId: client.id,
+      serviceId: service.id,
+      milestoneLabel: parsed.data.milestoneLabel
+    });
+    if (duplicate) {
+      return NextResponse.json({ error: 'DUPLICATE_ACTIVE_INVOICE', invoice: duplicate }, { status: 409 });
+    }
+
     const invoice = await createBillingInvoice({
       id: `inv_${randomUUID()}`,
       organizationId: auth.organizationId,

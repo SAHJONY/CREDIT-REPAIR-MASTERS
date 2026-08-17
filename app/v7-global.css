@@ -1,0 +1,54 @@
+/* v7 — final reference-driven global experience. Loaded last. */
+:root{--v7-bg:#030914;--v7-panel:rgba(7,17,31,.86);--v7-panel-2:rgba(11,24,42,.82);--v7-border:rgba(255,255,255,.085);--v7-gold:#f5b843;--v7-gold-2:#ffd77b;--v7-blue:#4c8dff;--v7-purple:#9f64ff;--v7-green:#32d889;--v7-text:#f7f9fd;--v7-muted:#92a0b5}
+html,body{min-height:100%;background:radial-gradient(circle at 52% -10%,rgba(47,92,165,.22),transparent 32%),radial-gradient(circle at 94% 28%,rgba(80,50,130,.11),transparent 30%),linear-gradient(145deg,#020711,#07111e 48%,#071522)!important;color:var(--v7-text)!important}
+body{font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;letter-spacing:-.012em}
+body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;background:linear-gradient(100deg,transparent 0 72%,rgba(245,184,67,.02) 72% 73%,transparent 73%),radial-gradient(circle at 50% 110%,rgba(17,71,117,.22),transparent 40%)}
+
+/* Global language control */
+.globalLanguage{position:fixed;z-index:1000;right:18px;bottom:18px;display:flex;align-items:center;gap:8px;padding:8px 11px;border:1px solid rgba(245,184,67,.22);border-radius:13px;background:rgba(4,11,20,.88);backdrop-filter:blur(22px) saturate(140%);box-shadow:0 16px 45px rgba(0,0,0,.35),0 0 26px rgba(245,184,67,.06)}
+.globalLanguage span{color:var(--v7-gold);font-size:15px}.globalLanguage select{appearance:none;background:transparent!important;border:0!important;box-shadow:none!important;color:#eef3fb!important;font-size:12px;font-weight:700;padding:2px 22px 2px 3px;min-width:110px;cursor:pointer}.globalLanguage option{background:#07111e;color:white}
+
+/* One visual shell for every app surface */
+main{max-width:1540px;margin-inline:auto}
+.appHeader,.header,.portalHeader,.publicCinemaNav,.serviceCinemaNav,.startCinemaNav{background:rgba(3,10,20,.74)!important;border:1px solid var(--v7-border)!important;backdrop-filter:blur(26px) saturate(145%)!important;box-shadow:0 16px 50px rgba(0,0,0,.26)!important}
+.appHeader,.header{border-radius:18px!important}
+
+/* Cards/panels */
+.card,.authCard,.portalMetricCard,.portalNextCard,.portalProgressPanel,.cinematicCard,.cinematicNext,.demoCard,.documentCard,.invoiceCard,.complianceCard,.premiumPanel,.metricCard,.kpiCard{
+ background:radial-gradient(circle at 90% 0%,rgba(76,141,255,.075),transparent 30%),linear-gradient(145deg,rgba(13,27,47,.92),rgba(5,13,24,.96))!important;
+ border:1px solid var(--v7-border)!important;border-radius:20px!important;box-shadow:0 22px 60px rgba(0,0,0,.3),inset 0 1px 0 rgba(255,255,255,.025)!important;backdrop-filter:blur(20px) saturate(125%)!important
+}
+.card:hover,.portalMetricCard:hover,.cinematicCard:hover{border-color:rgba(245,184,67,.24)!important;transform:translateY(-2px);box-shadow:0 28px 80px rgba(0,0,0,.35),0 0 34px rgba(76,141,255,.055)!important}
+
+/* Cinematic hierarchy */
+h1{font-size:clamp(32px,4vw,62px);line-height:.98;letter-spacing:-.048em}h2{letter-spacing:-.035em}h3{letter-spacing:-.02em}.kicker,.eyebrow,.label,.cinematicEyebrow{color:var(--v7-gold)!important;font-weight:800!important;letter-spacing:.14em!important;text-transform:uppercase}.subtitle,.small,.muted{color:var(--v7-muted)!important}
+.value,.portalProgressValue,.cinematicCard>strong{font-variant-numeric:tabular-nums;font-weight:750!important;letter-spacing:-.055em!important}
+
+/* Premium buttons */
+.primaryButton,.goldButton,button[type=submit]{background:linear-gradient(135deg,#ffe49a 0%,#f5ba45 58%,#e49b25 100%)!important;color:#161006!important;border:1px solid rgba(255,226,145,.66)!important;border-radius:11px!important;font-weight:800!important;box-shadow:0 10px 26px rgba(245,184,67,.18),inset 0 1px 0 rgba(255,255,255,.45)!important;transition:.18s ease!important}
+.primaryButton:hover,.goldButton:hover,button[type=submit]:hover{transform:translateY(-2px)!important;box-shadow:0 15px 36px rgba(245,184,67,.28)!important}
+.secondaryButton,.glassButton{background:linear-gradient(145deg,rgba(255,255,255,.075),rgba(255,255,255,.025))!important;border:1px solid rgba(255,255,255,.11)!important;color:#eef3fb!important;border-radius:11px!important;backdrop-filter:blur(16px)}
+
+/* Forms */
+input,select,textarea{background:linear-gradient(145deg,rgba(3,11,21,.94),rgba(8,19,33,.92))!important;border:1px solid rgba(255,255,255,.1)!important;color:#f5f8fc!important;border-radius:11px!important;min-height:42px}textarea{min-height:100px}input:focus,select:focus,textarea:focus{outline:none!important;border-color:rgba(245,184,67,.58)!important;box-shadow:0 0 0 3px rgba(245,184,67,.08),0 0 26px rgba(76,141,255,.08)!important}label{color:#dce5f2!important}
+
+/* Tables / ledgers */
+table{width:100%;border-collapse:separate!important;border-spacing:0!important;border:1px solid var(--v7-border)!important;border-radius:16px!important;overflow:hidden;background:rgba(4,12,22,.7)!important}thead th{background:linear-gradient(180deg,rgba(20,37,59,.94),rgba(11,25,42,.92))!important;color:#dfe8f5!important;border-bottom:1px solid rgba(245,184,67,.13)!important}tbody td{color:#c8d3e2!important;border-bottom-color:rgba(255,255,255,.055)!important}tbody tr:hover td{background:rgba(76,141,255,.035)!important}
+
+/* Auth */
+.authShell{min-height:100vh;background:radial-gradient(circle at 17% 12%,rgba(51,101,180,.2),transparent 28%),radial-gradient(circle at 86% 22%,rgba(245,184,67,.09),transparent 24%),linear-gradient(145deg,#020711,#07111e 55%,#071522)!important}.authCard{max-width:520px!important;border-color:rgba(245,184,67,.18)!important;box-shadow:0 35px 110px rgba(0,0,0,.48),0 0 50px rgba(76,141,255,.05)!important}
+
+/* Portal / owner nav */
+.portalNav,.referenceSidebar{background:linear-gradient(180deg,rgba(2,9,18,.97),rgba(5,15,27,.94))!important;border-color:rgba(245,184,67,.14)!important}.portalNav a,.referenceSidebar a{transition:.16s ease}.portalNav a:hover,.referenceSidebar a:hover{background:linear-gradient(90deg,rgba(245,184,67,.13),rgba(76,141,255,.045))!important;color:white!important}.portalNav .active,.referenceSidebar .active{background:linear-gradient(90deg,rgba(245,184,67,.18),rgba(245,184,67,.055))!important;box-shadow:inset 2px 0 0 var(--v7-gold),0 0 24px rgba(245,184,67,.08)}
+
+/* Badges */
+.badge,.pill{border-radius:999px!important;background:rgba(245,184,67,.075)!important;border-color:rgba(245,184,67,.2)!important;color:#f6d68e!important}.low,.success{background:rgba(50,216,137,.08)!important;border-color:rgba(50,216,137,.22)!important;color:#91ebbf!important}.high,.danger{background:rgba(237,87,108,.08)!important;border-color:rgba(237,87,108,.22)!important;color:#ffb1bf!important}
+
+/* Documents / empty states */
+pre,code{background:#030a13!important;border-color:var(--v7-border)!important;color:#dce8f6!important}.emptyState,.guardrail{background:linear-gradient(145deg,rgba(10,25,42,.7),rgba(5,15,27,.78))!important;border-color:rgba(76,141,255,.15)!important;color:#b8c6d8!important}
+
+/* RTL */
+html[dir=rtl] body{font-family:Tahoma,"Segoe UI",sans-serif}html[dir=rtl] .globalLanguage{right:auto;left:18px}html[dir=rtl] .referenceSidebar{border-right:0!important;border-left:1px solid rgba(245,184,67,.14)!important}html[dir=rtl] .portalNav .active,html[dir=rtl] .referenceSidebar .active{box-shadow:inset -2px 0 0 var(--v7-gold),0 0 24px rgba(245,184,67,.08)!important}
+
+@media(max-width:900px){main{width:min(100% - 18px,1540px)}.globalLanguage{right:10px;bottom:10px}.card,.authCard,.portalMetricCard,.cinematicCard{border-radius:16px!important}h1{font-size:clamp(34px,10vw,52px)}}
+@media(prefers-reduced-motion:reduce){*{transition-duration:.001ms!important;animation-duration:.001ms!important;scroll-behavior:auto!important}}

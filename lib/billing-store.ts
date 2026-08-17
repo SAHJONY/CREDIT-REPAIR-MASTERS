@@ -149,11 +149,11 @@ export async function voidBillingInvoice(organizationId: string, invoiceId: stri
   return rows[0] ? mapInvoice(rows[0] as InvoiceRow) : null;
 }
 
-export async function attachCheckoutSession(organizationId: string, invoiceId: string, sessionId: string, checkoutUrl: string) {
+export async function attachCheckoutSession(organizationId: string, invoiceId: string, provider: 'stripe' | 'square', sessionId: string, checkoutUrl: string) {
   const sql = neon(databaseUrl());
   const rows = await sql`update billing_invoices set
     status = case when status = 'paid' then status else 'checkout_pending' end,
-    provider = 'stripe', provider_session_id = ${sessionId}, checkout_url = ${checkoutUrl}, updated_at = now()
+    provider = ${provider}, provider_session_id = ${sessionId}, checkout_url = ${checkoutUrl}, updated_at = now()
     where organization_id = ${organizationId} and id = ${invoiceId} and status in ('open','checkout_pending')
     returning *`;
   return rows[0] ? mapInvoice(rows[0] as InvoiceRow) : null;
@@ -186,4 +186,32 @@ export async function settleStripeInvoice(input: {
   ) on conflict (provider, provider_event_id) do nothing`;
 
   return mapInvoice(updated[0] as InvoiceRow);
+}
+
+export async function settleSquareInvoice(input: {
+  orderId: string;
+  paymentId: string;
+  providerEventId: string;
+  eventType: string;
+  amountCents: number;
+  payloadFingerprint: string;
+}) {
+  const sql = neon(databaseUrl());
+  const updated = await sql`update billing_invoices set
+    status = 'paid', provider = 'square', provider_payment_id = ${input.paymentId},
+    paid_at = coalesce(paid_at, now()), updated_at = now()
+    where provider = 'square' and provider_session_id = ${input.orderId}
+      and amount_cents = ${input.amountCents} and status <> 'void'
+    returning *`;
+  if (!updated[0]) return null;
+
+  const invoice = mapInvoice(updated[0] as InvoiceRow);
+  await sql`insert into payment_events (
+    id, organization_id, invoice_id, provider, provider_event_id, event_type, amount_cents, payload_fingerprint, created_at
+  ) values (
+    ${`payevt_${input.providerEventId}`}, ${invoice.organizationId}, ${invoice.id}, 'square', ${input.providerEventId},
+    ${input.eventType}, ${input.amountCents}, ${input.payloadFingerprint}, now()
+  ) on conflict (provider, provider_event_id) do nothing`;
+
+  return invoice;
 }

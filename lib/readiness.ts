@@ -23,6 +23,7 @@ export function getReadinessChecks(): ReadinessCheck[] {
   const liveProviderConfigured = configured("CREDIT_DATA_PROVIDER") && configured("CREDIT_PROVIDER_API_KEY");
   const privateBlobConfigured = configured("BLOB_READ_WRITE_TOKEN");
   const stateRuntime = stateComplianceRuntimeSummary();
+  const stateRoutingReady = stateRuntime.jurisdictions === 51 && stateRuntime.federalBaselineCoverage && stateRuntime.failClosed;
 
   return [
     { id: "ui", label: "Owner command center", status: "ready", requiredForProduction: true },
@@ -38,7 +39,7 @@ export function getReadinessChecks(): ReadinessCheck[] {
     { id: "free-credit-sources", label: "Free consumer credit disclosure sources", status: "ready", requiredForProduction: true, detail: "consumer-controlled free-report intake is the active production operating model" },
     { id: "bureau", label: "Authorized live credit data provider", status: liveProviderConfigured ? "ready" : "setup", requiredForProduction: false, detail: liveProviderConfigured ? "contracted provider name and API credential configured" : "deferred by business strategy until client volume and profitability justify contracted integration; free consumer imports remain the active operating model" },
     { id: "vault", label: "Private evidence document vault", status: privateBlobConfigured ? "ready" : "setup", requiredForProduction: true, detail: privateBlobConfigured ? "Vercel Private Blob credential configured" : "private Blob store/credential not configured" },
-    { id: "state-rules", label: "State compliance routing + fail-closed coverage", status: stateRuntime.runtimeReady ? "ready" : "setup", requiredForProduction: true, detail: stateRuntime.runtimeReady ? `${stateRuntime.jurisdictions} jurisdictions routed; ${stateRuntime.validated} state overlay validated; ${stateRuntime.manualReviewRequired} require manual compliance review; unsupported jurisdictions blocked` : "state compliance runtime incomplete" },
+    { id: "state-rules", label: "State compliance routing + fail-closed coverage", status: stateRoutingReady ? "ready" : "setup", requiredForProduction: true, detail: stateRoutingReady ? `${stateRuntime.jurisdictions} jurisdictions routed; ${stateRuntime.validated} autonomous rule bundles validated; ${stateRuntime.manualReviewRequired} remain fail-closed/manual; automation coverage ${stateRuntime.automationPercent}%; nationwide autonomous=${stateRuntime.nationwideAutonomous}` : "state compliance routing, federal baseline, or fail-closed coverage is incomplete" },
     { id: "external-actions", label: "External action adapters", status: "blocked", requiredForProduction: false, detail: "intentionally approval-gated" }
   ];
 }

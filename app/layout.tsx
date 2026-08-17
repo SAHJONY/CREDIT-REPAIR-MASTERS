@@ -4,6 +4,7 @@ import "./ultra-premium.css";
 import "./cinematic.css";
 import "./cinematic-global.css";
 import "./cinematic-everywhere.css";
+import "./all-pages-cinematic-lock.css";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {

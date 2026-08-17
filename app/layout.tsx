@@ -3,6 +3,7 @@ import "./v6.css";
 import "./ultra-premium.css";
 import "./cinematic.css";
 import "./cinematic-global.css";
+import "./cinematic-everywhere.css";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {

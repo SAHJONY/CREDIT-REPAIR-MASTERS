@@ -37,37 +37,31 @@ export default async function GetStartedPage({ searchParams }: { searchParams: S
   const consumer = commercialServices.filter((service) => service.audience === 'consumer');
   const business = commercialServices.filter((service) => service.audience === 'business');
   const b2b = commercialServices.filter((service) => service.audience === 'b2b');
-  const attribution = {
-    source: params.utm_source || params.ref || 'direct',
-    medium: params.utm_medium || '',
-    campaign: params.utm_campaign || ''
-  };
+  const attribution = { source: params.utm_source || params.ref || 'direct', medium: params.utm_medium || '', campaign: params.utm_campaign || '' };
 
   return (
-    <main>
-      <header className="appHeader">
-        <div>
-          <div className="kicker">CREDIT REPAIR MASTERS / GET STARTED</div>
-          <h1>Choose the right operating path.</h1>
-          <p className="subtitle">Start with the service that matches your goal. Consumer credit work stays evidence-based and jurisdiction-gated; business advisory and the OS follow separate commercial rules.</p>
+    <main className="onboardingCinema">
+      <section className="onboardingHero">
+        <div className="onboardingHeroImage" aria-hidden="true" />
+        <div className="onboardingHeroShade" />
+        <div className="onboardingHeroCopy">
+          <div className="cinematicEyebrow">CREDIT REPAIR MASTERS · PRIVATE ONBOARDING</div>
+          <h1>Choose the path<br/><em>that matches your goal.</em></h1>
+          <p>Consumer credit work stays evidence-based and jurisdiction-gated. Business advisory and professional software follow their own commercial rules.</p>
+          <div className="publicCinemaActions"><Link className="glassButton" href="/services">Compare services</Link><Link className="glassButton" href="/portal/sign-in">Existing client</Link></div>
         </div>
-        <div className="headerActions"><Link className="secondaryButton" href="/services">Pricing</Link><Link className="secondaryButton" href="/portal/sign-in">Existing client</Link></div>
-      </header>
+      </section>
 
       {selected ? (
-        <section className="grid" style={{ marginBottom: 14 }}>
-          <div className="card span5">
-            <div className="row">
-              <div>
-                <div className="label">Selected service</div>
-                <h2>{selected.name}</h2>
-                <div className="value">{price(selected)}</div>
-                <p className="small">{selected.description}</p>
-              </div>
-              <span className="pill low">{selected.audience}</span>
-            </div>
-            <div style={{ marginTop: 12 }}>{selected.deliverables.map((item) => <div className="small" key={item}>• {item}</div>)}</div>
-            <div className="guardrail" style={{ marginTop: 14 }}>
+        <section className="onboardingSelected">
+          <div className="onboardingSelectedSummary">
+            <div className="cinematicEyebrow goldText">SELECTED SERVICE</div>
+            <span className="pill low">{selected.audience}</span>
+            <h2>{selected.name}</h2>
+            <strong>{price(selected)}</strong>
+            <p>{selected.description}</p>
+            <div className="commercialDeliverables">{selected.deliverables.map((item) => <div key={item}>✓ {item}</div>)}</div>
+            <div className="guardrail">
               {selected.audience === 'consumer'
                 ? 'Consumer fees remain subject to service completion, contract status, cancellation timing, sales channel, and state law. No score increase or deletion outcome is guaranteed.'
                 : selected.audience === 'business'
@@ -75,56 +69,19 @@ export default async function GetStartedPage({ searchParams }: { searchParams: S
                   : 'OS subscriptions are software access for credit professionals and agencies; customer compliance obligations remain with the operating organization.'}
             </div>
           </div>
-          <div className="card span7">
-            <LeadIntakeForm
-              serviceId={selected.id}
-              serviceName={selected.name}
-              audience={selected.audience}
-              source={attribution.source}
-              medium={attribution.medium}
-              campaign={attribution.campaign}
-            />
+          <div className="onboardingFormGlass">
+            <LeadIntakeForm serviceId={selected.id} serviceName={selected.name} audience={selected.audience} source={attribution.source} medium={attribution.medium} campaign={attribution.campaign} />
           </div>
         </section>
       ) : null}
 
-      <section className="grid">
-        <div className="card span4">
-          <div className="label">Personal credit</div>
-          <h2>Consumer intelligence</h2>
-          <p className="small">For consumers who want evidence-based report analysis, monitoring, or complex recovery case management.</p>
-          {consumer.map((service) => <Link className="listRow" href={serviceHref(service.id, params)} key={service.id}><div><strong>{service.name}</strong><div className="small">{price(service)}</div></div><span>→</span></Link>)}
-        </div>
-
-        <div className="card span4">
-          <div className="label">Business credit</div>
-          <h2>Advisory</h2>
-          <p className="small">For companies that need business-credit readiness, reporting strategy, or financing-readiness implementation.</p>
-          {business.map((service) => <Link className="listRow" href={serviceHref(service.id, params)} key={service.id}><div><strong>{service.name}</strong><div className="small">{price(service)}</div></div><span>→</span></Link>)}
-        </div>
-
-        <div className="card span4">
-          <div className="label">For professionals</div>
-          <h2>CREDIT REPAIR MASTERS OS</h2>
-          <p className="small">For operators and agencies that want the governed workflow, evidence ledger, AI analysis, client workspace, and audit trail.</p>
-          {b2b.map((service) => <Link className="listRow" href={serviceHref(service.id, params)} key={service.id}><div><strong>{service.name}</strong><div className="small">{price(service)}</div></div><span>→</span></Link>)}
-        </div>
-
-        <div className="card span12">
-          <div className="label">Secure onboarding</div>
-          <h2>Qualification → activation → delivery → compliant billing</h2>
-          <div className="grid">
-            <div className="span3"><strong>1. Qualification</strong><p className="small">Capture service intent, state, source and permission to contact before operational work begins.</p></div>
-            <div className="span3"><strong>2. Controlled activation</strong><p className="small">Approved customers receive tenant-scoped portal access. Staff and customer permissions remain isolated.</p></div>
-            <div className="span3"><strong>3. Evidence-first execution</strong><p className="small">Reports, documents, authorizations, case actions, approvals and outcomes are tracked in the OS.</p></div>
-            <div className="span3"><strong>4. Billing gate</strong><p className="small">Consumer collection stays blocked until the existing eligibility engine approves jurisdiction, timing and service status.</p></div>
-          </div>
-          <div className="headerActions" style={{ marginTop: 16 }}>
-            <Link className="primaryButton" href="/services">Compare all services</Link>
-            <Link className="secondaryButton" href="/portal/sign-in">Existing client sign in</Link>
-          </div>
-        </div>
+      <section className="onboardingPaths">
+        <div className="onboardingPath blue"><div className="cinematicEyebrow">PERSONAL CREDIT</div><h2>Consumer intelligence</h2><p>Evidence-based report analysis, monitoring and complex recovery case management.</p>{consumer.map((service) => <Link className="cinemaListRow" href={serviceHref(service.id, params)} key={service.id}><div><strong>{service.name}</strong><span>{price(service)}</span></div><b>→</b></Link>)}</div>
+        <div className="onboardingPath emerald"><div className="cinematicEyebrow">BUSINESS CREDIT</div><h2>Advisory</h2><p>Business-credit readiness, reporting strategy and financing-readiness implementation.</p>{business.map((service) => <Link className="cinemaListRow" href={serviceHref(service.id, params)} key={service.id}><div><strong>{service.name}</strong><span>{price(service)}</span></div><b>→</b></Link>)}</div>
+        <div className="onboardingPath violet"><div className="cinematicEyebrow">FOR PROFESSIONALS</div><h2>CREDIT REPAIR MASTERS OS</h2><p>Governed workflow, evidence ledger, AI analysis, client workspace and audit trail.</p>{b2b.map((service) => <Link className="cinemaListRow" href={serviceHref(service.id, params)} key={service.id}><div><strong>{service.name}</strong><span>{price(service)}</span></div><b>→</b></Link>)}</div>
       </section>
+
+      <section className="onboardingJourney"><div><div className="cinematicEyebrow goldText">SECURE ONBOARDING</div><h2>Qualification → activation → delivery → compliant billing</h2></div><div className="journeyGrid"><div><b>01</b><strong>Qualification</strong><span>Capture service intent, state, source and contact permission.</span></div><div><b>02</b><strong>Controlled activation</strong><span>Tenant-scoped access keeps staff and customer permissions isolated.</span></div><div><b>03</b><strong>Evidence-first execution</strong><span>Reports, documents, authorizations and outcomes stay in the OS.</span></div><div><b>04</b><strong>Billing gate</strong><span>Collection remains blocked until the eligibility engine approves it.</span></div></div></section>
       <footer>Accurate negative information is not eligible for deletion simply because it is negative. CREDIT REPAIR MASTERS does not guarantee score increases, funding approvals, or removal of accurate information.</footer>
     </main>
   );

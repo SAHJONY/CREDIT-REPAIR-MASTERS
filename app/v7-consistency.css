@@ -1,0 +1,49 @@
+/* v7.2 — all-pages consistency lock. Loaded last. */
+:root{--crm-surface:linear-gradient(145deg,rgba(14,29,50,.92),rgba(5,13,24,.96));--crm-border:rgba(255,255,255,.09);--crm-gold:#f3b74a;--crm-radius:22px;--crm-shadow:0 28px 80px rgba(0,0,0,.34)}
+
+/* Normalize all page shells */
+main,.portalShell,.publicCinema,.serviceCinema,.startCinema,.authShell{color:#f8fbff!important}
+.referenceAppMain>main,.portalShell,.dashboardShell,.billingShell,.complianceShell,.documentsShell,.clientsShell,.growthShell,.launchShell,.demoShell{width:min(1480px,calc(100% - 30px))!important;margin-inline:auto!important;padding:22px 0 44px!important}
+
+/* Normalize headers and route-level hero surfaces */
+.appHeader,.header,.portalHeader,.pageHeader,.dashboardHeader,.billingHeader,.complianceHeader,.documentsHeader,.clientsHeader,.growthHeader,.launchHeader,.demoHeader,.publicCinemaNav,.serviceCinemaNav,.startCinemaNav{border-radius:20px!important;background:linear-gradient(180deg,rgba(8,18,31,.82),rgba(3,10,20,.74))!important;border:1px solid var(--crm-border)!important;backdrop-filter:blur(30px) saturate(155%)!important;box-shadow:0 18px 55px rgba(0,0,0,.28),inset 0 1px 0 rgba(255,255,255,.035)!important}
+
+/* One surface language for every route family */
+.card,.authCard,.portalMetricCard,.portalNextCard,.portalProgressPanel,.portalHero,.cinematicCard,.cinematicNext,.demoCard,.documentCard,.invoiceCard,.complianceCard,.premiumPanel,.metricCard,.kpiCard,.panel,.sectionCard,.summaryCard,.statusCard,.clientCard,.billingCard,.reportCard,.progressCard,.consentCard,.paymentCard,.accountCard,fieldset,dialog{background:radial-gradient(circle at 92% -8%,rgba(75,140,255,.09),transparent 31%),var(--crm-surface)!important;border:1px solid var(--crm-border)!important;border-radius:var(--crm-radius)!important;box-shadow:var(--crm-shadow),inset 0 1px 0 rgba(255,255,255,.035)!important;backdrop-filter:blur(24px) saturate(132%)!important}
+
+/* Normalize spacing and grids */
+.grid,.cards,.metrics,.metricGrid,.portalMetrics,.dashboardGrid,.billingGrid,.complianceGrid,.documentsGrid,.clientsGrid{gap:14px!important}.card,.panel,.premiumPanel,.portalMetricCard,.portalNextCard,.documentCard,.invoiceCard,.complianceCard{padding:20px!important}
+section+section{margin-top:16px}
+
+/* Normalize typography */
+main h1,.portalShell h1,.authShell h1{font-size:clamp(36px,4.5vw,66px)!important;line-height:.97!important;letter-spacing:-.052em!important;font-weight:760!important;color:#f9fbff!important}main h2,.portalShell h2{letter-spacing:-.04em!important;color:#f7faff!important}.kicker,.eyebrow,.label,.cinematicEyebrow,.sectionLabel{color:var(--crm-gold)!important;font-weight:850!important;letter-spacing:.14em!important;text-transform:uppercase!important}.subtitle,.muted,.small,.helperText{color:#93a2b8!important}
+
+/* Normalize nav/button language */
+.primaryButton,.goldButton,button[type=submit],a.primaryButton{min-height:44px!important;border-radius:12px!important;background:linear-gradient(135deg,#ffe8a9 0%,#f4bd52 53%,#e49b25 100%)!important;color:#171006!important;border:1px solid rgba(255,230,163,.72)!important;font-weight:850!important;box-shadow:0 12px 30px rgba(243,183,74,.2),inset 0 1px 0 rgba(255,255,255,.55)!important}.secondaryButton,.glassButton,a.secondaryButton{min-height:44px!important;border-radius:12px!important;background:linear-gradient(145deg,rgba(255,255,255,.085),rgba(255,255,255,.025))!important;border:1px solid rgba(255,255,255,.12)!important;color:#f2f6fc!important;backdrop-filter:blur(18px)!important}
+
+/* Normalize all forms */
+form{color:#e8eef7}input,select,textarea{min-height:44px!important;border-radius:12px!important;background:linear-gradient(145deg,rgba(3,11,21,.96),rgba(8,19,33,.94))!important;border:1px solid rgba(255,255,255,.105)!important;color:#f5f8fc!important}textarea{min-height:108px!important}label{color:#dce5f2!important;font-weight:650!important}input:focus,select:focus,textarea:focus{outline:none!important;border-color:rgba(243,183,74,.6)!important;box-shadow:0 0 0 3px rgba(243,183,74,.08),0 0 28px rgba(75,140,255,.08)!important}
+
+/* Normalize tables, ledgers, document viewers */
+table{border-radius:17px!important;background:rgba(4,12,22,.72)!important;border:1px solid var(--crm-border)!important;box-shadow:0 20px 55px rgba(0,0,0,.18)!important}thead th{background:linear-gradient(180deg,rgba(21,39,63,.95),rgba(11,25,42,.93))!important;color:#e4ecf7!important;border-bottom:1px solid rgba(243,183,74,.14)!important}tbody td{color:#cbd6e5!important;border-bottom-color:rgba(255,255,255,.055)!important}pre,code,.documentViewer,.documentPreview{background:#030a13!important;border-color:var(--crm-border)!important;color:#dce8f6!important}
+
+/* Normalize badges/statuses */
+.badge,.pill,.statusBadge{border-radius:999px!important;background:rgba(243,183,74,.08)!important;border:1px solid rgba(243,183,74,.22)!important;color:#f7d894!important;font-weight:750!important}.success,.low,.statusSuccess{background:rgba(57,217,138,.085)!important;border-color:rgba(57,217,138,.24)!important;color:#99edc3!important}.danger,.high,.statusDanger{background:rgba(255,109,131,.085)!important;border-color:rgba(255,109,131,.24)!important;color:#ffb7c2!important}
+
+/* Remove visual drift from legacy nested headers/navs inside private frame */
+.referenceAppMain .appHeader,.referenceAppMain .header,.referenceAppMain .portalHeader{margin-bottom:14px!important}.referenceAppMain .portalNav{border-radius:16px!important;background:rgba(5,12,21,.76)!important;border:1px solid rgba(255,255,255,.075)!important;backdrop-filter:blur(22px)!important}.referenceAppMain .portalHero{background:radial-gradient(circle at 100% 0%,rgba(243,183,74,.08),transparent 32%),var(--crm-surface)!important}
+
+/* Public/auth pages share the same premium palette */
+.publicCinema,.serviceCinema,.startCinema,.authShell{background:radial-gradient(circle at 18% 12%,rgba(51,101,180,.18),transparent 28%),radial-gradient(circle at 88% 24%,rgba(243,183,74,.08),transparent 24%),linear-gradient(145deg,#020711,#07111e 55%,#071522)!important}
+
+/* Empty/loading/error states */
+.emptyState,.guardrail,.loadingState,.errorState,.notice{border-radius:16px!important;background:linear-gradient(145deg,rgba(10,25,42,.72),rgba(5,15,27,.8))!important;border:1px solid rgba(75,140,255,.16)!important;color:#bac8da!important}
+
+/* Mobile parity: keep all navigation reachable and surfaces coherent */
+@media(max-width:900px){.referenceAppMain>main,.portalShell,.dashboardShell,.billingShell,.complianceShell,.documentsShell,.clientsShell,.growthShell,.launchShell,.demoShell{width:calc(100% - 18px)!important;padding-top:14px!important}.card,.panel,.premiumPanel,.portalMetricCard,.cinematicCard,.documentCard,.invoiceCard,.complianceCard{border-radius:17px!important;padding:16px!important}table{display:block!important;overflow-x:auto!important;-webkit-overflow-scrolling:touch!important}}
+@media(max-width:680px){.referenceSideNav{grid-template-columns:repeat(8,minmax(54px,1fr))!important}.referenceSideNav a:nth-child(n){display:flex!important}.referenceSideNav{overflow-x:auto!important;scrollbar-width:none}.referenceSideNav::-webkit-scrollbar{display:none}.referenceSidebar{background:rgba(3,10,20,.94)!important;backdrop-filter:blur(26px) saturate(150%)!important}.globalLanguage{bottom:82px!important}.publicCinemaNav,.serviceCinemaNav,.startCinemaNav{border-radius:16px!important}}
+
+/* RTL parity */
+html[dir=rtl] .referenceAppMain,html[dir=rtl] .portalShell{text-align:right}html[dir=rtl] .referenceSidebar{border-right:0!important;border-left:1px solid rgba(243,183,74,.15)!important}
+
+@media(prefers-reduced-motion:reduce){*{animation-duration:.001ms!important;transition-duration:.001ms!important;scroll-behavior:auto!important}}

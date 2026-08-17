@@ -7,10 +7,6 @@ import { getCommercialService } from '@/lib/service-catalog';
 
 export const dynamic = 'force-dynamic';
 
-function methodLabel(method: string) {
-  return method.replaceAll('_', ' ').replace(/\b\w/g, (letter) => letter.toUpperCase());
-}
-
 function money(cents: number) {
   return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(cents / 100);
 }
@@ -29,52 +25,25 @@ export default async function PortalPaymentsPage() {
   const balance = due.reduce((sum, invoice) => sum + invoice.amountCents, 0);
 
   return (
-    <main>
-      <header className="appHeader">
-        <div>
-          <div className="kicker">MY CREDIT REPAIR MASTERS / BILLING</div>
-          <h1>Payments & Receipts</h1>
-          <p className="subtitle">Pay only approved invoices for completed, eligible services and review your payment history.</p>
-        </div>
+    <main className="portalShell">
+      <header className="portalHeader">
+        <div><div className="portalBrand">CREDIT REPAIR MASTERS</div><div className="eyebrow portalPageEyebrow">SECURE BILLING</div><h1>Payments</h1><p className="subtitle">Review approved invoices, pay securely, and access your payment history.</p></div>
         <PortalNav />
       </header>
 
+      <section className="portalPaymentHero">
+        <div><div className="eyebrow">AMOUNT DUE</div><div className="portalBalance">{money(balance)}</div><p>{due.length ? `${due.length} approved invoice${due.length === 1 ? '' : 's'} ready for payment.` : 'You have no payment due right now.'}</p></div>
+        <div className="portalPaymentStatus"><span>Secure checkout</span><strong>{secureCheckoutReady ? 'Available' : 'Not yet configured'}</strong><small>Your card information is entered directly with the payment processor and is not stored by CREDIT REPAIR MASTERS.</small></div>
+      </section>
+
       <section className="grid">
-        <div className="card span4"><div className="label">Amount due</div><div className="value">{money(balance)}</div><div className="small">{due.length} eligible invoice{due.length === 1 ? '' : 's'}</div></div>
-        <div className="card span4"><div className="label">Paid invoices</div><div className="value">{paid.length}</div><div className="small">processor-verified receipts</div></div>
-        <div className="card span4"><div className="label">Secure checkout</div><div className="value statusValue">{secureCheckoutReady ? 'READY' : 'SETUP'}</div><div className="small">Stripe and Square hosted checkout; no raw card storage</div></div>
+        <section className="portalFeatureCard span12">
+          <div className="eyebrow">APPROVED INVOICES</div><h2>{due.length ? 'Ready to pay' : 'Nothing due'}</h2>
+          {due.length ? due.map((invoice) => { const service = getCommercialService(invoice.serviceId); return <article className="portalInvoiceCard" key={invoice.id}><div><strong>{service?.name || invoice.serviceId}</strong><span>{invoice.milestoneLabel}</span><small>Issued {new Date(invoice.createdAt).toLocaleDateString()}</small></div><div className="invoiceAmount">{money(invoice.amountCents)}</div><div className="portalPayActions">{squareReady ? <PortalCheckoutButton invoiceId={invoice.id} provider="square" label="Pay with Square" /> : null}{stripeReady ? <PortalCheckoutButton invoiceId={invoice.id} provider="stripe" label="Pay with Stripe" /> : null}{!secureCheckoutReady ? <span className="portalNotice">Secure checkout is being configured.</span> : null}</div></article>; }) : <div className="portalNotice success">✓ No approved invoice is currently due. You will only see a payment request after the service and billing requirements are satisfied.</div>}
+        </section>
 
-        <div className="card span12">
-          <div className="label">Amount due</div>
-          <h2>Eligible invoices</h2>
-          {due.length ? due.map((invoice) => {
-            const service = getCommercialService(invoice.serviceId);
-            return <div className="listRow" key={invoice.id} style={{ alignItems: 'center' }}>
-              <div><strong>{service?.name || invoice.serviceId}</strong><div className="small">{invoice.milestoneLabel} · {money(invoice.amountCents)} · issued {new Date(invoice.createdAt).toLocaleDateString()}</div></div>
-              <div className="headerActions">
-                {stripeReady ? <PortalCheckoutButton invoiceId={invoice.id} provider="stripe" label="Pay with Stripe" /> : null}
-                {squareReady ? <PortalCheckoutButton invoiceId={invoice.id} provider="square" label="Pay with Square" /> : null}
-                {!secureCheckoutReady ? <span className="pill medium">checkout setup</span> : null}
-              </div>
-            </div>;
-          }) : <div className="emptyState">You have no eligible amount due. CREDIT REPAIR MASTERS will not present a charge until the billing gate approves collection.</div>}
-        </div>
-
-        <div className="card span7"><div className="label">Receipts</div><h2>Payment history</h2>
-          {paid.length ? paid.map((invoice) => {
-            const service = getCommercialService(invoice.serviceId);
-            return <div className="listRow" key={invoice.id}><div><strong>{service?.name || invoice.serviceId}</strong><div className="small">{invoice.milestoneLabel} · {money(invoice.amountCents)} · {invoice.provider ? `${invoice.provider} · ` : ''}paid {invoice.paidAt ? new Date(invoice.paidAt).toLocaleDateString() : 'verified'}</div></div><span className="pill low">PAID</span></div>;
-          }) : <div className="emptyState">No completed payments yet.</div>}
-        </div>
-
-        <div className="card span5">
-          <div className="label">Payment methods</div>
-          <h2>Secure processor rails</h2>
-          <p className="small">Card numbers are entered on processor-hosted or tokenized checkout, not stored by CREDIT REPAIR MASTERS.</p>
-          {providers.map((provider) => <div className="listRow" key={provider.id}><div><strong>{provider.name}</strong><div className="small">{provider.methods.map(methodLabel).join(' · ')}</div></div><span className={`pill ${provider.configured ? 'low' : 'medium'}`}>{provider.configured ? 'ready' : 'setup'}</span></div>)}
-        </div>
-
-        <div className="card span12"><div className="label">Payment safety</div><h2>No payment is accepted outside the billing gate</h2><div className="guardrail">The system checks the service, jurisdiction, sales channel, completion status, agreement status, and cancellation timing before an invoice can be issued. A successful browser redirect is not proof of payment; settlement requires a verified processor webhook.</div></div>
+        <section className="portalFeatureCard span8"><div className="eyebrow">PAYMENT HISTORY</div><h2>Receipts</h2>{paid.length ? paid.map((invoice) => { const service = getCommercialService(invoice.serviceId); return <div className="portalRecord" key={invoice.id}><div><strong>{service?.name || invoice.serviceId}</strong><span>{invoice.milestoneLabel} · {invoice.paidAt ? new Date(invoice.paidAt).toLocaleDateString() : 'Payment verified'}</span></div><b>{money(invoice.amountCents)} · Paid</b></div>; }) : <div className="portalNotice">No completed payments yet.</div>}</section>
+        <section className="portalFeatureCard span4"><div className="eyebrow">PAYMENT SECURITY</div><h2>Protected checkout</h2><p>Payments are completed on secure processor-hosted checkout. CREDIT REPAIR MASTERS does not store your full card number.</p><div className="portalTrustList"><span>✓ Approved invoices only</span><span>✓ Secure hosted checkout</span><span>✓ Verified payment receipts</span></div></section>
       </section>
     </main>
   );

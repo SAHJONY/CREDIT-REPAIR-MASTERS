@@ -40,15 +40,29 @@ export default async function GetStartedPage({ searchParams }: { searchParams: S
   const attribution = { source: params.utm_source || params.ref || 'direct', medium: params.utm_medium || '', campaign: params.utm_campaign || '' };
 
   return (
-    <main className="onboardingCinema">
-      <section className="onboardingHero">
-        <div className="onboardingHeroImage" aria-hidden="true" />
-        <div className="onboardingHeroShade" />
-        <div className="onboardingHeroCopy">
+    <main className="onboardingCinema onboardingV72">
+      <section className="onboardingCommandHero">
+        <div className="onboardingCommandCopy">
           <div className="cinematicEyebrow">CREDIT REPAIR MASTERS · PRIVATE ONBOARDING</div>
-          <h1>Choose the path<br/><em>that matches your goal.</em></h1>
-          <p>Consumer credit work stays evidence-based and jurisdiction-gated. Business advisory and professional software follow their own commercial rules.</p>
-          <div className="publicCinemaActions"><Link className="glassButton" href="/services">Compare services</Link><Link className="glassButton" href="/portal/sign-in">Existing client</Link></div>
+          <h1>Choose the path<br/><em>built for your goal.</em></h1>
+          <p>One secure entry point for personal credit intelligence, business-credit advisory, and professional operating software.</p>
+          <div className="onboardingTrustRow">
+            <span>✓ Secure intake</span><span>✓ Jurisdiction-aware</span><span>✓ No score guarantees</span>
+          </div>
+          <div className="publicCinemaActions">
+            <Link className="goldButton" href="#paths">Choose your path</Link>
+            <Link className="glassButton" href="/portal/sign-in">Existing client</Link>
+          </div>
+        </div>
+        <div className="onboardingCommandPanel">
+          <div className="onboardingCommandTop"><span>PRIVATE CLIENT INTAKE</span><b>SECURE</b></div>
+          <div className="onboardingCommandMetric"><small>PATHS AVAILABLE</small><strong>3</strong><span>Personal · Business · Professional</span></div>
+          <div className="onboardingCommandSteps">
+            <div className="done"><i>1</i><p><b>Select your goal</b><span>Choose the service path that fits you.</span></p></div>
+            <div><i>2</i><p><b>Complete qualification</b><span>Provide only the information required.</span></p></div>
+            <div><i>3</i><p><b>Activate securely</b><span>Access your private workspace.</span></p></div>
+          </div>
+          <div className="onboardingCommandFooter">Consumer billing remains controlled by eligibility and compliance gates.</div>
         </div>
       </section>
 
@@ -75,10 +89,10 @@ export default async function GetStartedPage({ searchParams }: { searchParams: S
         </section>
       ) : null}
 
-      <section className="onboardingPaths">
-        <div className="onboardingPath blue"><div className="cinematicEyebrow">PERSONAL CREDIT</div><h2>Consumer intelligence</h2><p>Evidence-based report analysis, monitoring and complex recovery case management.</p>{consumer.map((service) => <Link className="cinemaListRow" href={serviceHref(service.id, params)} key={service.id}><div><strong>{service.name}</strong><span>{price(service)}</span></div><b>→</b></Link>)}</div>
-        <div className="onboardingPath emerald"><div className="cinematicEyebrow">BUSINESS CREDIT</div><h2>Advisory</h2><p>Business-credit readiness, reporting strategy and financing-readiness implementation.</p>{business.map((service) => <Link className="cinemaListRow" href={serviceHref(service.id, params)} key={service.id}><div><strong>{service.name}</strong><span>{price(service)}</span></div><b>→</b></Link>)}</div>
-        <div className="onboardingPath violet"><div className="cinematicEyebrow">FOR PROFESSIONALS</div><h2>CREDIT REPAIR MASTERS OS</h2><p>Governed workflow, evidence ledger, AI analysis, client workspace and audit trail.</p>{b2b.map((service) => <Link className="cinemaListRow" href={serviceHref(service.id, params)} key={service.id}><div><strong>{service.name}</strong><span>{price(service)}</span></div><b>→</b></Link>)}</div>
+      <section className="onboardingPaths" id="paths">
+        <div className="onboardingPath blue"><div className="pathIcon">◎</div><div className="cinematicEyebrow">PERSONAL CREDIT</div><h2>Consumer intelligence</h2><p>Evidence-based report analysis, monitoring and complex recovery case management.</p>{consumer.map((service) => <Link className="cinemaListRow" href={serviceHref(service.id, params)} key={service.id}><div><strong>{service.name}</strong><span>{price(service)}</span></div><b>→</b></Link>)}</div>
+        <div className="onboardingPath emerald"><div className="pathIcon">◇</div><div className="cinematicEyebrow">BUSINESS CREDIT</div><h2>Advisory</h2><p>Business-credit readiness, reporting strategy and financing-readiness implementation.</p>{business.map((service) => <Link className="cinemaListRow" href={serviceHref(service.id, params)} key={service.id}><div><strong>{service.name}</strong><span>{price(service)}</span></div><b>→</b></Link>)}</div>
+        <div className="onboardingPath violet"><div className="pathIcon">▦</div><div className="cinematicEyebrow">FOR PROFESSIONALS</div><h2>CREDIT REPAIR MASTERS OS</h2><p>Governed workflow, evidence ledger, AI analysis, client workspace and audit trail.</p>{b2b.map((service) => <Link className="cinemaListRow" href={serviceHref(service.id, params)} key={service.id}><div><strong>{service.name}</strong><span>{price(service)}</span></div><b>→</b></Link>)}</div>
       </section>
 
       <section className="onboardingJourney"><div><div className="cinematicEyebrow goldText">SECURE ONBOARDING</div><h2>Qualification → activation → delivery → compliant billing</h2></div><div className="journeyGrid"><div><b>01</b><strong>Qualification</strong><span>Capture service intent, state, source and contact permission.</span></div><div><b>02</b><strong>Controlled activation</strong><span>Tenant-scoped access keeps staff and customer permissions isolated.</span></div><div><b>03</b><strong>Evidence-first execution</strong><span>Reports, documents, authorizations and outcomes stay in the OS.</span></div><div><b>04</b><strong>Billing gate</strong><span>Collection remains blocked until the eligibility engine approves it.</span></div></div></section>

@@ -25,8 +25,8 @@ export default function ServicesPage() {
   return (
     <main>
       <header className="appHeader">
-        <div><div className="kicker">CREDIT REPAIR MASTERS / COMMERCIAL MODEL</div><h1>Services & pricing</h1><p className="subtitle">A diversified revenue model across consumer intelligence, business advisory, and B2B software.</p></div>
-        <div className="headerActions"><Link className="secondaryButton" href="/dashboard">Owner OS</Link></div>
+        <div><div className="kicker">CREDIT REPAIR MASTERS / COMMERCIAL MODEL</div><h1>Services & pricing</h1><p className="subtitle">A diversified revenue model across consumer intelligence, business advisory, and B2B software—with a controlled qualification path before sensitive billing or credit activity.</p></div>
+        <div className="headerActions"><Link className="primaryButton" href="/get-started">Get started</Link><Link className="secondaryButton" href="/dashboard">Owner OS</Link></div>
       </header>
       <section className="grid">
         {groups.map((group) => (
@@ -38,12 +38,13 @@ export default function ServicesPage() {
                   <div className="label">{service.billingModel.replaceAll('_', ' ')}</div><h2>{service.name}</h2><div className="value">{price(service)}</div><p className="small">{service.description}</p>
                   <div style={{ marginTop: 12 }}>{service.deliverables.map((item) => <div className="small" key={item}>• {item}</div>)}</div>
                   <div className="small" style={{ marginTop: 14 }}>Payment policy: {service.paymentPolicy.replaceAll('_', ' ')}</div>
+                  <div className="headerActions" style={{ marginTop: 14 }}><Link className="primaryButton" href={`/get-started?service=${service.id}`}>Choose this service</Link></div>
                 </div>
               ))}
             </div>
           </div>
         ))}
-        <div className="card span12"><div className="label">Billing safety</div><h2>No payment is collected from this page</h2><p className="small">The billing eligibility API must approve the jurisdiction, sales channel, service status, contract status, and cancellation timing before a consumer-credit invoice or checkout can be enabled.</p></div>
+        <div className="card span12"><div className="label">Billing safety</div><h2>Qualification before checkout</h2><p className="small">The billing eligibility API must approve the jurisdiction, sales channel, service status, contract status, and cancellation timing before a consumer-credit invoice or checkout can be enabled. The public funnel now routes visitors into the correct service path instead of treating pricing as a dead end.</p><div className="headerActions" style={{ marginTop: 14 }}><Link className="primaryButton" href="/get-started">Open qualification path</Link></div></div>
       </section>
     </main>
   );

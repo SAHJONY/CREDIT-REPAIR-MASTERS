@@ -18,33 +18,52 @@ export default async function Home({ searchParams }: { searchParams: SearchParam
   const params = await searchParams;
 
   return (
-    <main>
-      <header className="appHeader">
-        <div>
-          <div className="kicker">CREDIT REPAIR MASTERS</div>
-          <h1>Evidence-first credit intelligence for consumers, businesses, and professionals.</h1>
-          <p className="subtitle">A secure credit operations platform for report analysis, documented case work, business-credit readiness, and governed AI workflows—without sharing bureau passwords or promising impossible deletions.</p>
+    <main className="publicCinema">
+      <nav className="publicCinemaNav">
+        <div className="cinematicWordmark"><span>CRM</span><div><b>CREDIT REPAIR</b><small>MASTERS</small></div></div>
+        <div className="publicCinemaLinks">
+          <Link href="/services">Services</Link>
+          <Link href="/portal/sign-in">Client Portal</Link>
+          <Link href="/auth/sign-in">Staff</Link>
+          <Link className="goldButton compact" href={funnelHref(params)}>Get Started</Link>
         </div>
-        <div className="headerActions"><Link className="primaryButton" href={funnelHref(params)}>Get started</Link><Link className="secondaryButton" href="/services">Services & pricing</Link><Link className="secondaryButton" href="/portal/sign-in">Client sign in</Link><Link className="secondaryButton" href="/auth/sign-in">Staff sign in</Link></div>
-      </header>
+      </nav>
 
-      <section className="grid">
-        <div className="card span4"><div className="label">Personal credit</div><h2>Consumer intelligence</h2><p className="small">Normalize reports, identify potentially inaccurate or unsupported reporting, organize evidence, monitor responses, and build a prioritized improvement plan.</p><div className="headerActions" style={{ marginTop: 14 }}><Link className="primaryButton" href={funnelHref(params, 'credit-intelligence-audit')}>Start with an audit</Link></div></div>
-        <div className="card span4"><div className="label">Business credit</div><h2>Readiness & advisory</h2><p className="small">Assess business profile quality, documentation readiness, reporting strategy, funding readiness, and implementation milestones.</p><div className="headerActions" style={{ marginTop: 14 }}><Link className="primaryButton" href={funnelHref(params, 'business-credit-accelerator')}>Explore business credit</Link></div></div>
-        <div className="card span4"><div className="label">For professionals</div><h2>CREDIT REPAIR MASTERS OS</h2><p className="small">Operate client work with a tenant-scoped evidence ledger, AI analysis, compliance workflow, approvals, audit trail, private documents, and client portal.</p><div className="headerActions" style={{ marginTop: 14 }}><Link className="primaryButton" href={funnelHref(params, 'credit-os-professional')}>Explore the OS</Link></div></div>
-
-        <div className="card span4"><div className="label">1. Get official reports</div><h2>Consumer-controlled intake</h2><p className="small">Use official free disclosure sources or bureau channels directly. Authentication remains between the consumer and the reporting company.</p></div>
-        <div className="card span4"><div className="label">2. Upload privately</div><h2>Evidence Vault</h2><p className="small">Credit reports and supporting documents are stored privately and linked only to the authorized tenant and client profile.</p></div>
-        <div className="card span4"><div className="label">3. Execute safely</div><h2>Policy-gated workflow</h2><p className="small">Evidence, consent, jurisdiction, billing eligibility, approvals, customer-safe progress, and agent actions stay inside one controlled operating system.</p></div>
-
-        <div className="card span12">
-          <div className="row">
-            <div><div className="label">Security & governance</div><h2>AI can analyze and propose. It cannot invent evidence or bypass authorization.</h2><div className="guardrail">Customer access is isolated by tenant and client. Accurate negative information is not treated as disputable merely because it is negative. Sensitive external actions remain policy- and approval-gated.</div></div>
-            <Link className="primaryButton" href={funnelHref(params)}>Choose my path</Link>
+      <section className="publicCinemaHero">
+        <div className="publicCinemaImage" aria-hidden="true" />
+        <div className="publicCinemaShade" />
+        <div className="publicCinemaCopy">
+          <div className="cinematicEyebrow">CREDIT INTELLIGENCE · PRIVATE CLIENT EXPERIENCE</div>
+          <h1>Build the financial future<br/><em>you deserve.</em></h1>
+          <p>Evidence-first credit intelligence, secure case management, business-credit readiness and governed AI workflows in one premium operating platform.</p>
+          <div className="publicCinemaActions">
+            <Link className="goldButton" href={funnelHref(params)}>Start your plan <span>→</span></Link>
+            <Link className="glassButton" href="/services">Explore services</Link>
           </div>
         </div>
+        <div className="publicCinemaTrust">
+          <div><small>PRIVATE BY DESIGN</small><strong>Secure</strong><span>Tenant-isolated client records</span></div>
+          <div><small>COMPLIANCE-FIRST</small><strong>Governed</strong><span>Policy-gated billing & actions</span></div>
+          <div><small>CLIENT EXPERIENCE</small><strong>Premium</strong><span>Portal, progress & documents</span></div>
+        </div>
       </section>
-      <footer>Credit Repair Masters does not guarantee score increases, financing approvals, or deletion of accurate information. Consumer credit services remain subject to applicable federal and state requirements.</footer>
+
+      <section className="publicCinemaCards">
+        <Link href={funnelHref(params, 'credit-intelligence-audit')} className="publicCinemaCard blueCard"><span>PERSONAL CREDIT</span><h2>Credit Intelligence</h2><p>Analyze reports, organize evidence and prioritize the next steps in your improvement plan.</p><b>Start with an audit →</b></Link>
+        <Link href={funnelHref(params, 'business-credit-accelerator')} className="publicCinemaCard violetCard"><span>BUSINESS CREDIT</span><h2>Capital Readiness</h2><p>Assess business profile quality, documentation, reporting strategy and funding readiness.</p><b>Explore business credit →</b></Link>
+        <Link href={funnelHref(params, 'credit-os-professional')} className="publicCinemaCard emeraldCard"><span>FOR PROFESSIONALS</span><h2>Credit Masters OS</h2><p>Operate client work with evidence, approvals, private documents, compliance and AI workflows.</p><b>Explore the OS →</b></Link>
+      </section>
+
+      <section className="publicCinemaFuture">
+        <div>
+          <div className="cinematicEyebrow goldText">CONTROL · CLARITY · PROGRESS</div>
+          <h2>One secure place for the entire journey.</h2>
+          <p>Reports, authorizations, case work, documents, customer-safe progress and approved payments stay connected without exposing bureau credentials.</p>
+          <Link className="glassButton" href="/portal/sign-in">Enter client portal →</Link>
+        </div>
+      </section>
+
+      <footer className="publicCinemaFooter">Credit Repair Masters does not guarantee score increases, financing approvals, or deletion of accurate information. Consumer credit services remain subject to applicable federal and state requirements.</footer>
     </main>
   );
 }

@@ -6,7 +6,9 @@ import "./cinematic-global.css";
 import "./cinematic-everywhere.css";
 import "./all-pages-cinematic-lock.css";
 import "./reference-landing.css";
+import "./reference-app-frame.css";
 import type { Metadata } from "next";
+import { ReferenceAppFrame } from "@/components/reference-app-frame";
 
 export const metadata: Metadata = {
   title: "Credit Repair Masters",
@@ -16,7 +18,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body><ReferenceAppFrame>{children}</ReferenceAppFrame></body>
     </html>
   );
 }

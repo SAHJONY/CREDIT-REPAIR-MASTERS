@@ -1,8 +1,9 @@
+import type { Route } from 'next';
 import Link from 'next/link';
 
 type SearchParams = Promise<{ utm_source?: string; utm_medium?: string; utm_campaign?: string; ref?: string }>;
 
-function funnelHref(params: Awaited<SearchParams>, service?: string) {
+function funnelHref(params: Awaited<SearchParams>, service?: string): Route {
   const query = new URLSearchParams();
   if (service) query.set('service', service);
   if (params.utm_source) query.set('utm_source', params.utm_source);
@@ -10,7 +11,7 @@ function funnelHref(params: Awaited<SearchParams>, service?: string) {
   if (params.utm_campaign) query.set('utm_campaign', params.utm_campaign);
   if (params.ref) query.set('ref', params.ref);
   const value = query.toString();
-  return value ? `/get-started?${value}` : '/get-started';
+  return (value ? `/get-started?${value}` : '/get-started') as Route;
 }
 
 export default async function Home({ searchParams }: { searchParams: SearchParams }) {

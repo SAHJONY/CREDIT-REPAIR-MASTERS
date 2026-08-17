@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import type { CSSProperties } from 'react';
 import { consentIsActive, requireCustomerPortalSession } from '@/lib/customer-portal';
 import { getPlatformStore } from '@/lib/platform-store';
 import './portal-dashboard.css';
@@ -75,7 +76,7 @@ export default async function PortalHome() {
                 <div className="crmHealthMeta">Based on completed secure-intake milestones</div>
               </div>
               <div className="crmRingWrap">
-                <div className="crmRing" style={{ '--p': `${ringDegrees}deg` } as React.CSSProperties} />
+                <div className="crmRing" style={{ '--p': `${ringDegrees}deg` } as CSSProperties} />
                 <div className="crmRingText">{progress}%<small>to review-ready</small></div>
               </div>
             </div>

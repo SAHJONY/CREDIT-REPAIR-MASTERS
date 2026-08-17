@@ -37,7 +37,7 @@ export default async function LaunchCenterPage() {
     { label: 'Customer portal', detail: 'Invite customer identities with least privilege; clients never inherit Owner access.', href: '/clients/portal-access', ready: false },
     { label: 'Demo verification', detail: 'Use isolated personal, billing, and business fixtures to demonstrate workflows safely.', href: '/demo', ready: demoClients.length >= 3 },
     { label: 'Document examples', detail: 'Review synthetic examples before promoting any document to an approved production template.', href: '/demo/documents', ready: true }
-  ];
+  ] as const;
 
   return (
     <main>

@@ -26,7 +26,7 @@ export interface StateComplianceRule {
   sources: string[];
 }
 
-export const STATE_RULES_VERSION = '2026-08-17.1';
+export const STATE_RULES_VERSION = '2026-08-17.2';
 
 const JURISDICTIONS: Record<string, string> = {
   AL: 'Alabama', AK: 'Alaska', AZ: 'Arizona', AR: 'Arkansas', CA: 'California',
@@ -65,6 +65,27 @@ function validatedRule(input: Omit<StateComplianceRule, 'mode' | 'federalBaselin
 }
 
 const validated: Record<string, StateComplianceRule> = {
+  AZ: validatedRule({
+    jurisdiction: 'AZ', name: 'Arizona', advanceFeeRestricted: true,
+    advanceFeePolicy: 'preperformance_only_if_bonded_or_trust', writtenContractRequired: true,
+    cancellationRightsRequired: true, cancellationDays: 3, cancellationUsesWorkingDays: false,
+    registrationPolicy: 'not_identified', bondPolicy: 'conditional_for_advance_fees',
+    notes: [...FEDERAL_NOTES,
+      'Arizona Revised Statutes Title 44, Chapter 11, Article 7 governs covered credit services organizations.',
+      'Arizona prohibits collecting consideration before full and complete performance unless the organization has the statutory surety bond.',
+      'The buyer must receive the statutory information statement before contract execution or payment, and the organization must retain the signed acknowledgment for two years.',
+      'Every contract must be written, dated, signed, contain the required three-day cancellation statement, and be accompanied by the detachable statutory cancellation form.',
+      'Written communications to buyers, furnishers, creditors, and consumer reporting agencies must identify the organization by complete name and address and state that the communication is from a credit services organization.'
+    ],
+    sources: [...FEDERAL_SOURCES,
+      'https://www.azleg.gov/ars/44/01703.htm',
+      'https://www.azleg.gov/ars/44/01704.htm',
+      'https://www.azleg.gov/ars/44/01705.htm',
+      'https://www.azleg.gov/ars/44/01706.htm',
+      'https://www.azleg.gov/ars/44/01708.htm',
+      'https://www.azleg.gov/ars/44/01713.htm'
+    ]
+  }),
   FL: validatedRule({
     jurisdiction: 'FL', name: 'Florida', advanceFeeRestricted: true,
     advanceFeePolicy: 'preperformance_only_if_bonded_or_trust', writtenContractRequired: true,

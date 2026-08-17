@@ -31,8 +31,8 @@ export default async function DashboardPage() {
   return (
     <main>
       <header className="appHeader">
-        <div><div className="kicker">{organization?.name || 'CREDIT REPAIR MASTERS'} / OWNER OS / v4.2</div><h1>Operations Command Center</h1><p className="subtitle">Live tenant data from Neon. Signed in as {session.email} · {session.member.role} · MFA assured.</p></div>
-        <div className="headerActions"><Link className="primaryButton" href="/launch">Launch Center</Link><Link className="secondaryButton" href="/documents">Documents</Link><Link className="secondaryButton" href="/demo">Demo OS</Link><Link className="secondaryButton" href="/billing">Billing</Link><Link className="secondaryButton" href="/clients">Clients</Link><SignOutButton /></div>
+        <div><div className="kicker">{organization?.name || 'CREDIT REPAIR MASTERS'} / OWNER OS / v4.3</div><h1>Operations Command Center</h1><p className="subtitle">Live tenant data from Neon. Signed in as {session.email} · {session.member.role} · MFA assured.</p></div>
+        <div className="headerActions"><Link className="primaryButton" href="/growth">Growth OS</Link><Link className="secondaryButton" href="/launch">Launch Center</Link><Link className="secondaryButton" href="/documents">Documents</Link><Link className="secondaryButton" href="/demo">Demo OS</Link><Link className="secondaryButton" href="/billing">Billing</Link><Link className="secondaryButton" href="/clients">Clients</Link><SignOutButton /></div>
       </header>
 
       <section className="grid">
@@ -40,6 +40,10 @@ export default async function DashboardPage() {
         <div className="card span3"><div className="label">Readiness</div><div className="value">{readiness.percent}%</div><div className="small">{readiness.ready}/{readiness.required} required controls</div></div>
         <div className="card span3"><div className="label">Demo fixtures</div><div className="value">{demoClients.length}</div><div className="small">excluded from real KPIs</div></div>
         <div className="card span3"><div className="label">Recent agent runs</div><div className="value">{runs.length}</div><div className="small">latest execution records</div></div>
+
+        <div className="card span12">
+          <div className="row"><div><div className="label">Commercial control plane</div><h2>From production readiness to revenue validation</h2><div className="small">Track live client counts, scenario forecasts, B2B economics, and 7/30-day success criteria without presenting projections as booked revenue.</div></div><Link className="primaryButton" href="/growth">Open Growth Command Center</Link></div>
+        </div>
 
         <div className="card span12">
           <div className="row"><div><div className="label">Production launch</div><h2>{readiness.productionReady ? 'Required controls ready' : 'Close remaining launch gates'}</h2><div className="small">Use one control plane for launch blockers, real-vs-demo isolation, vault readiness, portal access, and billing.</div></div><Link className="primaryButton" href="/launch">Open Production Launch Center</Link></div>

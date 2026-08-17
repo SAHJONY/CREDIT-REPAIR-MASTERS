@@ -19,47 +19,51 @@ export default async function PortalHome() {
   const progress = Math.round((completed / 3) * 100);
 
   return (
-    <main className="portalShell">
-      <header className="portalHeader">
-        <div>
-          <div className="portalBrand">CREDIT REPAIR MASTERS</div>
-          <h1>Welcome back, {portal.client.displayName}</h1>
-          <p className="subtitle">Here is where your credit improvement plan stands today.</p>
-        </div>
+    <main className="portalShell cinematicPortal">
+      <header className="portalHeader cinematicHeader">
+        <div className="cinematicWordmark"><span>CRM</span><div><b>CREDIT REPAIR</b><small>MASTERS</small></div></div>
         <PortalNav />
       </header>
 
-      <section className="portalHero">
-        <div>
-          <div className="eyebrow">YOUR PROGRESS</div>
-          <div className="portalProgressValue">{progress}%</div>
-          <p className="portalLead">{ready ? 'Your file is ready for the next review.' : 'Complete the remaining steps so we can continue your review.'}</p>
+      <section className="cinematicHero">
+        <div className="cinematicHeroImage" aria-hidden="true" />
+        <div className="cinematicShade" />
+        <div className="cinematicCopy">
+          <div className="cinematicEyebrow">PRIVATE CLIENT EXPERIENCE</div>
+          <h1>Good evening,<br/><em>{portal.client.displayName}</em></h1>
+          <p>Here’s where your credit improvement plan stands today.</p>
+          <Link className="goldButton" href="/portal/progress">View your progress <span>→</span></Link>
         </div>
-        <div className="portalProgressPanel">
-          <div className="row"><strong>Credit improvement plan</strong><span>{completed}/3 steps ready</span></div>
-          <div className="portalProgressTrack"><div style={{ width: `${progress}%` }} /></div>
-          <div className="portalMilestones"><span className={analysisConsent ? 'done' : ''}>Authorization</span><span className={reports.length ? 'done' : ''}>Reports</span><span className={ready ? 'done' : ''}>Review ready</span></div>
+        <div className="cinematicScoreGlass">
+          <div><small>PLAN READINESS</small><strong>{progress}%</strong><span>{ready ? 'On track' : 'Building'}</span></div>
+          <div className="cinematicRing" style={{'--progress': `${progress * 3.6}deg`} as React.CSSProperties}><b>{progress}%</b><small>to ready</small></div>
+          <p>{completed}/3 secure intake milestones complete</p>
         </div>
       </section>
 
-      <section className="portalCardGrid">
-        <Link className="portalMetricCard" href="/portal/reports"><span>Credit reports</span><strong>{reports.length}</strong><small>{reports.length ? 'Securely received' : 'Upload your first report'}</small><b>View reports →</b></Link>
-        <Link className="portalMetricCard" href="/portal/progress"><span>Plan status</span><strong className="metricText">{ready ? 'On track' : 'Needs action'}</strong><small>Follow your customer-safe milestones</small><b>View progress →</b></Link>
-        <Link className="portalMetricCard" href="/portal/documents"><span>Documents</span><strong className="metricText">Secure</strong><small>Agreements, letters and shared files</small><b>View documents →</b></Link>
-        <Link className="portalMetricCard" href="/portal/payments"><span>Payments</span><strong className="metricText">Protected</strong><small>Only approved invoices are presented</small><b>View billing →</b></Link>
+      <section className="cinematicCards">
+        <Link href="/portal/reports" className="cinematicCard blueCard"><i>▣</i><span>Credit Reports</span><strong>{reports.length}</strong><small>{reports.length ? 'Securely received' : 'Upload your first report'}</small><b>View Reports →</b></Link>
+        <Link href="/portal/progress" className="cinematicCard violetCard"><i>↗</i><span>Plan Status</span><strong className="textMetric">{ready ? 'On Track' : 'Action'}</strong><small>Follow every milestone</small><b>View Progress →</b></Link>
+        <Link href="/portal/documents" className="cinematicCard emeraldCard"><i>▤</i><span>Documents</span><strong className="textMetric">Secure</strong><small>Agreements, letters & reports</small><b>View Documents →</b></Link>
+        <Link href="/portal/payments" className="cinematicCard goldCard"><i>▱</i><span>Payments</span><strong className="textMetric">Protected</strong><small>Approved invoices only</small><b>View Billing →</b></Link>
       </section>
 
-      <section className="portalNextCard">
-        <div>
-          <div className="eyebrow">WHAT HAPPENS NEXT</div>
-          <h2>{ready ? 'Your file is ready for analysis' : 'Finish your secure intake'}</h2>
-          <p>{ready ? 'Your authorization and credit report are on file. You do not need to upload them again.' : 'We only need the items shown below. Your credit bureau passwords are never requested.'}</p>
+      <section className="cinematicNext">
+        <div className="cinematicNextCopy">
+          <div className="cinematicEyebrow goldText">NEXT UP</div>
+          <h2>{ready ? 'Your file is ready for the next review.' : 'Complete your secure intake.'}</h2>
+          <p>{ready ? 'Your authorization and report are on file. Our workflow can continue without another upload.' : 'Complete the remaining secure steps below. We never request your credit bureau passwords.'}</p>
+          <strong className="calmStatus">◈ {ready ? 'You don’t need to do anything right now.' : 'Your next required action is shown on the right.'}</strong>
         </div>
-        <div className="portalSteps">
-          <div className={analysisConsent ? 'portalStep complete' : 'portalStep'}><i>{analysisConsent ? '✓' : '1'}</i><div><strong>Authorize analysis</strong><span>{analysisConsent ? 'Completed' : 'Required before analysis'}</span></div><Link href="/portal/consents">Open</Link></div>
-          <div className={reports.length ? 'portalStep complete' : 'portalStep'}><i>{reports.length ? '✓' : '2'}</i><div><strong>Provide your credit report</strong><span>{reports.length ? `${reports.length} report(s) received` : 'Upload it securely'}</span></div><Link href="/portal/reports">Open</Link></div>
-          <div className={ready ? 'portalStep complete' : 'portalStep'}><i>{ready ? '✓' : '3'}</i><div><strong>Follow your progress</strong><span>{ready ? 'Ready for review' : 'Available after intake'}</span></div><Link href="/portal/progress">Open</Link></div>
+        <div className="cinematicTimeline">
+          <div className={analysisConsent ? 'timelineNode done' : 'timelineNode current'}><i>{analysisConsent ? '✓' : '1'}</i><div><b>Authorization</b><small>{analysisConsent ? 'Completed' : 'Required'}</small></div><Link href="/portal/consents">Open</Link></div>
+          <div className={reports.length ? 'timelineNode done' : 'timelineNode current'}><i>{reports.length ? '✓' : '2'}</i><div><b>Reports received</b><small>{reports.length ? `${reports.length} secure report(s)` : 'Upload securely'}</small></div><Link href="/portal/reports">Open</Link></div>
+          <div className={ready ? 'timelineNode done' : 'timelineNode'}><i>{ready ? '✓' : '3'}</i><div><b>Review ready</b><small>{ready ? 'Ready for analysis' : 'Pending intake'}</small></div><Link href="/portal/progress">Open</Link></div>
         </div>
+      </section>
+
+      <section className="cinematicFuture">
+        <div><div className="cinematicEyebrow">FINANCIAL FUTURE</div><h2>Build toward what comes next.</h2><p>Better credit can open doors to better opportunities. Your plan, documents and progress stay together in one private experience.</p><Link className="glassButton" href="/portal/progress">Explore your plan →</Link></div>
       </section>
     </main>
   );

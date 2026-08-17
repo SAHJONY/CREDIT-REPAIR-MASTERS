@@ -21,8 +21,9 @@ export default async function PortalPaymentsPage() {
     listBillingInvoices(portal.organizationId, portal.client.id),
     Promise.resolve(getPaymentProviders())
   ]);
-  const configured = providers.filter((provider) => provider.configured);
   const stripeReady = providers.find((provider) => provider.id === 'stripe')?.configured ?? false;
+  const squareReady = providers.find((provider) => provider.id === 'square')?.configured ?? false;
+  const secureCheckoutReady = stripeReady || squareReady;
   const due = invoices.filter((invoice) => invoice.status === 'open' || invoice.status === 'checkout_pending');
   const paid = invoices.filter((invoice) => invoice.status === 'paid');
   const balance = due.reduce((sum, invoice) => sum + invoice.amountCents, 0);
@@ -41,7 +42,7 @@ export default async function PortalPaymentsPage() {
       <section className="grid">
         <div className="card span4"><div className="label">Amount due</div><div className="value">{money(balance)}</div><div className="small">{due.length} eligible invoice{due.length === 1 ? '' : 's'}</div></div>
         <div className="card span4"><div className="label">Paid invoices</div><div className="value">{paid.length}</div><div className="small">processor-verified receipts</div></div>
-        <div className="card span4"><div className="label">Secure checkout</div><div className="value statusValue">{stripeReady ? 'READY' : 'SETUP'}</div><div className="small">hosted checkout; no raw card storage</div></div>
+        <div className="card span4"><div className="label">Secure checkout</div><div className="value statusValue">{secureCheckoutReady ? 'READY' : 'SETUP'}</div><div className="small">Stripe and Square hosted checkout; no raw card storage</div></div>
 
         <div className="card span12">
           <div className="label">Amount due</div>
@@ -50,7 +51,11 @@ export default async function PortalPaymentsPage() {
             const service = getCommercialService(invoice.serviceId);
             return <div className="listRow" key={invoice.id} style={{ alignItems: 'center' }}>
               <div><strong>{service?.name || invoice.serviceId}</strong><div className="small">{invoice.milestoneLabel} · {money(invoice.amountCents)} · issued {new Date(invoice.createdAt).toLocaleDateString()}</div></div>
-              <div>{stripeReady ? <PortalCheckoutButton invoiceId={invoice.id} /> : <span className="pill medium">checkout setup</span>}</div>
+              <div className="headerActions">
+                {stripeReady ? <PortalCheckoutButton invoiceId={invoice.id} provider="stripe" label="Pay with Stripe" /> : null}
+                {squareReady ? <PortalCheckoutButton invoiceId={invoice.id} provider="square" label="Pay with Square" /> : null}
+                {!secureCheckoutReady ? <span className="pill medium">checkout setup</span> : null}
+              </div>
             </div>;
           }) : <div className="emptyState">You have no eligible amount due. CREDIT REPAIR MASTERS will not present a charge until the billing gate approves collection.</div>}
         </div>
@@ -58,7 +63,7 @@ export default async function PortalPaymentsPage() {
         <div className="card span7"><div className="label">Receipts</div><h2>Payment history</h2>
           {paid.length ? paid.map((invoice) => {
             const service = getCommercialService(invoice.serviceId);
-            return <div className="listRow" key={invoice.id}><div><strong>{service?.name || invoice.serviceId}</strong><div className="small">{invoice.milestoneLabel} · {money(invoice.amountCents)} · paid {invoice.paidAt ? new Date(invoice.paidAt).toLocaleDateString() : 'verified'}</div></div><span className="pill low">PAID</span></div>;
+            return <div className="listRow" key={invoice.id}><div><strong>{service?.name || invoice.serviceId}</strong><div className="small">{invoice.milestoneLabel} · {money(invoice.amountCents)} · {invoice.provider ? `${invoice.provider} · ` : ''}paid {invoice.paidAt ? new Date(invoice.paidAt).toLocaleDateString() : 'verified'}</div></div><span className="pill low">PAID</span></div>;
           }) : <div className="emptyState">No completed payments yet.</div>}
         </div>
 

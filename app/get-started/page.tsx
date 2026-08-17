@@ -1,3 +1,4 @@
+import type { Route } from 'next';
 import Link from 'next/link';
 import { LeadIntakeForm } from '@/components/lead-intake-form';
 import { commercialServices, getCommercialService } from '@/lib/service-catalog';
@@ -21,13 +22,13 @@ function price(service: (typeof commercialServices)[number]) {
   return service.billingModel === 'monthly' ? `${amount}/mo` : amount;
 }
 
-function serviceHref(serviceId: string, params: Awaited<SearchParams>) {
+function serviceHref(serviceId: string, params: Awaited<SearchParams>): Route {
   const query = new URLSearchParams({ service: serviceId });
   if (params.utm_source) query.set('utm_source', params.utm_source);
   if (params.utm_medium) query.set('utm_medium', params.utm_medium);
   if (params.utm_campaign) query.set('utm_campaign', params.utm_campaign);
   if (params.ref) query.set('ref', params.ref);
-  return `/get-started?${query.toString()}`;
+  return `/get-started?${query.toString()}` as Route;
 }
 
 export default async function GetStartedPage({ searchParams }: { searchParams: SearchParams }) {

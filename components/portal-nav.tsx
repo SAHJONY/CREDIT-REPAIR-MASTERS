@@ -10,15 +10,15 @@ export function PortalNav() {
   }
 
   return (
-    <div className="headerActions">
-      <Link className="secondaryButton" href="/portal">Home</Link>
-      <Link className="secondaryButton" href="/portal/reports">Reports</Link>
-      <Link className="secondaryButton" href="/portal/progress">Progress</Link>
-      <Link className="secondaryButton" href="/portal/documents">Documents</Link>
-      <Link className="secondaryButton" href="/portal/consents">Consents</Link>
-      <Link className="secondaryButton" href="/portal/payments">Payments</Link>
-      <Link className="secondaryButton" href="/portal/account">Account</Link>
-      <button className="secondaryButton" type="button" onClick={signOut}>Sign out</button>
-    </div>
+    <nav className="portalNav" aria-label="Customer portal">
+      <Link href="/portal">Home</Link>
+      <Link href="/portal/progress">Progress</Link>
+      <Link href="/portal/documents">Documents</Link>
+      <Link href="/portal/payments">Payments</Link>
+      <details className="portalMore">
+        <summary>More</summary>
+        <div><Link href="/portal/reports">Credit reports</Link><Link href="/portal/consents">Authorizations</Link><Link href="/portal/account">Account</Link><button type="button" onClick={signOut}>Sign out</button></div>
+      </details>
+    </nav>
   );
 }

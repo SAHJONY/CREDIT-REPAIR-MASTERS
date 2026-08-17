@@ -4,6 +4,8 @@ import { del, put } from "@vercel/blob";
 const MAX_SERVER_UPLOAD_BYTES = 4_000_000;
 const ALLOWED_CONTENT_TYPES = new Set([
   "application/pdf",
+  "application/msword",
+  "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
   "image/jpeg",
   "image/png",
   "image/webp",

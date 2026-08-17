@@ -10,10 +10,10 @@ export default function PortalSignInPage() {
         <p className="subtitle">Securely access your credit-report intake, documents, authorizations, and progress.</p>
         <PortalSignInForm />
         <div className="authActions">
-          <Link className="secondaryButton" href="/auth/forgot-password">Forgot password?</Link>
+          <Link className="secondaryButton" href="/portal/forgot-password">Forgot password?</Link>
           <Link className="secondaryButton" href="/">Back to website</Link>
         </div>
-        <div className="guardrail">Your portal is private. CREDIT REPAIR MASTERS will never ask you to share bureau passwords or bypass identity verification.</div>
+        <div className="guardrail">Your portal is private. If you have never activated your portal, password recovery will not work yet; use the secure activation link issued for your client profile first.</div>
       </section>
     </main>
   );

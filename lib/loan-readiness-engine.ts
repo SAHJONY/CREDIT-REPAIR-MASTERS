@@ -50,6 +50,26 @@ export function calculateLoanReadiness(input: LoanReadinessInputs) {
   if (reserveMonths < target.reserveMonths) actions.push({ priority: 'P1', targetDay: 90, title: `Build at least ${target.reserveMonths} month(s) of modeled reserves`, detail: `Current reserves cover about ${reserveMonths.toFixed(1)} month(s) of entered monthly debt obligations.` });
   if (!actions.length) actions.push({ priority: 'P2', targetDay: 7, title: 'Prepare lender-ready documentation and shop carefully', detail: 'The entered profile meets this planning model’s core targets. Compare actual lender criteria, rates, fees and terms before submitting applications.' });
 
-  const status = readiness >= 85 ? 'READY TO SHOP' : readiness >= 70 ? 'NEAR READY' : readiness >= 50 ? 'BUILDING' : 'NOT READY YET';
-  return { readiness, status, dti, reserveMonths, target, actions } as const;
+  const components = [
+    { id: 'credit', label: 'Credit profile', score: Math.round((scorePoints / 25) * 100), current: `${input.creditScore}`, target: `${target.scoreTarget}+` },
+    { id: 'payment', label: 'Payment history', score: Math.round((paymentPoints / 20) * 100), current: `${input.onTimePaymentRate}%`, target: '100%' },
+    { id: 'utilization', label: 'Utilization', score: Math.round((utilizationPoints / 15) * 100), current: `${input.utilization}%`, target: `≤ ${target.utilizationTarget}%` },
+    { id: 'dti', label: 'Debt-to-income', score: Math.round((dtiPoints / 15) * 100), current: `${dti.toFixed(1)}%`, target: `≤ ${target.dtiTarget}%` },
+    { id: 'derogatories', label: 'Derogatory pressure', score: Math.round((derogatoryPoints / 10) * 100), current: `${input.derogatories}`, target: 'review/resolved' },
+    { id: 'inquiries', label: 'Inquiry pressure', score: Math.round((inquiryPoints / 10) * 100), current: `${input.hardInquiries}`, target: '≤ 2 recent' },
+    { id: 'reserves', label: 'Cash reserves', score: Math.round((reservePoints / 5) * 100), current: `${reserveMonths.toFixed(1)} mo`, target: `${target.reserveMonths}+ mo` }
+  ] as const;
+
+  const p0Blockers = actions.filter((action) => action.priority === 'P0');
+  const readyToShop = readiness >= 85 && p0Blockers.length === 0;
+  const status = readyToShop ? 'READY TO SHOP' : readiness >= 70 ? 'NEAR READY' : readiness >= 50 ? 'BUILDING' : 'NOT READY YET';
+  const shopGate = {
+    ready: readyToShop,
+    label: readyToShop ? 'READY TO SHOP' : 'NOT YET READY TO SHOP',
+    reasons: readyToShop
+      ? ['No modeled P0 blockers remain. Confirm actual lender criteria, documentation, rates, fees and product terms before applying.']
+      : p0Blockers.map((action) => action.title)
+  } as const;
+
+  return { readiness, status, dti, reserveMonths, target, actions, components, p0Blockers, shopGate } as const;
 }

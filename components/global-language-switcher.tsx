@@ -15,6 +15,7 @@ const rtl = new Set<Locale>(['ar','he','fa','ur']);
 const ATTRS = ['placeholder','title','aria-label'] as const;
 const originalText = new WeakMap<Text,string>();
 const originalAttrs = new WeakMap<Element,Record<string,string>>();
+const FAILURE_COOLDOWN_MS = 5 * 60 * 1000;
 
 const core: Partial<Record<Locale,TranslationMap>> = {
   es:{'Home':'Inicio','Services':'Servicios','How It Works':'Cómo funciona','Results':'Resultados','Pricing':'Precios','Education':'Educación','About Us':'Nosotros','Get Started':'Comenzar','Get Started Now':'Comenzar ahora','Client Portal':'Portal del cliente','Staff':'Equipo','Dashboard':'Panel','Clients':'Clientes','Documents':'Documentos','Payments':'Pagos','Billing':'Facturación','Compliance':'Cumplimiento','Credit Progress':'Progreso de crédito','Reports & Scores':'Reportes y puntajes','Disputes':'Disputas','Account':'Cuenta','Account Settings':'Configuración','View Your Progress':'Ver tu progreso','View Reports':'Ver reportes','View Documents':'Ver documentos','View Billing':'Ver facturación','Credit Reports':'Reportes de crédito','Items Under Review':'Elementos en revisión','Progress Overview':'Resumen del progreso','Recent Activity':'Actividad reciente','Financial Education':'Educación financiera','Secure & Confidential':'Seguro y confidencial','Pending':'Pendiente','Completed':'Completado','Current':'Actual','Open':'Abrir','Close':'Cerrar','Save':'Guardar','Cancel':'Cancelar','Continue':'Continuar','Sign in':'Iniciar sesión','Sign out':'Cerrar sesión'},
@@ -30,12 +31,29 @@ const core: Partial<Record<Locale,TranslationMap>> = {
 };
 
 function cacheKey(locale: Locale) { return `crm-i18n-v3:${locale}`; }
+function failureKey(locale: Locale) { return `crm-i18n-v3:cooldown:${locale}`; }
 function loadCache(locale: Locale): TranslationMap {
   try { return { ...(core[locale] || {}), ...JSON.parse(localStorage.getItem(cacheKey(locale)) || '{}') }; }
   catch { return { ...(core[locale] || {}) }; }
 }
 function saveCache(locale: Locale, map: TranslationMap) {
   try { localStorage.setItem(cacheKey(locale), JSON.stringify(map)); } catch { /* storage can be unavailable */ }
+}
+function translationCoolingDown(locale: Locale) {
+  try {
+    const until = Number(localStorage.getItem(failureKey(locale)) || 0);
+    if (!Number.isFinite(until) || until <= Date.now()) {
+      localStorage.removeItem(failureKey(locale));
+      return false;
+    }
+    return true;
+  } catch { return false; }
+}
+function startTranslationCooldown(locale: Locale) {
+  try { localStorage.setItem(failureKey(locale), String(Date.now() + FAILURE_COOLDOWN_MS)); } catch { /* storage can be unavailable */ }
+}
+function clearTranslationCooldown(locale: Locale) {
+  try { localStorage.removeItem(failureKey(locale)); } catch { /* storage can be unavailable */ }
 }
 function isSkippedElement(element: Element | null) {
   return !element || Boolean(element.closest('[data-no-translate]')) || ['SCRIPT','STYLE','CODE','PRE'].includes(element.tagName);
@@ -102,17 +120,26 @@ function applyTranslations(locale: Locale, map: TranslationMap, root: ParentNode
 }
 
 async function fetchMissing(locale: Locale, strings: string[], map: TranslationMap) {
-  if (locale === 'en') return map;
+  if (locale === 'en' || translationCoolingDown(locale)) return { map, available: locale === 'en' };
   const missing = strings.filter((source) => !map[source]);
-  if (!missing.length) return map;
+  if (!missing.length) return { map, available: true };
   for (let i = 0; i < missing.length; i += 80) {
-    const response = await fetch('/api/ui-translate', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ locale, strings: missing.slice(i, i + 80) }) });
-    if (!response.ok) continue;
-    const data = await response.json() as { translations?: TranslationMap };
-    Object.assign(map, data.translations || {});
+    try {
+      const response = await fetch('/api/ui-translate', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ locale, strings: missing.slice(i, i + 80) }) });
+      if (!response.ok) {
+        startTranslationCooldown(locale);
+        return { map, available: false };
+      }
+      const data = await response.json() as { translations?: TranslationMap };
+      Object.assign(map, data.translations || {});
+    } catch {
+      startTranslationCooldown(locale);
+      return { map, available: false };
+    }
   }
+  clearTranslationCooldown(locale);
   saveCache(locale, map);
-  return map;
+  return { map, available: true };
 }
 
 export function GlobalLanguageSwitcher() {
@@ -130,15 +157,26 @@ export function GlobalLanguageSwitcher() {
     applyTranslations(selected, map);
 
     async function translateAll() {
-      if (running.current || activeLocale.current === 'en') return;
+      if (running.current || activeLocale.current === 'en' || translationCoolingDown(activeLocale.current)) return;
+      const missing = sourceStrings().filter((source) => !map[source]);
+      if (!missing.length) return;
       running.current = true;
-      try { map = await fetchMissing(activeLocale.current, sourceStrings(), map); applyTranslations(activeLocale.current, map); }
-      finally { running.current = false; }
+      try {
+        const result = await fetchMissing(activeLocale.current, missing, map);
+        map = result.map;
+        applyTranslations(activeLocale.current, map);
+      } finally {
+        running.current = false;
+      }
     }
     void translateAll();
     let timer: ReturnType<typeof setTimeout> | undefined;
     const observer = new MutationObserver(() => {
-      clearTimeout(timer); timer = setTimeout(() => { applyTranslations(activeLocale.current, map); void translateAll(); }, 120);
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        applyTranslations(activeLocale.current, map);
+        if (!translationCoolingDown(activeLocale.current)) void translateAll();
+      }, 250);
     });
     observer.observe(document.body, { childList:true, subtree:true, characterData:true, attributes:true, attributeFilter:[...ATTRS,'value'] });
     return () => { observer.disconnect(); clearTimeout(timer); };
@@ -146,6 +184,7 @@ export function GlobalLanguageSwitcher() {
 
   function change(next: Locale) {
     localStorage.setItem('crm-locale',next);
+    clearTranslationCooldown(next);
     setLocale(next);
     window.location.reload();
   }

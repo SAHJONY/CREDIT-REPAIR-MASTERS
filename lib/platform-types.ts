@@ -27,6 +27,37 @@ export interface ClientProfile {
   updatedAt: string;
 }
 
+export type LoanReadinessGoal = "mortgage" | "auto" | "credit_card" | "personal_loan" | "business_credit" | "lease" | "financed_purchase";
+
+export interface LoanReadinessAction {
+  priority: "P0" | "P1" | "P2";
+  title: string;
+  detail: string;
+  targetDay?: number;
+}
+
+export interface LoanReadinessAssessment {
+  id: string;
+  organizationId: string;
+  clientId: string;
+  goal: LoanReadinessGoal;
+  readinessScore: number;
+  status: "READY TO SHOP" | "NEAR READY" | "BUILDING" | "NOT READY YET";
+  creditScore: number;
+  utilization: number;
+  monthlyIncome: number;
+  monthlyDebt: number;
+  dti: number;
+  onTimePaymentRate: number;
+  derogatories: number;
+  hardInquiries: number;
+  cashReserves: number;
+  reserveMonths: number;
+  roadmap: LoanReadinessAction[];
+  createdBy: string;
+  createdAt: string;
+}
+
 export type ConsentScope =
   | "credit_report_analysis"
   | "dispute_drafting"

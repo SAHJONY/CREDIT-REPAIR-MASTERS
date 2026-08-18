@@ -20,6 +20,12 @@ export interface ClientDisputeLetterInput {
 export interface ClientDisputeLetterDraft {
   subject: string;
   body: string;
+  letterhead: {
+    clientName: string;
+    clientAddress: string;
+    recipientName: string;
+    recipientAddress: string;
+  };
   requiresClientReview: true;
   requiresApproval: true;
   externalExecutionEnabled: false;
@@ -47,11 +53,9 @@ function validateInput(input: ClientDisputeLetterInput) {
 }
 
 function promptFor(input: ClientDisputeLetterInput) {
+  // Full name and postal addresses are intentionally excluded from model input.
+  // They are inserted locally into the final letterhead after drafting.
   const facts = {
-    clientName: clean(input.clientName, 160),
-    clientAddress: clean(input.clientAddress, 240),
-    recipientName: clean(input.recipientName, 160),
-    recipientAddress: clean(input.recipientAddress, 240),
     accountOrReference: clean(input.accountOrReference, 120),
     disputedField: clean(input.disputedField, 320),
     currentReporting: clean(input.currentReporting, 600),
@@ -76,6 +80,7 @@ WRITING STANDARD
 - Sentence lengths may vary naturally. Keep paragraphs short. Do not add fake typos, fake handwriting cues, fake personal history, or any technique intended to bypass AI-detection systems.
 - Do not promise deletion, score improvement, funding, or any outcome.
 - Mention attachments by their actual supplied names when useful.
+- Do not add sender or recipient postal addresses; the application inserts those locally.
 - End with a simple request for the recipient to investigate the identified information and send the client the result.
 - Return only the letter text, with a useful subject line followed by the body.
 
@@ -125,6 +130,12 @@ export async function composeClientDisputeLetter(input: ClientDisputeLetterInput
   return {
     subject: subject.slice(0, 180),
     body,
+    letterhead: {
+      clientName: clean(input.clientName, 160),
+      clientAddress: clean(input.clientAddress, 240),
+      recipientName: clean(input.recipientName, 160),
+      recipientAddress: clean(input.recipientAddress, 240)
+    },
     requiresClientReview: true,
     requiresApproval: true,
     externalExecutionEnabled: false,

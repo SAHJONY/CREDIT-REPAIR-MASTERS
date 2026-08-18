@@ -1,4 +1,4 @@
-/* v9.2 — critical landing CTA + responsive composition lock. Loaded last. */
+/* v9.3 — critical landing CTA + responsive composition + mobile overlay lock. Loaded last. */
 .referenceHero{
   min-height:560px!important;
   overflow:hidden!important;
@@ -30,6 +30,26 @@
 .referenceNav a{white-space:nowrap!important}
 .referenceActions{flex:0 0 auto!important;white-space:nowrap!important}
 
+/* Global language control must never cover a material portion of the application. */
+.globalLanguage{
+  width:auto!important;
+  max-width:180px!important;
+  min-width:0!important;
+  min-height:44px!important;
+  padding:6px 9px!important;
+  border-radius:12px!important;
+  gap:6px!important;
+}
+.globalLanguage select{
+  width:118px!important;
+  max-width:118px!important;
+  min-width:0!important;
+  min-height:32px!important;
+  height:32px!important;
+  padding:0 18px 0 4px!important;
+  font-size:12px!important;
+}
+
 @media(max-width:1380px){
   .referenceTopbar{padding-left:24px!important;padding-right:24px!important}
   .referenceBrand{min-width:190px!important}
@@ -51,4 +71,26 @@
   .referenceHero p{font-size:14px!important;line-height:1.55!important}
   .referenceHeroButtons{flex-direction:column!important;align-items:stretch!important}
   .referenceHeroButtons .referencePrimary,.referenceHeroButtons .referenceSecondary{width:100%!important;justify-content:center!important;min-height:52px!important;font-size:13px!important}
+
+  /* Mobile: compact language pill pinned to the safe area, never a large floating card. */
+  .globalLanguage{
+    right:10px!important;
+    left:auto!important;
+    bottom:max(10px,env(safe-area-inset-bottom))!important;
+    width:148px!important;
+    max-width:calc(100vw - 20px)!important;
+    min-height:40px!important;
+    padding:5px 8px!important;
+    border-radius:11px!important;
+    box-shadow:0 10px 28px rgba(0,0,0,.34)!important;
+  }
+  .globalLanguage span{font-size:13px!important;flex:0 0 auto!important}
+  .globalLanguage select{
+    width:108px!important;
+    max-width:108px!important;
+    height:30px!important;
+    min-height:30px!important;
+    padding:0 16px 0 2px!important;
+    font-size:11px!important;
+  }
 }

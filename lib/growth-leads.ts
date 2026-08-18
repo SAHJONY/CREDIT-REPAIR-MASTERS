@@ -1,3 +1,5 @@
+import { persistGrowthLead, updateGrowthLeadDeliveryChannel } from './growth-lead-store';
+
 export type GrowthLeadNotification = {
   reference: string;
   name: string;
@@ -29,7 +31,6 @@ function configured(value?: string) {
 async function sendWebhook(lead: GrowthLeadNotification) {
   const url = configured(process.env.LEADS_WEBHOOK_URL);
   if (!url) return false;
-
   const secret = configured(process.env.LEADS_WEBHOOK_SECRET);
   const response = await fetch(url, {
     method: 'POST',
@@ -51,10 +52,7 @@ async function sendResendEmail(lead: GrowthLeadNotification) {
 
   const response = await fetch('https://api.resend.com/emails', {
     method: 'POST',
-    headers: {
-      authorization: `Bearer ${apiKey}`,
-      'content-type': 'application/json'
-    },
+    headers: { authorization: `Bearer ${apiKey}`, 'content-type': 'application/json' },
     body: JSON.stringify({
       from,
       to: [to],
@@ -79,7 +77,16 @@ async function sendResendEmail(lead: GrowthLeadNotification) {
   return response.ok;
 }
 
-export async function deliverGrowthLead(lead: GrowthLeadNotification) {
+export async function deliverGrowthLead(
+  organizationId: string,
+  identityKey: string,
+  lead: GrowthLeadNotification,
+  isTest = false
+) {
+  // The Owner OS inbox is the durable primary rail. External notification is additive.
+  await persistGrowthLead(organizationId, identityKey, lead, 'owner-inbox', isTest);
+
+  let channel = 'owner-inbox';
   const webhookConfigured = Boolean(configured(process.env.LEADS_WEBHOOK_URL));
   const resendConfigured = Boolean(
     configured(process.env.RESEND_API_KEY) &&
@@ -87,23 +94,25 @@ export async function deliverGrowthLead(lead: GrowthLeadNotification) {
     configured(process.env.LEADS_FROM_EMAIL)
   );
 
-  if (!webhookConfigured && !resendConfigured) throw new Error('LEAD_DELIVERY_NOT_CONFIGURED');
-
   if (webhookConfigured) {
     try {
-      if (await sendWebhook(lead)) return { channel: 'webhook' as const };
+      if (await sendWebhook(lead)) channel = 'owner-inbox+webhook';
     } catch {
-      // Fall through to email if it is configured.
+      // Durable inbox already has the lead; notification failure must not lose it.
     }
   }
 
   if (resendConfigured) {
     try {
-      if (await sendResendEmail(lead)) return { channel: 'email' as const };
+      if (await sendResendEmail(lead)) channel = `${channel}+email`;
     } catch {
-      // Return one fail-closed error below without logging prospect PII.
+      // Durable inbox already has the lead; notification failure must not lose it.
     }
   }
 
-  throw new Error('LEAD_DELIVERY_FAILED');
+  if (channel !== 'owner-inbox') {
+    try { await updateGrowthLeadDeliveryChannel(lead.reference, organizationId, channel); } catch { /* keep durable lead */ }
+  }
+
+  return { channel };
 }

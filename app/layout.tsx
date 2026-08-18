@@ -9,6 +9,7 @@ import "./reference-landing.css";
 import "./reference-app-frame.css";
 import "./v7-global.css";
 import "./v7-consistency.css";
+import "./v9-cta-visibility.css";
 import type { Metadata } from "next";
 import { ReferenceAppFrame } from "@/components/reference-app-frame";
 import { GlobalLanguageSwitcher } from "@/components/global-language-switcher";

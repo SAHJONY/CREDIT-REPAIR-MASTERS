@@ -33,7 +33,7 @@ export default async function DashboardPage() {
     <main>
       <header className="ownerHero">
         <div><div className="kicker">{organization?.name || 'CREDIT REPAIR MASTERS'} / OWNER OS / v6</div><h1>Operations Command Center</h1><p className="subtitle">Live business operations, client activity, readiness and AI execution from one control plane.</p></div>
-        <div className="ownerNav"><Link className="primaryButton" href="/clients">Clients</Link><Link className="secondaryButton" href="/billing">Billing</Link><Link className="secondaryButton" href="/documents">Documents</Link><Link className="secondaryButton" href="/growth">Growth</Link><Link className="secondaryButton" href="/launch">Launch</Link><SignOutButton /></div>
+        <div className="ownerNav"><Link className="primaryButton" href="/loan-readiness">Approval Readiness</Link><Link className="secondaryButton" href="/clients">Clients</Link><Link className="secondaryButton" href="/billing">Billing</Link><Link className="secondaryButton" href="/documents">Documents</Link><Link className="secondaryButton" href="/growth">Growth</Link><Link className="secondaryButton" href="/launch">Launch</Link><SignOutButton /></div>
       </header>
 
       <section className="ownerKpiGrid">
@@ -44,8 +44,8 @@ export default async function DashboardPage() {
       </section>
 
       <section className="ownerActionStrip">
-        <div className="ownerActionCard"><div className="label">OWNER FOCUS</div><h2>{openGates.length ? 'Close remaining production gates' : 'Operate and prove revenue'}</h2><p>{openGates.length ? `${openGates.length} required control${openGates.length === 1 ? '' : 's'} still need attention before the system can consider the launch fully ready.` : 'Required production controls are ready. Prioritize active clients, settlement proof and measurable revenue execution.'}</p><div className="headerActions"><Link className="primaryButton" href={openGates.length ? '/launch' : '/growth'}>{openGates.length ? 'Open Launch Center' : 'Open Growth OS'}</Link><Link className="secondaryButton" href="/clients">Manage clients</Link></div></div>
-        <div className="ownerActionCard"><div className="label">QUICK ACCESS</div><div className="ownerQuickLinks"><Link href="/billing">Revenue & billing</Link><Link href="/documents">Document center</Link><Link href="/compliance">Compliance</Link><Link href="/demo">Demo OS</Link></div></div>
+        <div className="ownerActionCard"><div className="label">OWNER FOCUS</div><h2>{openGates.length ? 'Close remaining production gates' : 'Operate and prove revenue'}</h2><p>{openGates.length ? `${openGates.length} required control${openGates.length === 1 ? '' : 's'} still need attention before the system can consider the launch fully ready.` : 'Required production controls are ready. Prioritize active clients, settlement proof and measurable revenue execution.'}</p><div className="headerActions"><Link className="primaryButton" href="/loan-readiness">Open Approval Readiness</Link><Link className="secondaryButton" href={openGates.length ? '/launch' : '/growth'}>{openGates.length ? 'Open Launch Center' : 'Open Growth OS'}</Link><Link className="secondaryButton" href="/clients">Manage clients</Link></div></div>
+        <div className="ownerActionCard"><div className="label">QUICK ACCESS</div><div className="ownerQuickLinks"><Link href="/loan-readiness">Universal approval readiness</Link><Link href="/billing">Revenue & billing</Link><Link href="/documents">Document center</Link><Link href="/compliance">Compliance</Link><Link href="/demo">Demo OS</Link></div></div>
       </section>
 
       <section className="grid">

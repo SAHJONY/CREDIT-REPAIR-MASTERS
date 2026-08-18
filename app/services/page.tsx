@@ -17,9 +17,9 @@ export default function ServicesPage() {
   const business = commercialServices.filter((service) => service.audience === 'business');
   const b2b = commercialServices.filter((service) => service.audience === 'b2b');
   const groups = [
-    { tone: 'blue', title: 'Consumer credit intelligence', note: 'Evidence-first analysis and recovery management with jurisdiction-aware billing controls.', services: consumer },
-    { tone: 'emerald', title: 'Business credit advisory', note: 'Business profile, reporting and funding-readiness advisory separated from consumer credit repair.', services: business },
-    { tone: 'violet', title: 'CREDIT REPAIR MASTERS OS', note: 'Premium software infrastructure for credit professionals and agencies.', services: b2b }
+    { tone: 'blue', title: 'Consumer approval readiness', note: 'Measure credit blockers, improve controllable factors and track readiness against a specific financing goal.', services: consumer },
+    { tone: 'emerald', title: 'Business funding readiness', note: 'Business profile, documentation, reporting and financing-readiness advisory without approval promises.', services: business },
+    { tone: 'violet', title: 'Approval Readiness OS', note: 'Governed software for professionals and agencies to operate measurable credit-to-readiness workflows.', services: b2b }
   ];
 
   return (
@@ -28,22 +28,22 @@ export default function ServicesPage() {
         <div className="commercialHeroImage" aria-hidden="true" />
         <div className="commercialHeroShade" />
         <div className="commercialHeroCopy">
-          <div className="cinematicEyebrow">CREDIT REPAIR MASTERS · COMMERCIAL MODEL</div>
-          <h1>Choose the level of support<br/><em>that fits your next move.</em></h1>
-          <p>Consumer intelligence, business-credit advisory and professional software—each delivered through a controlled, secure operating model.</p>
-          <div className="publicCinemaActions"><Link className="goldButton" href="/get-started">Get started <span>→</span></Link><Link className="glassButton" href="/dashboard">Owner OS</Link></div>
+          <div className="cinematicEyebrow">CREDIT REPAIR MASTERS · CREDIT-TO-APPROVAL READINESS PLATFORM</div>
+          <h1>Choose the readiness path<br/><em>that matches your next financial move.</em></h1>
+          <p>Consumer approval readiness, business funding readiness and professional software—each built around measurable blockers, documented progress and controlled financial shopping.</p>
+          <div className="publicCinemaActions"><Link className="goldButton" href="/get-started">Check readiness <span>→</span></Link><Link className="glassButton" href="/dashboard">Owner OS</Link></div>
         </div>
         <div className="commercialHeroStats">
-          <div><small>MODEL</small><strong>3</strong><span>revenue lines</span></div>
-          <div><small>CONTROL</small><strong>Gate</strong><span>before sensitive billing</span></div>
-          <div><small>DELIVERY</small><strong>Secure</strong><span>portal + evidence workflow</span></div>
+          <div><small>JOURNEY</small><strong>Goal</strong><span>before the intervention</span></div>
+          <div><small>MEASURE</small><strong>0–100</strong><span>explainable readiness</span></div>
+          <div><small>GATE</small><strong>85+</strong><span>plus zero P0 blockers</span></div>
         </div>
       </section>
 
       <section className="commercialGroups">
         {groups.map((group) => (
           <div className={`commercialGroup ${group.tone}`} key={group.title}>
-            <div className="commercialGroupIntro"><div className="cinematicEyebrow">REVENUE LINE</div><h2>{group.title}</h2><p>{group.note}</p></div>
+            <div className="commercialGroupIntro"><div className="cinematicEyebrow">READINESS PRODUCT LINE</div><h2>{group.title}</h2><p>{group.note}</p></div>
             <div className="commercialServiceGrid">
               {group.services.map((service) => (
                 <article className="commercialServiceCard" key={service.id}>
@@ -52,7 +52,7 @@ export default function ServicesPage() {
                   <p>{service.description}</p>
                   <div className="commercialDeliverables">{service.deliverables.map((item) => <div key={item}>✓ {item}</div>)}</div>
                   <small>Payment policy: {service.paymentPolicy.replaceAll('_', ' ')}</small>
-                  <Link className="goldButton compact" href={`/get-started?service=${service.id}`}>Choose this service →</Link>
+                  <Link className="goldButton compact" href={`/get-started?service=${service.id}`}>Choose this path →</Link>
                 </article>
               ))}
             </div>
@@ -61,8 +61,8 @@ export default function ServicesPage() {
       </section>
 
       <section className="commercialSafety">
-        <div><div className="cinematicEyebrow goldText">BILLING SAFETY</div><h2>Qualification comes before checkout.</h2><p>The system evaluates jurisdiction, sales channel, service status, contract status and cancellation timing before eligible consumer-credit billing can be enabled.</p></div>
-        <Link className="goldButton" href="/get-started">Open qualification path →</Link>
+        <div><div className="cinematicEyebrow goldText">READINESS ≠ APPROVAL</div><h2>Prepare first. Apply when the profile is stronger.</h2><p>Readiness scores and Ready-to-Shop status are educational planning gates. They do not represent lender underwriting, approval, rates or terms. Consumer billing remains subject to jurisdiction, service completion, contract status and applicable law.</p></div>
+        <Link className="goldButton" href="/get-started">Open readiness assessment →</Link>
       </section>
     </main>
   );

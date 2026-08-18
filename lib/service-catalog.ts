@@ -23,8 +23,8 @@ export const commercialServices: CommercialService[] = [
     billingModel: 'one_time',
     regulatoryClass: 'consumer_credit_services',
     priceCents: 19900,
-    description: 'Evidence-based credit report analysis and prioritized improvement plan.',
-    deliverables: ['Credit report normalization','Account-by-account accuracy review','Utilization and derogatory-account analysis','Evidence inventory','Personalized action plan'],
+    description: 'Evidence-based credit-to-approval readiness assessment tied to the customer’s next financing goal.',
+    deliverables: ['Credit report normalization','Goal-specific readiness assessment','Utilization, DTI, payment, inquiry and derogatory analysis','P0/P1/P2 blocker inventory','Personalized 7/30/60/90-day action plan'],
     paymentPolicy: 'post_performance'
   },
   {
@@ -34,8 +34,8 @@ export const commercialServices: CommercialService[] = [
     billingModel: 'monthly',
     regulatoryClass: 'consumer_credit_services',
     priceCents: 12900,
-    description: 'Ongoing monitoring, evidence organization, response analysis, and monthly strategy work.',
-    deliverables: ['Monthly report review','Utilization recommendations','Evidence organization','Legitimate dispute preparation','Bureau-response analysis','Monthly strategy update'],
+    description: 'Ongoing readiness monitoring, evidence organization, reassessment and monthly strategy work.',
+    deliverables: ['Monthly readiness reassessment','Readiness-score delta tracking','Utilization and DTI recommendations','Evidence organization','Legitimate dispute preparation when supported','Monthly action-plan update'],
     paymentPolicy: 'post_performance'
   },
   {
@@ -45,8 +45,8 @@ export const commercialServices: CommercialService[] = [
     billingModel: 'monthly',
     regulatoryClass: 'consumer_credit_services',
     priceCents: 24900,
-    description: 'Higher-touch case management for complex evidence-backed credit reporting problems.',
-    deliverables: ['Priority case review','Advanced evidence matching','Furnisher correspondence preparation','Escalation planning','Complex bureau-response analysis'],
+    description: 'Higher-touch readiness and recovery management for complex evidence-backed credit reporting problems.',
+    deliverables: ['Priority readiness review','Advanced evidence matching','Furnisher correspondence preparation','Escalation planning','Complex bureau-response analysis','Goal-specific blocker reprioritization'],
     paymentPolicy: 'post_performance'
   },
   {
@@ -56,7 +56,7 @@ export const commercialServices: CommercialService[] = [
     billingModel: 'one_time',
     regulatoryClass: 'business_advisory',
     priceCents: 79900,
-    description: 'Business-credit readiness and implementation advisory program.',
+    description: 'Business-credit and funding-readiness implementation program.',
     deliverables: ['Business profile audit','Documentation readiness review','Vendor and reporting roadmap','Funding-readiness plan','Implementation milestones'],
     paymentPolicy: 'standard'
   },
@@ -68,7 +68,7 @@ export const commercialServices: CommercialService[] = [
     regulatoryClass: 'business_advisory',
     priceRangeCents: [150000, 300000],
     description: 'High-touch business credit and financing-readiness advisory.',
-    deliverables: ['Dedicated advisory plan','Business credit profile optimization','Reporting verification','Financing-readiness preparation','Priority implementation support'],
+    deliverables: ['Dedicated readiness plan','Business credit profile optimization','Reporting verification','Financing-readiness preparation','Priority implementation support'],
     paymentPolicy: 'manual_quote'
   },
   {
@@ -78,8 +78,8 @@ export const commercialServices: CommercialService[] = [
     billingModel: 'monthly',
     regulatoryClass: 'software',
     priceCents: 19900,
-    description: 'Single-operator access to the credit operations software platform.',
-    deliverables: ['Client workspace','Evidence ledger','AI analysis tools','Compliance workflow','Audit trail'],
+    description: 'Single-operator access to the Credit-to-Approval Readiness operating platform.',
+    deliverables: ['Client readiness workspace','Explainable scoring','Evidence ledger','AI analysis tools','Compliance workflow','Audit trail'],
     paymentPolicy: 'standard'
   },
   {
@@ -89,8 +89,8 @@ export const commercialServices: CommercialService[] = [
     billingModel: 'monthly',
     regulatoryClass: 'software',
     priceCents: 39900,
-    description: 'Multi-user professional credit operations platform.',
-    deliverables: ['Everything in Solo','Expanded client capacity','Team roles','Operational reporting','Priority support'],
+    description: 'Multi-user professional approval-readiness and credit-operations platform.',
+    deliverables: ['Everything in Solo','Expanded client capacity','Team roles','Readiness pipeline reporting','Operational reporting','Priority support'],
     paymentPolicy: 'standard'
   },
   {
@@ -100,7 +100,7 @@ export const commercialServices: CommercialService[] = [
     billingModel: 'monthly',
     regulatoryClass: 'software',
     priceCents: 79900,
-    description: 'Agency-grade credit operations platform with advanced workflow capacity.',
+    description: 'Agency-grade Credit-to-Approval Readiness platform with advanced workflow and governance capacity.',
     deliverables: ['Everything in Professional','Agency workflows','Advanced governance','Higher capacity','White-label readiness'],
     paymentPolicy: 'standard'
   }

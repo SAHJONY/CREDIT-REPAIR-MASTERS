@@ -1,33 +1,13 @@
 'use client';
 
-import { useMemo, useState } from 'react';
-
-type Goal = 'mortgage' | 'auto' | 'credit_card' | 'personal_loan' | 'business_credit' | 'lease' | 'financed_purchase';
-
-type GoalProfile = {
-  label: string;
-  scoreTarget: number;
-  utilizationTarget: number;
-  dtiTarget: number;
-  reserveMonths: number;
-};
-
-const goals: Record<Goal, GoalProfile> = {
-  mortgage: { label: 'Home / Mortgage', scoreTarget: 640, utilizationTarget: 30, dtiTarget: 43, reserveMonths: 2 },
-  auto: { label: 'Vehicle / Auto Loan', scoreTarget: 620, utilizationTarget: 35, dtiTarget: 45, reserveMonths: 1 },
-  credit_card: { label: 'Credit Card', scoreTarget: 670, utilizationTarget: 30, dtiTarget: 40, reserveMonths: 1 },
-  personal_loan: { label: 'Personal Loan', scoreTarget: 660, utilizationTarget: 30, dtiTarget: 40, reserveMonths: 1 },
-  business_credit: { label: 'Business Credit / Funding', scoreTarget: 680, utilizationTarget: 30, dtiTarget: 40, reserveMonths: 2 },
-  lease: { label: 'Apartment / Lease', scoreTarget: 620, utilizationTarget: 35, dtiTarget: 45, reserveMonths: 1 },
-  financed_purchase: { label: 'Any Financed Purchase', scoreTarget: 650, utilizationTarget: 30, dtiTarget: 40, reserveMonths: 1 }
-};
-
-function clamp(value: number, min = 0, max = 100) {
-  return Math.max(min, Math.min(max, value));
-}
+import { useEffect, useMemo, useState } from 'react';
+import { calculateLoanReadiness, loanReadinessGoals } from '@/lib/loan-readiness-engine';
+import type { ClientProfile, LoanReadinessAssessment, LoanReadinessGoal } from '@/lib/platform-types';
 
 export function LoanReadinessWorkbench() {
-  const [goal, setGoal] = useState<Goal>('mortgage');
+  const [clients, setClients] = useState<ClientProfile[]>([]);
+  const [clientId, setClientId] = useState('');
+  const [goal, setGoal] = useState<LoanReadinessGoal>('mortgage');
   const [creditScore, setCreditScore] = useState(620);
   const [utilization, setUtilization] = useState(48);
   const [monthlyIncome, setMonthlyIncome] = useState(6500);
@@ -36,52 +16,57 @@ export function LoanReadinessWorkbench() {
   const [derogatories, setDerogatories] = useState(1);
   const [hardInquiries, setHardInquiries] = useState(3);
   const [cashReserves, setCashReserves] = useState(3000);
+  const [history, setHistory] = useState<LoanReadinessAssessment[]>([]);
+  const [saving, setSaving] = useState(false);
+  const [message, setMessage] = useState('');
 
-  const assessment = useMemo(() => {
-    const target = goals[goal];
-    const dti = monthlyIncome > 0 ? (monthlyDebt / monthlyIncome) * 100 : 100;
-    const reserveMonths = monthlyDebt > 0 ? cashReserves / monthlyDebt : cashReserves > 0 ? 6 : 0;
+  const inputs = useMemo(() => ({ goal, creditScore, utilization, monthlyIncome, monthlyDebt, onTimePaymentRate, derogatories, hardInquiries, cashReserves }), [goal, creditScore, utilization, monthlyIncome, monthlyDebt, onTimePaymentRate, derogatories, hardInquiries, cashReserves]);
+  const assessment = useMemo(() => calculateLoanReadiness(inputs), [inputs]);
 
-    const scorePoints = clamp(((creditScore - 500) / Math.max(1, target.scoreTarget - 500)) * 25, 0, 25);
-    const paymentPoints = clamp((onTimePaymentRate / 100) * 20, 0, 20);
-    const utilizationPoints = utilization <= target.utilizationTarget
-      ? 15
-      : clamp(15 - ((utilization - target.utilizationTarget) / 70) * 15, 0, 15);
-    const dtiPoints = dti <= target.dtiTarget ? 15 : clamp(15 - ((dti - target.dtiTarget) / 45) * 15, 0, 15);
-    const derogatoryPoints = clamp(10 - derogatories * 3, 0, 10);
-    const inquiryPoints = clamp(10 - Math.max(0, hardInquiries - 1) * 2, 0, 10);
-    const reservePoints = clamp((reserveMonths / Math.max(1, target.reserveMonths)) * 5, 0, 5);
-    const readiness = Math.round(scorePoints + paymentPoints + utilizationPoints + dtiPoints + derogatoryPoints + inquiryPoints + reservePoints);
+  useEffect(() => {
+    fetch('/api/clients').then((r) => r.json()).then((data) => {
+      const list = Array.isArray(data.clients) ? data.clients as ClientProfile[] : [];
+      setClients(list);
+      if (list.length) setClientId((current) => current || list[0].id);
+    }).catch(() => setMessage('Unable to load clients.'));
+  }, []);
 
-    const actions: Array<{ priority: 'P0' | 'P1' | 'P2'; title: string; detail: string }> = [];
-    if (creditScore < target.scoreTarget) actions.push({ priority: 'P0', title: `Build toward a ${target.scoreTarget}+ credit profile`, detail: `Current score entered: ${creditScore}. Focus first on accurate reporting, payment history, utilization and aging rather than unnecessary new accounts.` });
-    if (utilization > target.utilizationTarget) actions.push({ priority: 'P0', title: `Reduce revolving utilization below ${target.utilizationTarget}%`, detail: `Current utilization entered: ${utilization}%. Prioritize the cards closest to their limits and avoid adding new revolving balances.` });
-    if (dti > target.dtiTarget) actions.push({ priority: 'P0', title: `Reduce debt-to-income toward ${target.dtiTarget}% or less`, detail: `Current modeled DTI: ${dti.toFixed(1)}%. Reduce required monthly debt payments or increase documented qualifying income before applying.` });
-    if (onTimePaymentRate < 100) actions.push({ priority: 'P0', title: 'Protect perfect payment history going forward', detail: `Current on-time rate entered: ${onTimePaymentRate}%. Automate minimum payments and prevent any new late payments.` });
-    if (derogatories > 0) actions.push({ priority: 'P1', title: 'Review derogatory items for accuracy and resolution options', detail: `${derogatories} derogatory item(s) entered. Dispute only inaccurate or incomplete reporting; handle accurate obligations through legitimate resolution strategies.` });
-    if (hardInquiries > 2) actions.push({ priority: 'P1', title: 'Pause avoidable new credit applications', detail: `${hardInquiries} recent hard inquiries entered. Let the profile stabilize before adding unnecessary inquiries.` });
-    if (reserveMonths < target.reserveMonths) actions.push({ priority: 'P1', title: `Build at least ${target.reserveMonths} month(s) of modeled reserves`, detail: `Current reserves cover about ${reserveMonths.toFixed(1)} month(s) of entered monthly debt obligations.` });
-    if (!actions.length) actions.push({ priority: 'P2', title: 'Prepare lender-ready documentation and shop carefully', detail: 'The entered profile meets this planning model’s core targets. Compare actual lender criteria, rates, fees and terms before submitting applications.' });
+  useEffect(() => {
+    if (!clientId) { setHistory([]); return; }
+    fetch(`/api/loan-readiness?clientId=${encodeURIComponent(clientId)}`).then((r) => r.json()).then((data) => setHistory(Array.isArray(data.history) ? data.history : [])).catch(() => setHistory([]));
+  }, [clientId]);
 
-    const status = readiness >= 85 ? 'READY TO SHOP' : readiness >= 70 ? 'NEAR READY' : readiness >= 50 ? 'BUILDING' : 'NOT READY YET';
-    return { readiness, status, dti, reserveMonths, target, actions };
-  }, [goal, creditScore, utilization, monthlyIncome, monthlyDebt, onTimePaymentRate, derogatories, hardInquiries, cashReserves]);
+  async function saveAssessment() {
+    if (!clientId) { setMessage('Select a client before saving.'); return; }
+    setSaving(true); setMessage('');
+    try {
+      const response = await fetch('/api/loan-readiness', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ clientId, ...inputs }) });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || 'Save failed');
+      setHistory((current) => [data.assessment as LoanReadinessAssessment, ...current].slice(0, 25));
+      setMessage('Assessment saved to the client readiness history.');
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : 'Unable to save assessment.');
+    } finally { setSaving(false); }
+  }
 
   return (
     <div className="grid">
       <section className="card span5">
-        <div className="label">CREDIT GOAL</div>
-        <h2>What does the client want to get approved for?</h2>
+        <div className="label">CLIENT + CREDIT GOAL</div><h2>What does this customer want to get approved for?</h2>
         <div style={{ display: 'grid', gap: 12 }}>
-          <label>Goal<select value={goal} onChange={(event) => setGoal(event.target.value as Goal)}>{Object.entries(goals).map(([key, item]) => <option key={key} value={key}>{item.label}</option>)}</select></label>
-          <label>Credit score<input type="number" min="300" max="850" value={creditScore} onChange={(event) => setCreditScore(Number(event.target.value))} /></label>
-          <label>Revolving utilization %<input type="number" min="0" max="100" value={utilization} onChange={(event) => setUtilization(Number(event.target.value))} /></label>
-          <label>Gross monthly income<input type="number" min="0" value={monthlyIncome} onChange={(event) => setMonthlyIncome(Number(event.target.value))} /></label>
-          <label>Required monthly debt payments<input type="number" min="0" value={monthlyDebt} onChange={(event) => setMonthlyDebt(Number(event.target.value))} /></label>
-          <label>On-time payment rate %<input type="number" min="0" max="100" value={onTimePaymentRate} onChange={(event) => setOnTimePaymentRate(Number(event.target.value))} /></label>
-          <label>Derogatory items<input type="number" min="0" value={derogatories} onChange={(event) => setDerogatories(Number(event.target.value))} /></label>
-          <label>Recent hard inquiries<input type="number" min="0" value={hardInquiries} onChange={(event) => setHardInquiries(Number(event.target.value))} /></label>
-          <label>Cash reserves<input type="number" min="0" value={cashReserves} onChange={(event) => setCashReserves(Number(event.target.value))} /></label>
+          <label>Client<select value={clientId} onChange={(e) => setClientId(e.target.value)}><option value="">Select client</option>{clients.map((client) => <option key={client.id} value={client.id}>{client.displayName}</option>)}</select></label>
+          <label>Goal<select value={goal} onChange={(e) => setGoal(e.target.value as LoanReadinessGoal)}>{Object.entries(loanReadinessGoals).map(([key, item]) => <option key={key} value={key}>{item.label}</option>)}</select></label>
+          <label>Credit score<input type="number" min="300" max="850" value={creditScore} onChange={(e) => setCreditScore(Number(e.target.value))} /></label>
+          <label>Revolving utilization %<input type="number" min="0" max="100" value={utilization} onChange={(e) => setUtilization(Number(e.target.value))} /></label>
+          <label>Gross monthly income<input type="number" min="0" value={monthlyIncome} onChange={(e) => setMonthlyIncome(Number(e.target.value))} /></label>
+          <label>Required monthly debt payments<input type="number" min="0" value={monthlyDebt} onChange={(e) => setMonthlyDebt(Number(e.target.value))} /></label>
+          <label>On-time payment rate %<input type="number" min="0" max="100" value={onTimePaymentRate} onChange={(e) => setOnTimePaymentRate(Number(e.target.value))} /></label>
+          <label>Derogatory items<input type="number" min="0" value={derogatories} onChange={(e) => setDerogatories(Number(e.target.value))} /></label>
+          <label>Recent hard inquiries<input type="number" min="0" value={hardInquiries} onChange={(e) => setHardInquiries(Number(e.target.value))} /></label>
+          <label>Cash reserves<input type="number" min="0" value={cashReserves} onChange={(e) => setCashReserves(Number(e.target.value))} /></label>
+          <button className="primaryButton" type="button" onClick={saveAssessment} disabled={saving || !clientId}>{saving ? 'Saving…' : 'Save Readiness Snapshot'}</button>
+          {message ? <div className="small">{message}</div> : null}
         </div>
       </section>
 
@@ -97,17 +82,11 @@ export function LoanReadinessWorkbench() {
         </div>
       </section>
 
-      <section className="card span12">
-        <div className="label">PERSONALIZED APPROVAL ROADMAP</div>
-        <h2>Highest-impact actions before applying</h2>
-        {assessment.actions.map((action, index) => <div className="listRow" key={`${action.title}-${index}`}><div><strong>{action.title}</strong><div className="small">{action.detail}</div></div><span className={`pill ${action.priority === 'P0' ? 'high' : action.priority === 'P1' ? 'medium' : 'low'}`}>{action.priority}</span></div>)}
-      </section>
+      <section className="card span12"><div className="label">90-DAY APPROVAL ROADMAP</div><h2>Highest-impact actions before applying</h2>{assessment.actions.map((action, index) => <div className="listRow" key={`${action.title}-${index}`}><div><strong>{action.title}</strong><div className="small">{action.detail}{action.targetDay ? ` · Target: day ${action.targetDay}` : ''}</div></div><span className={`pill ${action.priority === 'P0' ? 'high' : action.priority === 'P1' ? 'medium' : 'low'}`}>{action.priority}</span></div>)}</section>
 
-      <section className="card span12">
-        <div className="label">COMPLIANCE GUARDRAIL</div>
-        <h2>Help customers become approvable — never promise approval.</h2>
-        <p className="small">This workbench provides education, readiness planning and modeled targets. Actual underwriting criteria vary by lender, product, collateral, income documentation, jurisdiction and the applicant’s complete credit profile. Dispute only information the consumer identifies as inaccurate or incomplete; do not misrepresent identity, income, employment, assets, tradelines or application facts.</p>
-      </section>
+      <section className="card span12"><div className="label">CLIENT READINESS HISTORY</div><h2>Reassessment timeline</h2>{history.length ? history.map((item) => <div className="listRow" key={item.id}><div><strong>{loanReadinessGoals[item.goal].label} · {item.readinessScore}/100</strong><div className="small">{new Date(item.createdAt).toLocaleString()} · DTI {item.dti.toFixed(1)}% · Utilization {item.utilization}% · Credit {item.creditScore}</div></div><span className={`pill ${item.readinessScore >= 85 ? 'low' : item.readinessScore >= 70 ? 'medium' : 'high'}`}>{item.status}</span></div>) : <div className="emptyState">No saved readiness snapshots for this client yet.</div>}</section>
+
+      <section className="card span12"><div className="label">COMPLIANCE GUARDRAIL</div><h2>Help customers become approvable — never promise approval.</h2><p className="small">This workbench provides education, readiness planning and modeled targets. Actual underwriting criteria vary by lender, product, collateral, income documentation, jurisdiction and the applicant’s complete credit profile. Dispute only information the consumer identifies as inaccurate or incomplete; do not misrepresent identity, income, employment, assets, tradelines or application facts.</p></section>
     </div>
   );
 }

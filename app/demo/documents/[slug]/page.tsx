@@ -18,17 +18,19 @@ export default async function DocumentReader({ params }: { params: Promise<{ slu
   const { slug } = await params;
   const document = getLibraryDocument(slug);
   if (!document) notFound();
+  const isLegacyDispute = document.category.toLowerCase().includes('dispute');
 
   return (
     <main>
       <header className="appHeader">
         <div>
-          <div className="kicker">CREDIT REPAIR MASTERS / DOCUMENT TEMPLATE / {document.category}</div>
+          <div className="kicker">CREDIT REPAIR MASTERS / DOCUMENT REFERENCE / {document.category}</div>
           <h1>{document.name}</h1>
           <p className="subtitle">{document.use}</p>
         </div>
         <div className="headerActions">
-          <Link className="secondaryButton" href="/demo/documents">All templates</Link>
+          {isLegacyDispute ? <Link className="primaryButton" href="/documents">Create client-voice draft</Link> : null}
+          <Link className="secondaryButton" href="/demo/documents">All references</Link>
           <Link className="secondaryButton" href="/documents">Client Documents</Link>
           <SignOutButton />
         </div>
@@ -37,10 +39,14 @@ export default async function DocumentReader({ params }: { params: Promise<{ slu
       <section className="grid">
         <div className="card span12">
           <div className="row">
-            <div><div className="label">DOCUMENT STATUS</div><h2>PRODUCTION DRAFT TEMPLATE</h2></div>
-            <span className={`pill ${document.status === 'approval required' ? 'medium' : document.status === 'post-performance' ? 'low' : 'medium'}`}>{document.status}</span>
+            <div><div className="label">DOCUMENT STATUS</div><h2>{isLegacyDispute ? 'REFERENCE ONLY — NOT FOR LIVE CLIENT USE' : 'PRODUCTION DRAFT REFERENCE'}</h2></div>
+            <span className={`pill ${isLegacyDispute ? 'medium' : document.status === 'post-performance' ? 'low' : 'medium'}`}>{isLegacyDispute ? 'reference only' : document.status}</span>
           </div>
-          <div className="guardrail">This page contains the substantive document text. Merge fields such as {'{{client.legalName}}'} must be replaced with actual client/provider data before execution. Required legal notices must not be paraphrased by the generation workflow. State-specific legal review is required before expansion beyond validated jurisdictions.</div>
+          {isLegacyDispute ? (
+            <div className="guardrail">This is a historical/reference dispute example. Do not copy, merge, or mass-produce this wording for a real consumer. Real client disputes must be drafted through Client Documents → Client-Voice Dispute Drafting from confirmed client facts, actual supporting evidence, and the specific requested correction. The resulting draft still requires client review and approval before any transmission.</div>
+          ) : (
+            <div className="guardrail">This page contains substantive reference text. Merge fields such as {'{{client.legalName}}'} must be replaced with actual client/provider data before execution. Required legal notices must not be paraphrased by the generation workflow. State-specific legal review is required before expansion beyond validated jurisdictions.</div>
+          )}
         </div>
 
         <div className="card span12" style={{ maxWidth: 920, margin: '0 auto', width: '100%' }}>
@@ -58,8 +64,8 @@ export default async function DocumentReader({ params }: { params: Promise<{ slu
 
         <div className="card span12">
           <div className="row">
-            <div><div className="label">Navigation</div><h2>Continue reviewing full texts</h2></div>
-            <Link className="primaryButton" href="/demo/documents">Back to document library</Link>
+            <div><div className="label">Navigation</div><h2>{isLegacyDispute ? 'Use the live client-specific workflow' : 'Continue reviewing full texts'}</h2></div>
+            <Link className="primaryButton" href={isLegacyDispute ? '/documents' : '/demo/documents'}>{isLegacyDispute ? 'Open Client-Voice Drafting' : 'Back to document library'}</Link>
           </div>
         </div>
       </section>

@@ -8,6 +8,8 @@ import { getCommercialService } from '@/lib/service-catalog';
 
 export const dynamic = 'force-dynamic';
 
+const SYNTHETIC_CAMPAIGN = 'system-lead-delivery-verification';
+
 const schema = z.object({
   serviceId: z.string().min(1).max(80),
   name: z.string().trim().min(2).max(100),
@@ -52,11 +54,8 @@ export async function POST(request: NextRequest) {
   if (rateLimited(key)) return NextResponse.json({ error: 'TOO_MANY_REQUESTS' }, { status: 429 });
 
   let body: unknown;
-  try {
-    body = await request.json();
-  } catch {
-    return NextResponse.json({ error: 'INVALID_JSON' }, { status: 400 });
-  }
+  try { body = await request.json(); }
+  catch { return NextResponse.json({ error: 'INVALID_JSON' }, { status: 400 }); }
 
   const parsed = schema.safeParse(body);
   if (!parsed.success) return NextResponse.json({ error: 'INVALID_LEAD_REQUEST' }, { status: 400 });
@@ -69,9 +68,10 @@ export async function POST(request: NextRequest) {
   const identityKey = leadKey(parsed.data.email);
   const organizationId = configuredOrganizationId();
   const store = getPlatformStore();
+  const isSyntheticTest = parsed.data.campaign === SYNTHETIC_CAMPAIGN;
 
   try {
-    const delivery = await deliverGrowthLead({
+    const lead = {
       reference,
       name: parsed.data.name,
       email: parsed.data.email.toLowerCase(),
@@ -84,15 +84,16 @@ export async function POST(request: NextRequest) {
       source: parsed.data.source || 'direct',
       medium: parsed.data.medium,
       campaign: parsed.data.campaign
-    });
+    };
+    const delivery = await deliverGrowthLead(organizationId, identityKey, lead, isSyntheticTest);
 
     try {
       await store.appendAudit(organizationId, {
         id: `audit_${randomUUID()}`,
         organizationId,
         actorType: 'system',
-        actorId: `public:${identityKey}`,
-        action: 'growth.lead_submitted',
+        actorId: isSyntheticTest ? 'system:lead-delivery-verification' : `public:${identityKey}`,
+        action: isSyntheticTest ? 'growth.lead_test_delivered' : 'growth.lead_submitted',
         resourceType: 'growth_lead',
         resourceId: reference,
         decision: 'allowed',
@@ -106,19 +107,20 @@ export async function POST(request: NextRequest) {
           campaign: parsed.data.campaign || '',
           hasPhone: Boolean(parsed.data.phone),
           contactConsent: true,
-          deliveryChannel: delivery.channel
+          deliveryChannel: delivery.channel,
+          syntheticTest: isSyntheticTest
         },
         createdAt: new Date().toISOString()
       });
     } catch {
-      // The prospect has already been delivered to the approved business channel.
-      // Do not fail the customer request solely because analytics persistence is degraded.
+      // Durable delivery has already succeeded. Analytics persistence is secondary.
     }
 
     return NextResponse.json({
       received: true,
       reference,
       service: service.name,
+      test: isSyntheticTest,
       message: 'Qualification request received. No payment was collected.'
     }, { status: 201 });
   } catch (error) {
@@ -128,8 +130,8 @@ export async function POST(request: NextRequest) {
         id: `audit_${randomUUID()}`,
         organizationId,
         actorType: 'system',
-        actorId: 'public-lead-intake',
-        action: 'growth.lead_delivery_failed',
+        actorId: isSyntheticTest ? 'system:lead-delivery-verification' : 'public-lead-intake',
+        action: isSyntheticTest ? 'growth.lead_test_failed' : 'growth.lead_delivery_failed',
         resourceType: 'growth_lead',
         resourceId: reference,
         decision: 'blocked',
@@ -137,12 +139,13 @@ export async function POST(request: NextRequest) {
           serviceId: service.id,
           audience: service.audience,
           state: parsed.data.state,
-          errorCode: code
+          errorCode: code,
+          syntheticTest: isSyntheticTest
         },
         createdAt: new Date().toISOString()
       });
     } catch {
-      // Preserve the fail-closed response without exposing PII or internal database details.
+      // Preserve fail-closed response without exposing PII or database details.
     }
     return NextResponse.json({ error: code }, { status: 503 });
   }

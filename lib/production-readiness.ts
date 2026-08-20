@@ -4,14 +4,27 @@ import { getReadinessChecks, readinessSummary, type ReadinessCheck } from './rea
 
 declare const process: { env: Record<string, string | undefined> };
 
-async function productionTableReady(tableName: 'loan_readiness_assessments' | 'growth_leads') {
+type ProductionTable =
+  | 'loan_readiness_assessments'
+  | 'growth_leads'
+  | 'marketplace_partners'
+  | 'marketplace_handoffs'
+  | 'marketplace_outcomes';
+
+async function productionTableReady(tableName: ProductionTable) {
   const url = process.env.DATABASE_URL?.trim();
   if (!url) return false;
   try {
     const sql = neon(url);
     const rows = tableName === 'loan_readiness_assessments'
       ? await sql`select to_regclass('public.loan_readiness_assessments') as table_name`
-      : await sql`select to_regclass('public.growth_leads') as table_name`;
+      : tableName === 'growth_leads'
+        ? await sql`select to_regclass('public.growth_leads') as table_name`
+        : tableName === 'marketplace_partners'
+          ? await sql`select to_regclass('public.marketplace_partners') as table_name`
+          : tableName === 'marketplace_handoffs'
+            ? await sql`select to_regclass('public.marketplace_handoffs') as table_name`
+            : await sql`select to_regclass('public.marketplace_outcomes') as table_name`;
     return Boolean(rows[0]?.table_name);
   } catch {
     return false;
@@ -20,11 +33,15 @@ async function productionTableReady(tableName: 'loan_readiness_assessments' | 'g
 
 export async function resolveProductionReadiness(organizationId: string) {
   const checks = getReadinessChecks();
-  const [mfaReady, loanReadinessReady, growthLeadInboxReady] = await Promise.all([
+  const [mfaReady, loanReadinessReady, growthLeadInboxReady, marketplacePartnersReady, marketplaceHandoffsReady, marketplaceOutcomesReady] = await Promise.all([
     productionMfaReady(organizationId),
     productionTableReady('loan_readiness_assessments'),
-    productionTableReady('growth_leads')
+    productionTableReady('growth_leads'),
+    productionTableReady('marketplace_partners'),
+    productionTableReady('marketplace_handoffs'),
+    productionTableReady('marketplace_outcomes')
   ]);
+  const marketplaceSchemaReady = marketplacePartnersReady && marketplaceHandoffsReady && marketplaceOutcomesReady;
 
   const resolvedChecks: ReadinessCheck[] = checks.map((check) => {
     if (check.id === 'mfa') {
@@ -56,6 +73,16 @@ export async function resolveProductionReadiness(organizationId: string) {
     detail: loanReadinessReady
       ? 'Production database contains the tenant-scoped loan readiness assessment history table'
       : 'Apply the versioned Loan Readiness migration before enabling saved assessments'
+  });
+
+  resolvedChecks.push({
+    id: 'marketplace-persistence',
+    label: 'New850 Marketplace persistent schema',
+    status: marketplaceSchemaReady ? 'ready' : 'setup',
+    requiredForProduction: true,
+    detail: marketplaceSchemaReady
+      ? 'Production database contains partner, consented handoff and outcome attribution tables'
+      : 'Apply the versioned New850 Marketplace migration before enabling partner routing or outcome attribution'
   });
 
   return {

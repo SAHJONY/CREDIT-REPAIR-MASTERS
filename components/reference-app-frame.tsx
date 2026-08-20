@@ -26,13 +26,13 @@ export function ReferenceAppFrame({ children }: { children: ReactNode }) {
     <div className="referenceAppFrame">
       <aside className="referenceSidebar">
         <Link href={portal ? '/portal' : '/dashboard'} className="referenceSideBrand">
-          <span>CRM</span><strong>CREDIT REPAIR<br/>MASTERS</strong>
+          <span>850</span><strong>NEW850.COM<br/>FINANCIAL READINESS</strong>
         </Link>
         <nav className="referenceSideNav" aria-label={portal ? 'Client portal' : 'Owner OS'}>
           {items.map(([icon,label,href]) => <Link key={label} href={href} className={pathname === href || (href !== '/portal' && href !== '/dashboard' && pathname.startsWith(href)) ? 'active' : ''}><i>{icon}</i><span>{label}</span></Link>)}
         </nav>
-        <div className="referenceSideQuote"><b>“</b><p>{portal ? 'Better credit can open doors to better opportunities.' : 'Operate with clarity. Automate with controls.'}</p><small>— Credit Repair Masters</small></div>
-        <div className="referenceSideStatus"><i>✓</i><div><b>{portal ? 'Private Client Portal' : 'Governed Owner OS'}</b><small>Secure · Compliance-first</small></div></div>
+        <div className="referenceSideQuote"><b>“</b><p>{portal ? 'Better preparation can open doors to better financial opportunities.' : 'Operate with clarity. Automate with controls.'}</p><small>— New850.com</small></div>
+        <div className="referenceSideStatus"><i>✓</i><div><b>{portal ? 'Private Client Portal' : 'New850 Owner OS'}</b><small>Secure · Compliance-first</small></div></div>
       </aside>
       <div className="referenceAppMain">
         <div className="referenceAppAmbient" aria-hidden="true" />

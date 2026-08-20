@@ -60,6 +60,17 @@ function database() {
   return neon(url);
 }
 
+function isMarketplaceSchemaMissing(error: unknown) {
+  if (!error || typeof error !== 'object') return false;
+  const candidate = error as { code?: string; message?: string };
+  return candidate.code === '42P01' || Boolean(candidate.message?.includes('marketplace_') && candidate.message?.includes('does not exist'));
+}
+
+function marketplaceSchemaRequired(error: unknown): never {
+  if (isMarketplaceSchemaMissing(error)) throw new Error('MARKETPLACE_SCHEMA_MIGRATION_REQUIRED');
+  throw error;
+}
+
 function partnerFromRow(row: Record<string, unknown>): MarketplacePartner {
   return {
     id: String(row.id), organizationId: String(row.organization_id), name: String(row.name),
@@ -95,10 +106,15 @@ function outcomeFromRow(row: Record<string, unknown>): MarketplaceOutcome {
 export async function listMarketplacePartners(organizationId: string, vertical?: New850VerticalId) {
   const sql = database();
   if (!sql) return memoryPartners.filter((p) => p.organizationId === organizationId && (!vertical || p.vertical === vertical));
-  const rows = vertical
-    ? await sql`select * from marketplace_partners where organization_id = ${organizationId} and vertical = ${vertical} order by name asc`
-    : await sql`select * from marketplace_partners where organization_id = ${organizationId} order by vertical asc, name asc`;
-  return rows.map((row) => partnerFromRow(row as Record<string, unknown>));
+  try {
+    const rows = vertical
+      ? await sql`select * from marketplace_partners where organization_id = ${organizationId} and vertical = ${vertical} order by name asc`
+      : await sql`select * from marketplace_partners where organization_id = ${organizationId} order by vertical asc, name asc`;
+    return rows.map((row) => partnerFromRow(row as Record<string, unknown>));
+  } catch (error) {
+    if (isMarketplaceSchemaMissing(error)) return [];
+    throw error;
+  }
 }
 
 export async function listEligibleMarketplacePartners(organizationId: string, vertical: New850VerticalId, readinessScore: number, state?: string) {
@@ -118,11 +134,15 @@ export async function upsertMarketplacePartner(organizationId: string, partner: 
     if (index >= 0) memoryPartners[index] = partner; else memoryPartners.push(partner);
     return partner;
   }
-  await sql`insert into marketplace_partners (id, organization_id, name, vertical, status, min_readiness, states, eligibility, disclosure, created_at, updated_at)
-    values (${partner.id}, ${organizationId}, ${partner.name}, ${partner.vertical}, ${partner.status}, ${partner.minReadiness}, ${JSON.stringify(partner.states)}::jsonb, ${JSON.stringify(partner.eligibility)}::jsonb, ${partner.disclosure}, ${partner.createdAt}, ${partner.updatedAt})
-    on conflict (id) do update set name = excluded.name, vertical = excluded.vertical, status = excluded.status, min_readiness = excluded.min_readiness,
-      states = excluded.states, eligibility = excluded.eligibility, disclosure = excluded.disclosure, updated_at = excluded.updated_at`;
-  return partner;
+  try {
+    await sql`insert into marketplace_partners (id, organization_id, name, vertical, status, min_readiness, states, eligibility, disclosure, created_at, updated_at)
+      values (${partner.id}, ${organizationId}, ${partner.name}, ${partner.vertical}, ${partner.status}, ${partner.minReadiness}, ${JSON.stringify(partner.states)}::jsonb, ${JSON.stringify(partner.eligibility)}::jsonb, ${partner.disclosure}, ${partner.createdAt}, ${partner.updatedAt})
+      on conflict (id) do update set name = excluded.name, vertical = excluded.vertical, status = excluded.status, min_readiness = excluded.min_readiness,
+        states = excluded.states, eligibility = excluded.eligibility, disclosure = excluded.disclosure, updated_at = excluded.updated_at`;
+    return partner;
+  } catch (error) {
+    return marketplaceSchemaRequired(error);
+  }
 }
 
 export async function appendMarketplaceHandoff(organizationId: string, handoff: MarketplaceHandoff) {
@@ -130,32 +150,50 @@ export async function appendMarketplaceHandoff(organizationId: string, handoff: 
   if (!handoff.consentRecorded) throw new Error('MARKETPLACE_HANDOFF_REQUIRES_CONSENT');
   const sql = database();
   if (!sql) { memoryHandoffs.push(handoff); return handoff; }
-  await sql`insert into marketplace_handoffs (id, organization_id, client_id, partner_id, vertical, readiness_score, consent_recorded, status, source, metadata, created_at, updated_at)
-    values (${handoff.id}, ${organizationId}, ${handoff.clientId}, ${handoff.partnerId}, ${handoff.vertical}, ${handoff.readinessScore}, ${handoff.consentRecorded}, ${handoff.status}, ${handoff.source}, ${JSON.stringify(handoff.metadata)}::jsonb, ${handoff.createdAt}, ${handoff.updatedAt})`;
-  return handoff;
+  try {
+    await sql`insert into marketplace_handoffs (id, organization_id, client_id, partner_id, vertical, readiness_score, consent_recorded, status, source, metadata, created_at, updated_at)
+      values (${handoff.id}, ${organizationId}, ${handoff.clientId}, ${handoff.partnerId}, ${handoff.vertical}, ${handoff.readinessScore}, ${handoff.consentRecorded}, ${handoff.status}, ${handoff.source}, ${JSON.stringify(handoff.metadata)}::jsonb, ${handoff.createdAt}, ${handoff.updatedAt})`;
+    return handoff;
+  } catch (error) {
+    return marketplaceSchemaRequired(error);
+  }
 }
 
 export async function listMarketplaceHandoffs(organizationId: string, limit = 100) {
   const safeLimit = Math.max(1, Math.min(limit, 250));
   const sql = database();
   if (!sql) return memoryHandoffs.filter((h) => h.organizationId === organizationId).slice(-safeLimit).reverse();
-  const rows = await sql`select * from marketplace_handoffs where organization_id = ${organizationId} order by created_at desc limit ${safeLimit}`;
-  return rows.map((row) => handoffFromRow(row as Record<string, unknown>));
+  try {
+    const rows = await sql`select * from marketplace_handoffs where organization_id = ${organizationId} order by created_at desc limit ${safeLimit}`;
+    return rows.map((row) => handoffFromRow(row as Record<string, unknown>));
+  } catch (error) {
+    if (isMarketplaceSchemaMissing(error)) return [];
+    throw error;
+  }
 }
 
 export async function appendMarketplaceOutcome(organizationId: string, outcome: MarketplaceOutcome) {
   if (outcome.organizationId !== organizationId) throw new Error('TENANT_SCOPE_MISMATCH');
   const sql = database();
   if (!sql) { memoryOutcomes.push(outcome); return outcome; }
-  await sql`insert into marketplace_outcomes (id, organization_id, handoff_id, client_id, partner_id, outcome, reported_by, amount, revenue_cents, metadata, created_at)
-    values (${outcome.id}, ${organizationId}, ${outcome.handoffId}, ${outcome.clientId}, ${outcome.partnerId}, ${outcome.outcome}, ${outcome.reportedBy}, ${outcome.amount ?? null}, ${outcome.revenueCents ?? null}, ${JSON.stringify(outcome.metadata)}::jsonb, ${outcome.createdAt})`;
-  return outcome;
+  try {
+    await sql`insert into marketplace_outcomes (id, organization_id, handoff_id, client_id, partner_id, outcome, reported_by, amount, revenue_cents, metadata, created_at)
+      values (${outcome.id}, ${organizationId}, ${outcome.handoffId}, ${outcome.clientId}, ${outcome.partnerId}, ${outcome.outcome}, ${outcome.reportedBy}, ${outcome.amount ?? null}, ${outcome.revenueCents ?? null}, ${JSON.stringify(outcome.metadata)}::jsonb, ${outcome.createdAt})`;
+    return outcome;
+  } catch (error) {
+    return marketplaceSchemaRequired(error);
+  }
 }
 
 export async function listMarketplaceOutcomes(organizationId: string, limit = 100) {
   const safeLimit = Math.max(1, Math.min(limit, 250));
   const sql = database();
   if (!sql) return memoryOutcomes.filter((o) => o.organizationId === organizationId).slice(-safeLimit).reverse();
-  const rows = await sql`select * from marketplace_outcomes where organization_id = ${organizationId} order by created_at desc limit ${safeLimit}`;
-  return rows.map((row) => outcomeFromRow(row as Record<string, unknown>));
+  try {
+    const rows = await sql`select * from marketplace_outcomes where organization_id = ${organizationId} order by created_at desc limit ${safeLimit}`;
+    return rows.map((row) => outcomeFromRow(row as Record<string, unknown>));
+  } catch (error) {
+    if (isMarketplaceSchemaMissing(error)) return [];
+    throw error;
+  }
 }

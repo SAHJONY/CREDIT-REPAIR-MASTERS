@@ -15,8 +15,8 @@ import { ReferenceAppFrame } from "@/components/reference-app-frame";
 import { GlobalLanguageSwitcher } from "@/components/global-language-switcher";
 
 export const metadata: Metadata = {
-  title: "Credit Repair Masters",
-  description: "Global secure credit intelligence and client operating platform"
+  title: "New850.com",
+  description: "Financial readiness, credit intelligence and approval preparation platform"
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

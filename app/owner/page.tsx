@@ -60,8 +60,8 @@ export default async function OwnerPage() {
     <main>
       <header className="ownerHero">
         <div>
-          <div className="kicker">PRIVATE OWNER OS / {organization?.name || 'CREDIT REPAIR MASTERS'} / CONTROL PLANE</div>
-          <h1>Owner Command Center</h1>
+          <div className="kicker">NEW850 OWNER OS / {organization?.name || 'NEW850.COM'} / CONTROL PLANE</div>
+          <h1>New850 Owner Command Center</h1>
           <p className="subtitle">One private dashboard to control customers, approval readiness, evidence, revenue, compliance, growth, AI operations and production release gates.</p>
         </div>
         <div className="ownerNav">
@@ -106,7 +106,7 @@ export default async function OwnerPage() {
       <section className="grid">
         <div className="card span12">
           <div className="label">ENTIRE OPERATING SYSTEM</div>
-          <h2>Control every business function from one owner surface.</h2>
+          <h2>Control every New850.com business function from one owner surface.</h2>
           <div className="grid">
             {modules.map((module) => (
               <div className="card span3" key={module.title}>
@@ -170,7 +170,7 @@ export default async function OwnerPage() {
           <div className="row">
             <div>
               <div className="label">OWNER GOVERNANCE</div>
-              <h2>Private, MFA-protected, fail-closed control plane.</h2>
+              <h2>Private, MFA-protected, fail-closed New850.com control plane.</h2>
               <div className="small">Signed in as {session.email} · owner role verified · MFA assured. Customer readiness is planning support, never a promise of lender approval.</div>
             </div>
             <Link className="secondaryButton" href="/dashboard">Staff dashboard</Link>

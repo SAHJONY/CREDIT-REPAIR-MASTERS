@@ -17,6 +17,72 @@ export interface CommercialService {
 
 export const commercialServices: CommercialService[] = [
   {
+    id: 'approval-blueprint',
+    name: 'Loan Approval Blueprint',
+    audience: 'consumer',
+    billingModel: 'one_time',
+    regulatoryClass: 'consumer_credit_services',
+    priceCents: 14900,
+    description: 'A goal-specific approval-readiness blueprint that shows what is holding the customer back, what to improve first and when to reassess before applying.',
+    deliverables: ['Goal-specific 0–100 readiness assessment','Credit, utilization, DTI, inquiry and reserve analysis','P0/P1/P2 blocker inventory','Prioritized 7/30/60/90-day action plan','Ready-to-Shop planning gate and reassessment targets'],
+    paymentPolicy: 'post_performance'
+  },
+  {
+    id: 'debt-optimization-plan',
+    name: 'Credit & Debt Optimization Plan',
+    audience: 'consumer',
+    billingModel: 'one_time',
+    regulatoryClass: 'consumer_credit_services',
+    priceCents: 29900,
+    description: 'A quantified payoff and utilization strategy designed to improve controllable credit and debt-readiness factors before financial shopping.',
+    deliverables: ['Balance and utilization analysis','Priority payoff sequence','DTI impact modeling','Target utilization thresholds','30/60/90-day optimization roadmap'],
+    paymentPolicy: 'post_performance'
+  },
+  {
+    id: 'mortgage-ready-90',
+    name: 'Mortgage Ready 90',
+    audience: 'consumer',
+    billingModel: 'one_time',
+    regulatoryClass: 'consumer_credit_services',
+    priceCents: 59900,
+    description: 'A 90-day home-financing readiness program focused on credit profile, debt ratios, reserves and application-document preparation.',
+    deliverables: ['Mortgage-specific readiness baseline','DTI and reserve targets','Credit-utilization plan','Income and document readiness checklist','30/60/90-day reassessments','Final Ready-to-Shop planning review'],
+    paymentPolicy: 'post_performance'
+  },
+  {
+    id: 'auto-loan-ready',
+    name: 'Auto Loan Ready',
+    audience: 'consumer',
+    billingModel: 'one_time',
+    regulatoryClass: 'consumer_credit_services',
+    priceCents: 14900,
+    description: 'Vehicle-financing readiness analysis that helps customers understand affordability, credit blockers, down-payment targets and application timing.',
+    deliverables: ['Auto-loan readiness assessment','Payment and affordability planning','Credit and utilization blockers','Down-payment target','Application timing roadmap'],
+    paymentPolicy: 'post_performance'
+  },
+  {
+    id: 'denial-rescue',
+    name: 'Denial Rescue Analysis',
+    audience: 'consumer',
+    billingModel: 'one_time',
+    regulatoryClass: 'consumer_credit_services',
+    priceCents: 19900,
+    description: 'A post-denial analysis that converts an adverse-action outcome into a prioritized recovery plan before the customer applies again.',
+    deliverables: ['Adverse-action reason review','Credit-factor and debt analysis','Controllable blocker identification','Reapplication timing guidance','30/60/90-day recovery roadmap'],
+    paymentPolicy: 'post_performance'
+  },
+  {
+    id: 'financing-concierge',
+    name: 'Financing Readiness Concierge',
+    audience: 'consumer',
+    billingModel: 'custom',
+    regulatoryClass: 'consumer_credit_services',
+    priceRangeCents: [99900, 250000],
+    description: 'High-touch preparation for a specific financing goal with recurring readiness reviews, documentation tracking and milestone management.',
+    deliverables: ['Dedicated readiness plan','Monthly readiness review','Document-vault preparation checklist','Credit and debt milestone tracking','Final application-readiness packet'],
+    paymentPolicy: 'manual_quote'
+  },
+  {
     id: 'credit-intelligence-audit',
     name: 'Complete Credit Intelligence Audit',
     audience: 'consumer',

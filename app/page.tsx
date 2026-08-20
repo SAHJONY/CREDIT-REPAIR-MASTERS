@@ -14,6 +14,13 @@ function funnelHref(params: Awaited<SearchParams>, service?: string): Route {
   return (value ? `/get-started?${value}` : '/get-started') as Route;
 }
 
+const outcomeOffers = [
+  ['⌂', 'Buy a Home', 'Mortgage Ready 90', '$599', 'Prepare credit, DTI, reserves and documents before mortgage shopping.', 'mortgage-ready-90'],
+  ['◈', 'Buy a Car', 'Auto Loan Ready', '$149', 'Know your blockers, affordability range and application timing before the dealership.', 'auto-loan-ready'],
+  ['↗', 'Get Business Funding', 'Business Credit Accelerator', '$799', 'Organize the business profile, documentation and funding-readiness milestones.', 'business-credit-accelerator'],
+  ['!', 'Recover From a Denial', 'Denial Rescue Analysis', '$199', 'Turn an adverse-action outcome into a prioritized recovery and reapplication plan.', 'denial-rescue']
+] as const;
+
 const metrics = [
   ['◎', 'Approval Readiness', '0–100', 'Explainable score', 'Measure blockers before you apply', '/loan-readiness', 'Explore readiness →'],
   ['▣', 'Credit Reports', '3', 'Reports monitored', 'Experian · Equifax · TransUnion', '/portal/reports', 'View reports →'],
@@ -47,7 +54,7 @@ export default async function Home({ searchParams }: { searchParams: SearchParam
 
         <div className="referenceActions">
           <Link className="referencePhone" href="/portal/sign-in">Client Portal</Link>{' '}
-          <Link className="referenceGetStarted" href={funnelHref(params)}>Check Your Readiness</Link>
+          <Link className="referenceGetStarted" href={funnelHref(params, 'approval-blueprint')}>Check Your Readiness</Link>
         </div>
       </header>
 
@@ -62,7 +69,7 @@ export default async function Home({ searchParams }: { searchParams: SearchParam
             </h1>
             <p>Measure the credit, debt, payment, inquiry and reserve factors affecting your next financing goal. Then follow a quantified plan designed to improve the factors you can control before you shop for credit.</p>
             <div className="referenceHeroButtons">
-              <Link className="referencePrimary" href={funnelHref(params)}>Check Your Readiness <span>→</span></Link>{' '}
+              <Link className="referencePrimary" href={funnelHref(params, 'approval-blueprint')}>Get Your Approval Blueprint <span>→</span></Link>{' '}
               <Link className="referenceSecondary" href="/portal/sign-in">Track Your Progress</Link>
             </div>
           </div>
@@ -77,6 +84,26 @@ export default async function Home({ searchParams }: { searchParams: SearchParam
               <span>Illustrative planning score · not a lender decision</span>
             </div>
           </aside>
+        </section>
+
+        <section className="referenceGoalSection" aria-labelledby="goal-heading">
+          <div className="referenceGoalIntro">
+            <span className="referencePill">START WITH WHAT YOU WANT TO FINANCE</span>
+            <h2 id="goal-heading">Choose Your Approval Goal.</h2>
+            <p>One readiness engine, four high-intent paths. Each path turns your current profile into measurable blockers, target thresholds and a next-action plan.</p>
+          </div>
+          <div className="referenceGoalGrid">
+            {outcomeOffers.map(([icon, goal, offer, price, detail, serviceId]) => (
+              <Link className="referenceGoalCard" href={funnelHref(params, serviceId)} key={serviceId}>
+                <span className="referenceGoalIcon">{icon}</span>
+                <small>{goal}</small>
+                <h3>{offer}</h3>
+                <strong>{price}</strong>
+                <p>{detail}</p>
+                <b>Start this path →</b>
+              </Link>
+            ))}
+          </div>
         </section>
 
         <section className="referenceMetricGrid">
@@ -115,17 +142,17 @@ export default async function Home({ searchParams }: { searchParams: SearchParam
                   <li>Track progress against your financing goal</li>
                   <li>Shop for credit only when your profile is better prepared</li>
                 </ul>
-                <Link className="referencePrimary" href={funnelHref(params)}>Build Your Readiness Plan →</Link>
+                <Link className="referencePrimary" href={funnelHref(params, 'approval-blueprint')}>Build Your Approval Blueprint →</Link>
               </div>
             </div>
           </div>
 
           <div className="referencePanel referenceAspirational">
             <div className="referencePanelInner">
-              <span className="referencePill">ONE GOVERNED WORKSPACE</span>
-              <h2>From Credit Problem To Financial Readiness.</h2>
-              <p>Reports, evidence, authorizations, readiness assessments, action plans, progress and approved payments stay connected in one secure workspace.</p>
-              <Link className="referencePrimary" href="/portal/sign-in">Enter Client Portal →</Link>
+              <span className="referencePill">PREMIUM PREPARATION</span>
+              <h2>Need More Than A Blueprint?</h2>
+              <p>Move into guided credit and debt optimization, a mortgage-ready program or high-touch financing-readiness concierge when the goal is larger or the profile is more complex.</p>
+              <Link className="referencePrimary" href={funnelHref(params, 'financing-concierge')}>Explore Concierge →</Link>
             </div>
           </div>
 

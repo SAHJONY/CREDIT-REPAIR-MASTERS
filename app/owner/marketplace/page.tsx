@@ -1,6 +1,9 @@
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
+import { MarketplaceOwnerControls } from '@/components/marketplace-owner-controls';
+import { isDemoClient } from '@/lib/demo-fixtures';
 import { getBusinessSession } from '@/lib/session-access';
+import { getPlatformStore } from '@/lib/platform-store';
 import { listMarketplaceHandoffs, listMarketplaceOutcomes, listMarketplacePartners } from '@/lib/marketplace-store';
 
 export const dynamic = 'force-dynamic';
@@ -11,12 +14,15 @@ export default async function OwnerMarketplacePage() {
   if (session.member.role !== 'owner') redirect('/dashboard');
   if (session.mfaRequired && !session.mfaAssured) redirect('/auth/mfa');
 
-  const [partners, handoffs, outcomes] = await Promise.all([
+  const store = getPlatformStore();
+  const [partners, handoffs, outcomes, clients] = await Promise.all([
     listMarketplacePartners(session.organizationId),
     listMarketplaceHandoffs(session.organizationId, 100),
-    listMarketplaceOutcomes(session.organizationId, 100)
+    listMarketplaceOutcomes(session.organizationId, 100),
+    store.listClients(session.organizationId)
   ]);
 
+  const realClients = clients.filter((client) => !isDemoClient(client));
   const activePartners = partners.filter((partner) => partner.status === 'active');
   const sentHandoffs = handoffs.filter((handoff) => handoff.status === 'sent' || handoff.status === 'accepted');
   const completedOutcomes = outcomes.filter((outcome) => outcome.outcome === 'funded' || outcome.outcome === 'purchased');
@@ -46,11 +52,16 @@ export default async function OwnerMarketplacePage() {
         <div className="ownerKpi"><span>TRACKED REVENUE</span><strong>${(trackedRevenue / 100).toLocaleString('en-US', { maximumFractionDigits: 0 })}</strong><small>reported marketplace attribution</small></div>
       </section>
 
+      <MarketplaceOwnerControls
+        clients={realClients.map((client) => ({ id: client.id, displayName: client.displayName, state: client.state }))}
+        partners={partners.map((partner) => ({ id: partner.id, name: partner.name, vertical: partner.vertical, status: partner.status, minReadiness: partner.minReadiness }))}
+      />
+
       <section className="grid">
         <div className="card span12">
           <div className="label">GOVERNANCE</div>
           <h2>Customer fit before partner economics.</h2>
-          <p className="small">Eligibility is based on vertical, readiness threshold, customer state and documented partner criteria. Partner compensation is not an input to the neutral eligibility function. No customer handoff may be written without consentRecorded=true.</p>
+          <p className="small">Eligibility is based on vertical, readiness threshold, customer state and documented partner criteria. Partner compensation is not an input to the neutral eligibility function. No customer handoff may be written without an active marketplace partner-sharing consent.</p>
         </div>
 
         <div className="card span6">

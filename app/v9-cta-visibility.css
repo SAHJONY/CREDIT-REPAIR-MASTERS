@@ -1,4 +1,4 @@
-/* v9.3 — critical landing CTA + responsive composition + mobile overlay lock. Loaded last. */
+/* v9.4 — critical landing CTA + responsive composition + mobile overlay + outcome-offer lock. Loaded last. */
 .referenceHero{
   min-height:560px!important;
   overflow:hidden!important;
@@ -22,6 +22,21 @@
 .referencePrimary,.referencePrimary *{color:#120c04!important;opacity:1!important;visibility:visible!important}
 .referencePrimary:hover{filter:brightness(1.07)!important;transform:translateY(-1px);box-shadow:0 18px 48px rgba(241,183,79,.52),inset 0 1px 0 rgba(255,255,255,.7)!important}
 .referencePrimary:focus-visible{outline:3px solid #fff4c7!important;outline-offset:3px!important}
+
+/* High-intent commercial entry points: one readiness engine, four outcome wrappers. */
+.referenceGoalSection{margin:26px 0!important;padding:26px!important;border:1px solid rgba(255,255,255,.08)!important;border-radius:22px!important;background:linear-gradient(145deg,rgba(6,17,31,.9),rgba(10,27,48,.72))!important;box-shadow:0 24px 70px rgba(0,0,0,.28)!important}
+.referenceGoalIntro{max-width:820px!important;margin-bottom:18px!important}
+.referenceGoalIntro h2{margin:10px 0 8px!important;font-size:clamp(28px,3vw,44px)!important}
+.referenceGoalIntro p{margin:0!important;color:#9cabbe!important;line-height:1.55!important}
+.referenceGoalGrid{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:14px!important}
+.referenceGoalCard{display:flex!important;flex-direction:column!important;min-width:0!important;min-height:250px!important;padding:20px!important;border:1px solid rgba(255,255,255,.09)!important;border-radius:18px!important;background:radial-gradient(circle at 90% -10%,rgba(75,140,255,.12),transparent 34%),linear-gradient(145deg,rgba(15,31,52,.96),rgba(5,14,25,.98))!important;box-shadow:0 18px 48px rgba(0,0,0,.24)!important;transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease!important}
+.referenceGoalCard:hover{transform:translateY(-3px)!important;border-color:rgba(243,183,74,.34)!important;box-shadow:0 24px 60px rgba(0,0,0,.34),0 0 30px rgba(243,183,74,.06)!important}
+.referenceGoalIcon{display:grid!important;place-items:center!important;width:38px!important;height:38px!important;border-radius:11px!important;margin-bottom:18px!important;background:rgba(243,183,74,.12)!important;border:1px solid rgba(243,183,74,.28)!important;color:#f3b74a!important;font-weight:900!important}
+.referenceGoalCard>small{color:#8fa1b7!important;font-size:11px!important;font-weight:850!important;letter-spacing:.09em!important;text-transform:uppercase!important}
+.referenceGoalCard h3{margin:7px 0 5px!important;font-size:20px!important;line-height:1.1!important}
+.referenceGoalCard>strong{font-size:22px!important;color:#f3b74a!important;margin-bottom:9px!important}
+.referenceGoalCard p{margin:0 0 18px!important;color:#9baabe!important;font-size:13px!important;line-height:1.5!important;flex:1!important}
+.referenceGoalCard b{color:#f3b74a!important;font-size:12px!important}
 
 /* Prevent the desktop header from forcing horizontal overflow on laptop widths. */
 .referenceTopbar{min-width:0!important;gap:18px!important}
@@ -57,6 +72,7 @@
   .referenceNav a:nth-child(n+5){display:none!important}
   .referenceHeroCopy{max-width:620px!important}
   .referenceHero h1{font-size:clamp(40px,4.15vw,58px)!important}
+  .referenceGoalGrid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
 }
 
 @media(max-width:1100px){
@@ -71,6 +87,9 @@
   .referenceHero p{font-size:14px!important;line-height:1.55!important}
   .referenceHeroButtons{flex-direction:column!important;align-items:stretch!important}
   .referenceHeroButtons .referencePrimary,.referenceHeroButtons .referenceSecondary{width:100%!important;justify-content:center!important;min-height:52px!important;font-size:13px!important}
+  .referenceGoalSection{padding:18px!important;margin:18px 0!important;border-radius:18px!important}
+  .referenceGoalGrid{grid-template-columns:1fr!important;gap:12px!important}
+  .referenceGoalCard{min-height:220px!important;padding:18px!important}
 
   /* Mobile: compact language pill pinned to the safe area, never a large floating card. */
   .globalLanguage{

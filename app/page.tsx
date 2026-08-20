@@ -44,12 +44,12 @@ export default async function Home({ searchParams }: { searchParams: SearchParam
 
         <nav className="referenceNav" aria-label="Primary">
           <Link className="active" href="/">Home</Link>{' '}
-          <Link href="/services">Services</Link>{' '}
-          <Link href="/get-started">How It Works</Link>{' '}
-          <Link href="/loan-readiness">Readiness</Link>{' '}
-          <Link href="/services">Pricing</Link>{' '}
-          <Link href="/portal">Education</Link>{' '}
-          <Link href="/services">About Us</Link>
+          <Link href="/loans">Loans</Link>{' '}
+          <Link href="/auto">Auto</Link>{' '}
+          <Link href="/mortgage">Home</Link>{' '}
+          <Link href="/business-funding">Business</Link>{' '}
+          <Link href="/marketplace">Marketplace</Link>{' '}
+          <Link href="/get-started">Readiness</Link>
         </nav>
 
         <div className="referenceActions">
@@ -70,7 +70,7 @@ export default async function Home({ searchParams }: { searchParams: SearchParam
             <p>Measure the credit, debt, payment, inquiry and reserve factors affecting your next financing goal. Then follow a quantified plan designed to improve the factors you can control before you shop for credit.</p>
             <div className="referenceHeroButtons">
               <Link className="referencePrimary" href={funnelHref(params, 'approval-blueprint')}>Get Your Approval Blueprint <span>→</span></Link>{' '}
-              <Link className="referenceSecondary" href="/portal/sign-in">Track Your Progress</Link>
+              <Link className="referenceSecondary" href="/marketplace">Explore Marketplace</Link>
             </div>
           </div>
 
@@ -185,7 +185,7 @@ export default async function Home({ searchParams }: { searchParams: SearchParam
           <div><b>Ready-to-Shop Gate</b>{' '}<small>A planning threshold, never an approval promise</small></div>
         </section>
 
-        <footer className="referenceFooter">New850.com provides financial education, readiness modeling and governed credit-services workflows. Readiness scores are planning tools and do not represent lender underwriting. We do not guarantee score increases, financing approvals, rates, terms, or deletion of accurate information. Services remain subject to applicable federal and state requirements.</footer>
+        <footer className="referenceFooter">New850.com provides financial education, readiness modeling and governed financial-readiness workflows. Marketplace results are comparison tools and do not represent lender underwriting. We do not guarantee score increases, financing approvals, rates, terms, funding or deletion of accurate information. Services remain subject to applicable federal and state requirements.</footer>
       </div>
     </main>
   );

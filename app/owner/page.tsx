@@ -19,7 +19,8 @@ type ModuleCard = {
 
 const modules: ModuleCard[] = [
   { label: 'CUSTOMERS', title: 'Client Operations', detail: 'Intake, onboarding, readiness plans, progress, cases and customer lifecycle.', href: '/clients', cta: 'Open clients' },
-  { label: 'APPROVAL', title: 'Loan Readiness Engine', detail: 'Goal-specific scoring, blocker analysis, 7/30/60/90-day plans and Ready-to-Shop gates.', href: '/loan-readiness', cta: 'Open readiness' },
+  { label: 'READINESS', title: 'Readiness Engine', detail: 'Goal-specific scoring, blocker analysis, 7/30/60/90-day plans and Ready-to-Shop gates.', href: '/loan-readiness', cta: 'Open readiness' },
+  { label: 'MARKETPLACE', title: 'Partner Marketplace', detail: 'Partner eligibility, consented handoffs, outcome attribution and marketplace revenue.', href: '/owner/marketplace', cta: 'Open marketplace' },
   { label: 'EVIDENCE', title: 'Document Vault', detail: 'Customer evidence, authorizations, reports, supporting documents and governed records.', href: '/documents', cta: 'Open documents' },
   { label: 'REVENUE', title: 'Billing & Offers', detail: 'Commercial services, invoice eligibility, settlement controls and revenue operations.', href: '/billing', cta: 'Open billing' },
   { label: 'GROWTH', title: 'Growth OS', detail: 'Lead flow, conversion pathways, offer entry points and measurable acquisition operations.', href: '/growth', cta: 'Open growth' },
@@ -62,10 +63,11 @@ export default async function OwnerPage() {
         <div>
           <div className="kicker">NEW850 OWNER OS / {organization?.name || 'NEW850.COM'} / CONTROL PLANE</div>
           <h1>New850 Owner Command Center</h1>
-          <p className="subtitle">One private dashboard to control customers, approval readiness, evidence, revenue, compliance, growth, AI operations and production release gates.</p>
+          <p className="subtitle">Control customers, readiness, Financial Passport, marketplace partners, handoffs, outcomes, revenue, compliance, growth, AI operations and production release gates.</p>
         </div>
         <div className="ownerNav">
-          <Link className="primaryButton" href="/loan-readiness">Approval Readiness</Link>
+          <Link className="primaryButton" href="/loan-readiness">Readiness</Link>
+          <Link className="secondaryButton" href="/owner/marketplace">Marketplace</Link>
           <Link className="secondaryButton" href="/clients">Clients</Link>
           <Link className="secondaryButton" href="/billing">Revenue</Link>
           <Link className="secondaryButton" href="/launch">Launch</Link>
@@ -83,10 +85,11 @@ export default async function OwnerPage() {
       <section className="ownerActionStrip">
         <div className="ownerActionCard">
           <div className="label">OWNER PRIORITY</div>
-          <h2>{openGates.length ? `Close ${openGates.length} production gate${openGates.length === 1 ? '' : 's'}` : 'Scale the approval-readiness business loop'}</h2>
-          <p>{openGates.length ? 'Required production controls remain open. Keep the system fail-closed until these controls are ready.' : 'Production controls are ready. Focus on real lead acquisition, measurable customer readiness improvement, compliant revenue and retention.'}</p>
+          <h2>{openGates.length ? `Close ${openGates.length} production gate${openGates.length === 1 ? '' : 's'}` : 'Scale the readiness-to-marketplace business loop'}</h2>
+          <p>{openGates.length ? 'Required production controls remain open. Keep the system fail-closed until these controls are ready.' : 'Production controls are ready. Focus on real lead acquisition, measurable customer readiness, consented marketplace handoffs, verified outcomes and compliant recurring revenue.'}</p>
           <div className="headerActions">
             <Link className="primaryButton" href={openGates.length ? '/launch' : '/growth'}>{openGates.length ? 'Resolve launch gates' : 'Open growth OS'}</Link>
+            <Link className="secondaryButton" href="/owner/marketplace">Marketplace control</Link>
             <Link className="secondaryButton" href="/billing">Revenue control</Link>
             <Link className="secondaryButton" href="/compliance">Compliance control</Link>
           </div>
@@ -96,6 +99,7 @@ export default async function OwnerPage() {
           <div className="ownerQuickLinks">
             <Link href="/clients">{realClients.length} real clients</Link>
             <Link href="/launch">{openGates.length} open production gates</Link>
+            <Link href="/owner/marketplace">Marketplace partner + outcome ledger</Link>
             <Link href="/dashboard">{runs.length} recent governed agent runs</Link>
             <Link href="/compliance">{blockedEvents} recent blocked audit events</Link>
             <Link href="/documents">{demoClients.length} demo fixtures excluded from KPIs</Link>
@@ -171,7 +175,7 @@ export default async function OwnerPage() {
             <div>
               <div className="label">OWNER GOVERNANCE</div>
               <h2>Private, MFA-protected, fail-closed New850.com control plane.</h2>
-              <div className="small">Signed in as {session.email} · owner role verified · MFA assured. Customer readiness is planning support, never a promise of lender approval.</div>
+              <div className="small">Signed in as {session.email} · owner role verified · MFA assured. Customer readiness is planning support, marketplace routing requires consent, and partner outcomes remain separate from lender underwriting.</div>
             </div>
             <Link className="secondaryButton" href="/dashboard">Staff dashboard</Link>
           </div>

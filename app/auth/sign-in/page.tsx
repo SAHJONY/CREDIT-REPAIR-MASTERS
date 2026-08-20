@@ -12,7 +12,7 @@ export default async function SignInPage() {
   return (
     <main className="authShell">
       <section className="authCard">
-        <div className="kicker">CREDIT REPAIR MASTERS</div>
+        <div className="kicker">NEW850.COM</div>
         <h1>Owner sign in</h1>
         <p className="subtitle">Secure access to tenant-scoped clients, consents, evidence, audit history and agent operations.</p>
         <SignInForm />

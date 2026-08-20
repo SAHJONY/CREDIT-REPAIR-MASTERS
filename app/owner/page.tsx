@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import type { Route } from 'next';
 import { redirect } from 'next/navigation';
 import { SignOutButton } from '@/components/sign-out-button';
 import { isDemoClient } from '@/lib/demo-fixtures';
@@ -12,7 +13,7 @@ type ModuleCard = {
   label: string;
   title: string;
   detail: string;
-  href: string;
+  href: Route;
   cta: string;
 };
 

@@ -35,10 +35,10 @@ export default async function Home({ searchParams }: { searchParams: SearchParam
     <main className="referenceLanding">
       <header className="referenceTopbar">
         <Link className="referenceBrand" href="/">
-          <span className="referenceCrest">CRM</span>{' '}
+          <span className="referenceCrest">850</span>{' '}
           <span className="referenceBrandText">
-            <strong>CREDIT REPAIR</strong>{' '}
-            <small>MASTERS</small>
+            <strong>NEW850.COM</strong>{' '}
+            <small>FINANCIAL READINESS</small>
           </span>
         </Link>
 
@@ -62,7 +62,7 @@ export default async function Home({ searchParams }: { searchParams: SearchParam
         <section className="referenceHero">
           <div className="referenceHeroImage" aria-hidden="true" />
           <div className="referenceHeroCopy">
-            <span className="referencePill">CREDIT-TO-APPROVAL READINESS PLATFORM</span>
+            <span className="referencePill">FINANCIAL READINESS & APPROVAL PREPARATION PLATFORM</span>
             <h1>
               Know What Is Holding You Back.{' '}
               <span>Apply Better Prepared.</span>
@@ -135,7 +135,7 @@ export default async function Home({ searchParams }: { searchParams: SearchParam
             <div className="referenceAspirational">
               <div className="referencePanelInner">
                 <span className="referencePill">MEASURE → IMPROVE → REASSESS</span>
-                <h2>Turn Credit Improvement Into Application Readiness.</h2>
+                <h2>Turn Financial Improvement Into Application Readiness.</h2>
                 <ul>
                   <li>Identify the highest-impact blockers first</li>
                   <li>Build measurable 7/30/60/90-day actions</li>
@@ -185,7 +185,7 @@ export default async function Home({ searchParams }: { searchParams: SearchParam
           <div><b>Ready-to-Shop Gate</b>{' '}<small>A planning threshold, never an approval promise</small></div>
         </section>
 
-        <footer className="referenceFooter">Credit Repair Masters provides credit education, readiness modeling and governed credit-services workflows. Readiness scores are planning tools and do not represent lender underwriting. We do not guarantee score increases, financing approvals, rates, terms, or deletion of accurate information. Services remain subject to applicable federal and state requirements.</footer>
+        <footer className="referenceFooter">New850.com provides financial education, readiness modeling and governed credit-services workflows. Readiness scores are planning tools and do not represent lender underwriting. We do not guarantee score increases, financing approvals, rates, terms, or deletion of accurate information. Services remain subject to applicable federal and state requirements.</footer>
       </div>
     </main>
   );

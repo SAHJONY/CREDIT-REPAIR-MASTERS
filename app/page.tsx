@@ -35,21 +35,21 @@ export default async function Home({ searchParams }: { searchParams: SearchParam
     <main className="referenceLanding">
       <header className="referenceTopbar">
         <Link className="referenceBrand" href="/">
-          <span className="referenceCrest">CRM</span>{' '}
+          <span className="referenceCrest">850</span>{' '}
           <span className="referenceBrandText">
-            <strong>CREDIT REPAIR</strong>{' '}
-            <small>MASTERS</small>
+            <strong>NEW850.COM</strong>{' '}
+            <small>FINANCIAL READINESS</small>
           </span>
         </Link>
 
         <nav className="referenceNav" aria-label="Primary">
           <Link className="active" href="/">Home</Link>{' '}
-          <Link href="/services">Services</Link>{' '}
-          <Link href="/get-started">How It Works</Link>{' '}
-          <Link href="/loan-readiness">Readiness</Link>{' '}
-          <Link href="/services">Pricing</Link>{' '}
-          <Link href="/portal">Education</Link>{' '}
-          <Link href="/services">About Us</Link>
+          <Link href="/loans">Loans</Link>{' '}
+          <Link href="/auto">Auto</Link>{' '}
+          <Link href="/mortgage">Home</Link>{' '}
+          <Link href="/business-funding">Business</Link>{' '}
+          <Link href="/marketplace">Marketplace</Link>{' '}
+          <Link href="/get-started">Readiness</Link>
         </nav>
 
         <div className="referenceActions">
@@ -62,7 +62,7 @@ export default async function Home({ searchParams }: { searchParams: SearchParam
         <section className="referenceHero">
           <div className="referenceHeroImage" aria-hidden="true" />
           <div className="referenceHeroCopy">
-            <span className="referencePill">CREDIT-TO-APPROVAL READINESS PLATFORM</span>
+            <span className="referencePill">FINANCIAL READINESS & APPROVAL PREPARATION PLATFORM</span>
             <h1>
               Know What Is Holding You Back.{' '}
               <span>Apply Better Prepared.</span>
@@ -70,7 +70,7 @@ export default async function Home({ searchParams }: { searchParams: SearchParam
             <p>Measure the credit, debt, payment, inquiry and reserve factors affecting your next financing goal. Then follow a quantified plan designed to improve the factors you can control before you shop for credit.</p>
             <div className="referenceHeroButtons">
               <Link className="referencePrimary" href={funnelHref(params, 'approval-blueprint')}>Get Your Approval Blueprint <span>→</span></Link>{' '}
-              <Link className="referenceSecondary" href="/portal/sign-in">Track Your Progress</Link>
+              <Link className="referenceSecondary" href="/marketplace">Explore Marketplace</Link>
             </div>
           </div>
 
@@ -135,7 +135,7 @@ export default async function Home({ searchParams }: { searchParams: SearchParam
             <div className="referenceAspirational">
               <div className="referencePanelInner">
                 <span className="referencePill">MEASURE → IMPROVE → REASSESS</span>
-                <h2>Turn Credit Improvement Into Application Readiness.</h2>
+                <h2>Turn Financial Improvement Into Application Readiness.</h2>
                 <ul>
                   <li>Identify the highest-impact blockers first</li>
                   <li>Build measurable 7/30/60/90-day actions</li>
@@ -185,7 +185,7 @@ export default async function Home({ searchParams }: { searchParams: SearchParam
           <div><b>Ready-to-Shop Gate</b>{' '}<small>A planning threshold, never an approval promise</small></div>
         </section>
 
-        <footer className="referenceFooter">Credit Repair Masters provides credit education, readiness modeling and governed credit-services workflows. Readiness scores are planning tools and do not represent lender underwriting. We do not guarantee score increases, financing approvals, rates, terms, or deletion of accurate information. Services remain subject to applicable federal and state requirements.</footer>
+        <footer className="referenceFooter">New850.com provides financial education, readiness modeling and governed financial-readiness workflows. Marketplace results are comparison tools and do not represent lender underwriting. We do not guarantee score increases, financing approvals, rates, terms, funding or deletion of accurate information. Services remain subject to applicable federal and state requirements.</footer>
       </div>
     </main>
   );

@@ -5,7 +5,8 @@ import { FormEvent, useState } from 'react';
 const scopes = [
   ['credit_report_analysis', 'Credit report analysis'],
   ['dispute_drafting', 'Dispute letter drafting'],
-  ['dispute_submission', 'Dispute submission approval']
+  ['dispute_submission', 'Dispute submission approval'],
+  ['marketplace_partner_sharing', 'Share selected information with a marketplace partner']
 ] as const;
 
 export function PortalConsentForm() {
@@ -43,6 +44,7 @@ export function PortalConsentForm() {
     <form className="appForm compactForm" onSubmit={submit}>
       <label>Authorization<select name="scope" defaultValue="credit_report_analysis">{scopes.map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select></label>
       <label>Decision<select name="granted" defaultValue="true"><option value="true">Grant authorization</option><option value="false">Revoke / deny</option></select></label>
+      <div className="small">Marketplace sharing is optional and separate from credit-report analysis. New850 must record this authorization before sending customer information to a participating partner.</div>
       {message ? <div className="formSuccess">{message}</div> : null}
       {error ? <div className="formError">{error}</div> : null}
       <button className="primaryButton" type="submit" disabled={busy}>{busy ? 'Saving…' : 'Save authorization'}</button>

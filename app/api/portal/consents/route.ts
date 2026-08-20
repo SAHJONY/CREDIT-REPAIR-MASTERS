@@ -6,7 +6,7 @@ import { getCustomerAccessByMember } from '@/lib/customer-portal';
 import { getPlatformStore } from '@/lib/platform-store';
 
 const schema = z.object({
-  scope: z.enum(['credit_report_analysis','dispute_drafting','dispute_submission']),
+  scope: z.enum(['credit_report_analysis','dispute_drafting','dispute_submission','marketplace_partner_sharing']),
   granted: z.boolean()
 });
 

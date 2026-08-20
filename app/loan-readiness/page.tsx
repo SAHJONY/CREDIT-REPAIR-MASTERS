@@ -14,12 +14,13 @@ export default async function LoanReadinessPage() {
     <main>
       <header className="ownerHero">
         <div>
-          <div className="kicker">CREDIT REPAIR MASTERS / APPROVAL READINESS</div>
-          <h1>Universal Credit Approval Readiness</h1>
+          <div className="kicker">NEW850.COM / FINANCIAL READINESS ENGINE</div>
+          <h1>Universal Financial Readiness</h1>
           <p className="subtitle">Prepare customers for mortgages, auto loans, credit cards, personal loans, business funding, leases and financed purchases with measurable, compliant readiness planning.</p>
         </div>
         <div className="ownerNav">
-          <Link className="secondaryButton" href="/dashboard">Owner OS</Link>
+          <Link className="secondaryButton" href="/owner">New850 Owner OS</Link>
+          <Link className="secondaryButton" href="/owner/marketplace">Marketplace</Link>
           <Link className="secondaryButton" href="/clients">Clients</Link>
           <Link className="secondaryButton" href="/documents">Documents</Link>
           <Link className="secondaryButton" href="/compliance">Compliance</Link>
@@ -30,11 +31,11 @@ export default async function LoanReadinessPage() {
         <div className="ownerActionCard">
           <div className="label">MISSION</div>
           <h2>Move each customer from desire to documented readiness.</h2>
-          <p>Measure the current profile, identify the highest-impact blockers, create a prioritized roadmap, reassess progress and guide the customer to shop for credit only when the profile is stronger.</p>
+          <p>Measure the current profile, identify the highest-impact blockers, create a prioritized roadmap, reassess progress and guide the customer to compare financial options only when the profile is stronger.</p>
         </div>
         <div className="ownerActionCard">
           <div className="label">SUPPORTED GOALS</div>
-          <p>Home · Vehicle · Credit Card · Personal Loan · Business Credit · Apartment / Lease · Any Financed Purchase</p>
+          <p>Home · Vehicle · Credit Card · Personal Loan · Business Funding · Apartment / Lease · Any Financed Purchase</p>
         </div>
       </section>
 

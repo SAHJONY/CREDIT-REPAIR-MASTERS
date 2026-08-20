@@ -28,7 +28,7 @@ export default function ServicesPage() {
         <div className="commercialHeroImage" aria-hidden="true" />
         <div className="commercialHeroShade" />
         <div className="commercialHeroCopy">
-          <div className="cinematicEyebrow">CREDIT REPAIR MASTERS · CREDIT-TO-APPROVAL READINESS PLATFORM</div>
+          <div className="cinematicEyebrow">NEW850.COM · FINANCIAL READINESS & APPROVAL PREPARATION</div>
           <h1>Choose the readiness path<br/><em>that matches your next financial move.</em></h1>
           <p>Consumer approval readiness, business funding readiness and professional software—each built around measurable blockers, documented progress and controlled financial shopping.</p>
           <div className="publicCinemaActions"><Link className="goldButton" href="/get-started">Check readiness <span>→</span></Link><Link className="glassButton" href="/dashboard">Owner OS</Link></div>

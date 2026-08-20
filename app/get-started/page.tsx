@@ -45,7 +45,7 @@ export default async function GetStartedPage({ searchParams }: { searchParams: S
         <div className="onboardingHeroImage" aria-hidden="true" />
         <div className="onboardingHeroShade" />
         <div className="onboardingHeroCopy">
-          <div className="cinematicEyebrow">CREDIT REPAIR MASTERS · CREDIT-TO-APPROVAL READINESS</div>
+          <div className="cinematicEyebrow">NEW850.COM · FINANCIAL READINESS & APPROVAL PREPARATION</div>
           <h1>Start with the goal.<br/><em>Measure what stands in the way.</em></h1>
           <p>Choose the path that matches what you are preparing to apply for. We measure controllable readiness factors, identify blockers and build a documented plan before financial shopping.</p>
           <div className="publicCinemaActions"><Link className="glassButton" href="/services">Compare readiness services</Link><Link className="glassButton" href="/portal/sign-in">Existing client</Link></div>
@@ -65,7 +65,7 @@ export default async function GetStartedPage({ searchParams }: { searchParams: S
               {selected.audience === 'consumer'
                 ? 'Consumer services measure and improve readiness factors; they do not guarantee score increases, deletion outcomes, financing approval, rates or terms. Fees remain subject to service completion, contract status, cancellation timing, sales channel, and state law.'
                 : selected.audience === 'business'
-                  ? 'Business-credit readiness advisory is separate from consumer credit repair and does not guarantee funding or financing approval.'
+                  ? 'Business-credit readiness advisory is separate from consumer credit services and does not guarantee funding or financing approval.'
                   : 'OS subscriptions provide governed readiness and credit-operations software; each operating organization remains responsible for its own customer compliance obligations.'}
             </div>
           </div>
@@ -82,7 +82,7 @@ export default async function GetStartedPage({ searchParams }: { searchParams: S
       </section>
 
       <section className="onboardingJourney"><div><div className="cinematicEyebrow goldText">READINESS JOURNEY</div><h2>Goal → assessment → blockers → action plan → reassessment → Ready to Shop</h2></div><div className="journeyGrid"><div><b>01</b><strong>Define the goal</strong><span>Mortgage, auto, card, personal loan, business credit, lease or financed purchase.</span></div><div><b>02</b><strong>Measure readiness</strong><span>Evaluate credit profile, utilization, payment history, DTI, inquiries, derogatories and reserves.</span></div><div><b>03</b><strong>Improve controllable factors</strong><span>Prioritize P0/P1/P2 blockers through evidence-based 7/30/60/90-day actions.</span></div><div><b>04</b><strong>Shop when better prepared</strong><span>Ready to Shop is a planning gate, never a lender approval or rate guarantee.</span></div></div></section>
-      <footer>Readiness scores are educational planning tools, not lender underwriting. Accurate negative information is not eligible for deletion simply because it is negative. CREDIT REPAIR MASTERS does not guarantee score increases, funding approvals, rates, terms, or removal of accurate information.</footer>
+      <footer>Readiness scores are educational planning tools, not lender underwriting. Accurate negative information is not eligible for deletion simply because it is negative. New850.com does not guarantee score increases, funding approvals, rates, terms, or removal of accurate information.</footer>
     </main>
   );
 }

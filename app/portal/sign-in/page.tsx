@@ -5,7 +5,7 @@ export default function PortalSignInPage() {
   return (
     <main className="authShell">
       <section className="authCard">
-        <div className="kicker">CREDIT REPAIR MASTERS / CLIENT PORTAL</div>
+        <div className="kicker">NEW850.COM / CLIENT PORTAL</div>
         <h1>Welcome back</h1>
         <p className="subtitle">Securely access your credit-report intake, documents, authorizations, and progress.</p>
         <PortalSignInForm />

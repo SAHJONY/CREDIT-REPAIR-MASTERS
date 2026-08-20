@@ -12,8 +12,10 @@ const portalItems = [
   ['⌂','Dashboard','/portal'],['↗','Credit Progress','/portal/progress'],['▣','Reports & Scores','/portal/reports'],['⌁','Disputes','/portal/progress'],['▤','Documents','/portal/documents'],['▱','Payments','/portal/payments'],['◇','Education','/portal/progress'],['◎','Account','/portal/account']
 ] as const;
 
+const publicPrefixes = ['/services','/get-started','/loans','/auto','/mortgage','/business-funding','/marketplace'] as const;
+
 function isPublic(pathname: string) {
-  return pathname === '/' || pathname.startsWith('/services') || pathname.startsWith('/get-started') || pathname.startsWith('/auth/') || pathname === '/portal/sign-in' || pathname.startsWith('/portal/activate') || pathname.startsWith('/portal/forgot-password');
+  return pathname === '/' || publicPrefixes.some((prefix) => pathname.startsWith(prefix)) || pathname.startsWith('/auth/') || pathname === '/portal/sign-in' || pathname.startsWith('/portal/activate') || pathname.startsWith('/portal/forgot-password');
 }
 
 export function ReferenceAppFrame({ children }: { children: ReactNode }) {

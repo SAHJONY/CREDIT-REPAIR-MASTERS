@@ -1,9 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
-import { authenticateOperator } from "@/lib/api-auth";
+import { authenticateBusinessUser, authorizeRoles } from "@/lib/api-auth";
 import { getPlatformStore, storageMode } from "@/lib/platform-store";
 
 export async function GET(request: NextRequest) {
-  const auth = authenticateOperator(request);
+  const auth = authorizeRoles(
+    await authenticateBusinessUser(request),
+    ["owner", "admin", "compliance_reviewer", "auditor"]
+  );
   if (!auth.ok) return NextResponse.json({ error: auth.error }, { status: auth.status });
 
   const mode = storageMode();
@@ -17,7 +20,7 @@ export async function GET(request: NextRequest) {
       store.listAgentRuns(auth.organizationId, 20)
     ]);
     return NextResponse.json({
-      version: "1.3.0-hardening",
+      version: "1.4.0-session-auth",
       mode,
       organization: org,
       rbacUsers: users.map(({ id, role, status }) => ({ id, role, status })),
@@ -32,7 +35,7 @@ export async function GET(request: NextRequest) {
     });
   } catch (error) {
     return NextResponse.json({
-      version: "1.3.0-hardening",
+      version: "1.4.0-session-auth",
       mode,
       organizationScope: auth.organizationId,
       persistenceConfigured: mode === "neon-postgres",

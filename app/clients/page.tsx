@@ -16,7 +16,7 @@ export default async function ClientsPage() {
   return (
     <main>
       <header className="appHeader">
-        <div><div className="kicker">CREDIT REPAIR MASTERS / CLIENT MANAGEMENT</div><h1>Clients</h1><p className="subtitle">Create and manage real tenant-scoped consumer and business credit clients.</p></div>
+        <div><div className="kicker">NEW850.COM / CLIENT MANAGEMENT</div><h1>Clients</h1><p className="subtitle">Create and manage real tenant-scoped consumer and business credit clients.</p></div>
         <div className="headerActions"><Link className="secondaryButton" href="/clients/portal-access">Portal Access</Link><Link className="secondaryButton" href="/dashboard">Dashboard</Link><SignOutButton /></div>
       </header>
       <section className="grid">

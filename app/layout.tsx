@@ -15,6 +15,7 @@ import "./world-class-finance.css";
 import "./responsive-hardening.css";
 import "./new850-unified-polish.css";
 import "./auth-premium.css";
+import "./cinematic-v10.css";
 import type { Metadata } from "next";
 import { ReferenceAppFrame } from "@/components/reference-app-frame";
 import { GlobalLanguageSwitcher } from "@/components/global-language-switcher";

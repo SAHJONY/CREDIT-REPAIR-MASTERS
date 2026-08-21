@@ -4,7 +4,7 @@ import type { New850Vertical } from '@/lib/new850-platform';
 
 export function New850VerticalPage({ vertical }: { vertical: New850Vertical }) {
   return (
-    <main className="commercialCinema">
+    <main className={`commercialCinema commercialCinema--${vertical.id}`}>
       <section className="commercialHero">
         <div className="commercialHeroImage" aria-hidden="true" />
         <div className="commercialHeroShade" />

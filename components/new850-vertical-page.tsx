@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { FinancialVisual } from '@/components/financial-visual';
 import type { New850Vertical } from '@/lib/new850-platform';
 
 export function New850VerticalPage({ vertical }: { vertical: New850Vertical }) {
@@ -16,6 +17,7 @@ export function New850VerticalPage({ vertical }: { vertical: New850Vertical }) {
             <Link className="glassButton" href="/marketplace">Explore marketplace</Link>
           </div>
         </div>
+        <div className="commercialHeroVisual"><FinancialVisual variant={vertical.id} compact label={`${vertical.eyebrow.replace('NEW850 ', '')} financial readiness`} /></div>
         <div className="commercialHeroStats">
           <div><small>MODEL</small><strong>Goal-first</strong><span>prepare before applying</span></div>
           <div><small>MEASURE</small><strong>0–100</strong><span>explainable readiness</span></div>
@@ -25,10 +27,13 @@ export function New850VerticalPage({ vertical }: { vertical: New850Vertical }) {
 
       <section className="commercialGroups">
         <div className="commercialGroup blue">
-          <div className="commercialGroupIntro">
-            <div className="cinematicEyebrow">HOW NEW850 WORKS</div>
-            <h2>{vertical.description}</h2>
-            <p>One reusable readiness profile can support multiple financial goals without turning every visit into another application.</p>
+          <div className="commercialSplitIntro">
+            <div className="commercialGroupIntro">
+              <div className="cinematicEyebrow">HOW NEW850 WORKS</div>
+              <h2>{vertical.description}</h2>
+              <p>One reusable readiness profile can support multiple financial goals without turning every visit into another application.</p>
+            </div>
+            <FinancialVisual variant="readiness" label="Readiness intelligence" />
           </div>
           <div className="commercialServiceGrid">
             {vertical.readinessFactors.map((factor, index) => (
@@ -42,7 +47,10 @@ export function New850VerticalPage({ vertical }: { vertical: New850Vertical }) {
         </div>
 
         <div className="commercialGroup emerald">
-          <div className="commercialGroupIntro"><div className="cinematicEyebrow">CUSTOMER JOURNEY</div><h2>Readiness before financial shopping.</h2><p>New850 separates preparation from provider underwriting so customers can make stronger, more deliberate decisions.</p></div>
+          <div className="commercialSplitIntro reverse">
+            <FinancialVisual variant={vertical.id === 'marketplace' ? 'passport' : vertical.id} label={`${vertical.eyebrow.replace('NEW850 ', '')} journey`} />
+            <div className="commercialGroupIntro"><div className="cinematicEyebrow">CUSTOMER JOURNEY</div><h2>Readiness before financial shopping.</h2><p>New850 separates preparation from provider underwriting so customers can make stronger, more deliberate decisions.</p></div>
+          </div>
           <div className="commercialServiceGrid">
             {vertical.journey.map((step, index) => (
               <article className="commercialServiceCard" key={step}>
@@ -54,7 +62,10 @@ export function New850VerticalPage({ vertical }: { vertical: New850Vertical }) {
         </div>
 
         <div className="commercialGroup violet">
-          <div className="commercialGroupIntro"><div className="cinematicEyebrow">MARKETPLACE SCOPE</div><h2>Products New850 can organize around this goal.</h2><p>Availability depends on participating partners, eligibility, geography, licensing and product-specific requirements.</p></div>
+          <div className="commercialSplitIntro">
+            <div className="commercialGroupIntro"><div className="cinematicEyebrow">MARKETPLACE SCOPE</div><h2>Products New850 can organize around this goal.</h2><p>Availability depends on participating partners, eligibility, geography, licensing and product-specific requirements.</p></div>
+            <FinancialVisual variant="marketplace" label="Financial marketplace comparison" />
+          </div>
           <div className="commercialServiceGrid">
             {vertical.products.map((product) => (
               <article className="commercialServiceCard" key={product}><div className="commercialServiceTop"><span>PRODUCT</span><strong>Partner-led</strong></div><h3>{product}</h3></article>

@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import type { ReactNode } from 'react';
+import { FinancialVisual } from '@/components/financial-visual';
 
 const ownerItems = [
   ['⌂','Dashboard','/dashboard'],['◎','Clients','/clients'],['↗','Growth','/growth'],['◈','Launch','/launch'],['▤','Documents','/documents'],['▱','Billing','/billing'],['✓','Compliance','/compliance'],['◇','Demo','/demo']
@@ -38,6 +39,7 @@ export function ReferenceAppFrame({ children }: { children: ReactNode }) {
       </aside>
       <div className="referenceAppMain">
         <div className="referenceAppAmbient" aria-hidden="true" />
+        <div className="referenceAppVisual" aria-hidden="true"><FinancialVisual variant={portal ? 'passport' : 'owner'} compact label={portal ? 'Financial Passport' : 'Owner command center'} /></div>
         {children}
       </div>
     </div>

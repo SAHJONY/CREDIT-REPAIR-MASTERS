@@ -16,6 +16,7 @@ import type { Metadata } from "next";
 import { ReferenceAppFrame } from "@/components/reference-app-frame";
 import { GlobalLanguageSwitcher } from "@/components/global-language-switcher";
 
+// Production release marker: world-class financial design + imagery.
 export const metadata: Metadata = {
   title: "New850.com",
   description: "Financial readiness, credit intelligence and approval preparation platform"

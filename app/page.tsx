@@ -66,7 +66,7 @@ export default async function Home({ searchParams }: { searchParams: SearchParam
           </div>
         </section>
 
-        <section className="pageVisualBand">
+        <section className="pageVisualBand pageVisualBand--passport">
           <div><span className="referencePill">ONE PROFILE · MULTIPLE GOALS</span><h2>Your financial life should connect.</h2><p>New850 organizes readiness for loans, vehicles, mortgages and business funding around one reusable financial profile, while keeping each goal-specific assessment separate and explainable.</p><div className="referenceHeroButtons"><Link className="referencePrimary" href="/portal/passport">Explore Financial Passport →</Link><Link className="referenceSecondary" href="/marketplace">View marketplace</Link></div></div>
           <CinematicPhoto variant="indigenous" label="A clear path toward financial readiness" />
         </section>

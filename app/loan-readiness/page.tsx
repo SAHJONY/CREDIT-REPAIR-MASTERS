@@ -17,7 +17,7 @@ const steps = [
 
 export default function LoanReadinessPage() {
   return (
-    <main className="onboardingCinema">
+    <main className="onboardingCinema onboardingCinema--readiness">
       <section className="onboardingHero">
         <div className="onboardingHeroImage" aria-hidden="true" />
         <div className="onboardingHeroShade" />

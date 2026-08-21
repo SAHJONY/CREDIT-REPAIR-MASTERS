@@ -45,7 +45,7 @@ export default async function GetStartedPage({ searchParams }: { searchParams: S
   const attribution = { source: params.utm_source || params.ref || 'direct', medium: params.utm_medium || '', campaign: params.utm_campaign || '' };
 
   return (
-    <main className="onboardingCinema">
+    <main className="onboardingCinema onboardingCinema--start">
       <section className="onboardingHero">
         <div className="onboardingHeroImage" aria-hidden="true" />
         <div className="onboardingHeroShade" />

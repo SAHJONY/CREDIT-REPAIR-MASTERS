@@ -5,7 +5,7 @@ type FinancialVisualVariant = New850VerticalId | 'passport' | 'owner' | 'growth'
 
 export function FinancialVisual({ variant, compact = false, label }: { variant: FinancialVisualVariant; compact?: boolean; label?: string }) {
   const photoByVariant: Record<FinancialVisualVariant, CinematicPhotoVariant> = {
-    loans: 'horizon', auto: 'mobility', mortgage: 'home', business: 'horizon',
+    loans: 'horizon', auto: 'mobility', mortgage: 'home', business: 'business',
     marketplace: 'mobility', passport: 'horizon', owner: 'horizon', growth: 'mobility',
     documents: 'home', security: 'horizon', readiness: 'horizon'
   };

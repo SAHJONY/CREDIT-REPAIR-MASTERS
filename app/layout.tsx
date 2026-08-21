@@ -19,6 +19,7 @@ import "./cinematic-v10.css";
 import type { Metadata, Viewport } from "next";
 import { ReferenceAppFrame } from "@/components/reference-app-frame";
 import { GlobalLanguageSwitcher } from "@/components/global-language-switcher";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 // Production release marker: world-class financial design + imagery.
 export const metadata: Metadata = {
@@ -32,9 +33,9 @@ export const metadata: Metadata = {
     siteName: "New850.com",
     title: "Know what is holding you back. Apply better prepared.",
     description: "A measurable, compliance-first financial readiness platform for your next financing goal.",
-    images: [{ url: "/cinematic/generated/new850-horizon-v2.png", width: 1672, height: 941, alt: "New850 financial readiness horizon" }]
+    images: [{ url: "/cinematic/generated/human-home-readiness-v1.png", width: 1672, height: 941, alt: "Family reviewing a financial readiness plan together" }]
   },
-  twitter: { card: "summary_large_image", title: "New850 Financial Readiness", description: "Prepare before you apply.", images: ["/cinematic/generated/new850-horizon-v2.png"] },
+  twitter: { card: "summary_large_image", title: "New850 Financial Readiness", description: "Prepare before you apply.", images: ["/cinematic/generated/human-home-readiness-v1.png"] },
   robots: { index: true, follow: true }
 };
 
@@ -45,6 +46,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     <html lang="en" suppressHydrationWarning>
       <body>
         <ReferenceAppFrame>{children}</ReferenceAppFrame>
+        <ThemeToggle />
         <GlobalLanguageSwitcher />
       </body>
     </html>

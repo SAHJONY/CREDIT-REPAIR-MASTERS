@@ -103,10 +103,12 @@ function recoveryCodes() {
 export async function getMfaStatus(organizationId: string, userId: string) {
   const rows = await sql()`select enabled, verified_at, locked_until from mfa_enrollments where organization_id = ${organizationId} and user_id = ${userId} limit 1`;
   const row = rows[0] as { enabled?: boolean; verified_at?: string; locked_until?: string } | undefined;
+  const lockExpiresAt = row?.locked_until ? new Date(row.locked_until) : null;
+  const activeLock = lockExpiresAt && lockExpiresAt.getTime() > Date.now() ? lockExpiresAt.toISOString() : null;
   return {
     configured: mfaCryptoConfigured(),
     enrolled: Boolean(row?.enabled && row?.verified_at),
-    lockedUntil: row?.locked_until ? new Date(row.locked_until).toISOString() : null
+    lockedUntil: activeLock
   };
 }
 

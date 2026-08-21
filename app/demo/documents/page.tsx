@@ -17,7 +17,7 @@ export default async function DemoDocumentsPage() {
     <main>
       <header className="appHeader">
         <div>
-          <div className="kicker">CREDIT REPAIR MASTERS / DOCUMENT REFERENCE LIBRARY</div>
+          <div className="kicker">NEW850.COM / DOCUMENT REFERENCE LIBRARY</div>
           <h1>Document Reference Texts</h1>
           <p className="subtitle">Reference material for consumer credit, Florida disclosures, evidence, billing, compliance, business credit, and historical dispute examples.</p>
         </div>

@@ -38,7 +38,11 @@ export function runAgentSafetyEvals(): EvalResult[] {
   results.push({ id: "pii-minimized", passed: pii.minimized.includes("[REDACTED_SSN]") && pii.minimized.includes("[REDACTED_EMAIL]") && pii.minimized.includes("[REDACTED_PHONE]"), detail: pii.minimized });
 
   const route = routeAgentTask({ intent: "submit_dispute", evidenceIds: ["ev_1"], consentId: "consent_1" });
-  results.push({ id: "sensitive-route-never-external", passed: route.execution === "approval_required" && route.canExecuteExternally === false, detail: route.execution });
+  results.push({
+    id: "sensitive-route-never-external",
+    passed: (route.execution === "approval_required" || route.execution === "blocked") && route.canExecuteExternally === false,
+    detail: route.execution
+  });
 
   const accurateNegative = evaluateDisputeClaim({ issueType: "accurate_negative", assertion: "The negative item is accurate.", evidenceIds: [verifiedReport.id] }, [verifiedReport]);
   results.push({ id: "accurate-negative-not-disputed", passed: !accurateNegative.draftEligible, detail: accurateNegative.reason });

@@ -90,7 +90,7 @@ export default async function ClientWorkspace({ params }: { params: Promise<{ id
         <div className="card span12">
           <div className="label">Credit report intake</div>
           <h2>Free report sources + secure import</h2>
-          <p className="small">Start with AnnualCreditReport.com or the three nationwide bureaus. Specialty reporting companies remain available when the case requires them. The client obtains the report directly; CREDIT REPAIR MASTERS does not scrape bureau portals or bypass consumer authentication.</p>
+          <p className="small">Start with AnnualCreditReport.com or the three nationwide bureaus. Specialty reporting companies remain available when the case requires them. The client obtains the report directly; New850 does not scrape bureau portals or bypass consumer authentication.</p>
           <div className="grid" style={{ marginTop: 14 }}>
             {reportProviders.map((provider, index) => (
               <div className="card span4" key={provider.id}>

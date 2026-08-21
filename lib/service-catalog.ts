@@ -18,13 +18,13 @@ export interface CommercialService {
 export const commercialServices: CommercialService[] = [
   {
     id: 'approval-blueprint',
-    name: 'Loan Approval Blueprint',
+    name: 'New850 Approval Blueprint',
     audience: 'consumer',
     billingModel: 'one_time',
     regulatoryClass: 'consumer_credit_services',
     priceCents: 14900,
-    description: 'A goal-specific approval-readiness blueprint that shows what is holding the customer back, what to improve first and when to reassess before applying.',
-    deliverables: ['Goal-specific 0–100 readiness assessment','Credit, utilization, DTI, inquiry and reserve analysis','P0/P1/P2 blocker inventory','Prioritized 7/30/60/90-day action plan','Ready-to-Shop planning gate and reassessment targets'],
+    description: 'A goal-specific readiness blueprint that shows what may be holding the customer back, what to improve first and when to reassess before applying.',
+    deliverables: ['Goal-specific 0–100 New850 Readiness assessment','Credit, utilization, DTI, inquiry and reserve analysis','P0/P1/P2 blocker inventory','Prioritized 7/30/60/90-day action plan','Ready-to-Shop planning gate and reassessment targets'],
     paymentPolicy: 'post_performance'
   },
   {
@@ -40,7 +40,7 @@ export const commercialServices: CommercialService[] = [
   },
   {
     id: 'mortgage-ready-90',
-    name: 'Mortgage Ready 90',
+    name: 'New850 Mortgage Ready 90',
     audience: 'consumer',
     billingModel: 'one_time',
     regulatoryClass: 'consumer_credit_services',
@@ -51,18 +51,18 @@ export const commercialServices: CommercialService[] = [
   },
   {
     id: 'auto-loan-ready',
-    name: 'Auto Loan Ready',
+    name: 'New850 Auto Ready',
     audience: 'consumer',
     billingModel: 'one_time',
     regulatoryClass: 'consumer_credit_services',
     priceCents: 14900,
     description: 'Vehicle-financing readiness analysis that helps customers understand affordability, credit blockers, down-payment targets and application timing.',
-    deliverables: ['Auto-loan readiness assessment','Payment and affordability planning','Credit and utilization blockers','Down-payment target','Application timing roadmap'],
+    deliverables: ['Auto financing readiness assessment','Payment and affordability planning','Credit and utilization blockers','Down-payment target','Application timing roadmap'],
     paymentPolicy: 'post_performance'
   },
   {
     id: 'denial-rescue',
-    name: 'Denial Rescue Analysis',
+    name: 'New850 Denial Recovery',
     audience: 'consumer',
     billingModel: 'one_time',
     regulatoryClass: 'consumer_credit_services',
@@ -73,7 +73,7 @@ export const commercialServices: CommercialService[] = [
   },
   {
     id: 'financing-concierge',
-    name: 'Financing Readiness Concierge',
+    name: 'New850 Readiness Concierge',
     audience: 'consumer',
     billingModel: 'custom',
     regulatoryClass: 'consumer_credit_services',
@@ -84,7 +84,7 @@ export const commercialServices: CommercialService[] = [
   },
   {
     id: 'credit-intelligence-audit',
-    name: 'Complete Credit Intelligence Audit',
+    name: 'New850 Financial Readiness Audit',
     audience: 'consumer',
     billingModel: 'one_time',
     regulatoryClass: 'consumer_credit_services',
@@ -95,7 +95,7 @@ export const commercialServices: CommercialService[] = [
   },
   {
     id: 'credit-intelligence-membership',
-    name: 'Credit Intelligence Membership',
+    name: 'New850 Readiness Membership',
     audience: 'consumer',
     billingModel: 'monthly',
     regulatoryClass: 'consumer_credit_services',
@@ -106,7 +106,7 @@ export const commercialServices: CommercialService[] = [
   },
   {
     id: 'premium-credit-recovery',
-    name: 'Premium Credit Recovery Management',
+    name: 'New850 Premium Recovery',
     audience: 'consumer',
     billingModel: 'monthly',
     regulatoryClass: 'consumer_credit_services',
@@ -117,7 +117,7 @@ export const commercialServices: CommercialService[] = [
   },
   {
     id: 'business-credit-accelerator',
-    name: 'Business Credit Accelerator',
+    name: 'New850 Business Funding Readiness',
     audience: 'business',
     billingModel: 'one_time',
     regulatoryClass: 'business_advisory',
@@ -128,7 +128,7 @@ export const commercialServices: CommercialService[] = [
   },
   {
     id: 'business-credit-concierge',
-    name: 'Business Credit Concierge',
+    name: 'New850 Business Concierge',
     audience: 'business',
     billingModel: 'custom',
     regulatoryClass: 'business_advisory',
@@ -139,34 +139,34 @@ export const commercialServices: CommercialService[] = [
   },
   {
     id: 'credit-os-solo',
-    name: 'CREDIT REPAIR MASTERS OS — Solo',
+    name: 'New850 OS — Solo',
     audience: 'b2b',
     billingModel: 'monthly',
     regulatoryClass: 'software',
     priceCents: 19900,
-    description: 'Single-operator access to the Credit-to-Approval Readiness operating platform.',
+    description: 'Single-operator access to the New850 financial-readiness operating platform.',
     deliverables: ['Client readiness workspace','Explainable scoring','Evidence ledger','AI analysis tools','Compliance workflow','Audit trail'],
     paymentPolicy: 'standard'
   },
   {
     id: 'credit-os-professional',
-    name: 'CREDIT REPAIR MASTERS OS — Professional',
+    name: 'New850 OS — Professional',
     audience: 'b2b',
     billingModel: 'monthly',
     regulatoryClass: 'software',
     priceCents: 39900,
-    description: 'Multi-user professional approval-readiness and credit-operations platform.',
+    description: 'Multi-user professional financial-readiness and customer-operations platform.',
     deliverables: ['Everything in Solo','Expanded client capacity','Team roles','Readiness pipeline reporting','Operational reporting','Priority support'],
     paymentPolicy: 'standard'
   },
   {
     id: 'credit-os-agency',
-    name: 'CREDIT REPAIR MASTERS OS — Agency',
+    name: 'New850 OS — Agency',
     audience: 'b2b',
     billingModel: 'monthly',
     regulatoryClass: 'software',
     priceCents: 79900,
-    description: 'Agency-grade Credit-to-Approval Readiness platform with advanced workflow and governance capacity.',
+    description: 'Agency-grade New850 financial-readiness platform with advanced workflow and governance capacity.',
     deliverables: ['Everything in Professional','Agency workflows','Advanced governance','Higher capacity','White-label readiness'],
     paymentPolicy: 'standard'
   }

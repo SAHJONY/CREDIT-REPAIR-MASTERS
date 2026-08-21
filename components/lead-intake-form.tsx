@@ -64,7 +64,7 @@ export function LeadIntakeForm({ serviceId, serviceName, audience, source, mediu
       <div className="formSuccess" style={{ marginTop: 18 }}>
         <strong>{success.message}</strong>
         <div style={{ marginTop: 6 }}>Reference: {success.reference}</div>
-        <div style={{ marginTop: 6 }}>A team member can use the information you authorized for this inquiry to evaluate fit and next steps. No score increase, deletion, financing approval, or other outcome is guaranteed.</div>
+        <div style={{ marginTop: 6 }}>A New850 team member can use the information you authorized for this inquiry to evaluate fit and next steps. No score increase, deletion, financing approval, or other outcome is guaranteed.</div>
       </div>
     );
   }
@@ -74,7 +74,7 @@ export function LeadIntakeForm({ serviceId, serviceName, audience, source, mediu
       <div>
         <div className="label">Qualification request</div>
         <h2>Start with {serviceName}</h2>
-        <p className="small">This is a fit and onboarding request, not a credit bureau dispute, contract acceptance, or payment authorization.</p>
+        <p className="small">This is a fit and onboarding request, not a credit bureau dispute, contract acceptance, lender application, or payment authorization.</p>
       </div>
 
       <div className="formGrid">
@@ -86,14 +86,14 @@ export function LeadIntakeForm({ serviceId, serviceName, audience, source, mediu
 
       <label>
         Primary goal
-        <input name="goal" minLength={5} maxLength={700} placeholder={audience === 'b2b' ? 'Example: run a 3-person credit services team on one governed OS' : audience === 'business' ? 'Example: improve business-credit readiness and reporting strategy' : 'Example: understand inaccurate or unsupported items on my reports'} required />
+        <input name="goal" minLength={5} maxLength={700} placeholder={audience === 'b2b' ? 'Example: run a 3-person financial-readiness team on one governed OS' : audience === 'business' ? 'Example: improve business funding readiness and documentation' : 'Example: prepare to finance a home, car, loan, card or other purchase'} required />
       </label>
 
       <label style={{ display: 'none' }} aria-hidden="true">Website<input name="website" tabIndex={-1} autoComplete="off" /></label>
 
       <label style={{ display: 'flex', gridTemplateColumns: 'auto 1fr', alignItems: 'start', gap: 10 }}>
         <input name="consent" type="checkbox" required style={{ width: 18, marginTop: 2 }} />
-        <span>I authorize CREDIT REPAIR MASTERS to contact me about this request. I understand this does not authorize access to bureau accounts, submission of disputes, new credit, financial transactions, or payment collection.</span>
+        <span>I authorize New850.com to contact me about this request. I understand this does not authorize access to bureau accounts, submission of disputes, a lender application, new credit, financial transactions, or payment collection.</span>
       </label>
 
       <button className="primaryButton" type="submit" disabled={busy}>{busy ? 'Submitting securely…' : 'Request qualification'}</button>

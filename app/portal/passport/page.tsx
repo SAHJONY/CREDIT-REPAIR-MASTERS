@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { FinancialVisual } from '@/components/financial-visual';
 import { PortalNav } from '@/components/portal-nav';
 import { consentIsActive, requireCustomerPortalSession } from '@/lib/customer-portal';
 import { getPlatformStore } from '@/lib/platform-store';
@@ -34,49 +35,33 @@ export default async function FinancialPassportPage() {
 
   return (
     <main className="portalShell">
-      <header className="portalHeader">
+      <header className="portalHeader portalVisualHero">
         <div>
           <div className="portalBrand">NEW850.COM</div>
           <div className="eyebrow portalPageEyebrow">FINANCIAL PASSPORT</div>
           <h1>One profile. Multiple financial goals.</h1>
           <p className="subtitle">Your New850 Financial Passport organizes reusable readiness information so each financing journey can start from what is already known.</p>
+          <PortalNav />
         </div>
-        <PortalNav />
+        <FinancialVisual variant="passport" compact label="Secure Financial Passport" />
       </header>
 
       <section className="grid">
         <section className="portalFeatureCard span12">
-          <div className="portalSectionHeading">
-            <div><div className="eyebrow">PASSPORT COMPLETION</div><h2>{passportCompletion}% foundation complete</h2><p>Completion reflects only information currently available in your secure New850 account. It is not a credit score or lender decision.</p></div>
-            <div className="portalCount">{completedSignals}<span>of {profileSignals.length} signals</span></div>
-          </div>
-          <div className="portalTimelineSteps">
-            {profileSignals.map((signal, index) => <div className={signal.ready ? 'timelineDone' : ''} key={signal.label}><i>{signal.ready ? '✓' : index + 1}</i><strong>{signal.label}</strong><span>{signal.value}</span></div>)}
-          </div>
+          <div className="portalSectionHeading"><div><div className="eyebrow">PASSPORT COMPLETION</div><h2>{passportCompletion}% foundation complete</h2><p>Completion reflects only information currently available in your secure New850 account. It is not a credit score or lender decision.</p></div><div className="portalCount">{completedSignals}<span>of {profileSignals.length} signals</span></div></div>
+          <div className="portalTimelineSteps">{profileSignals.map((signal, index) => <div className={signal.ready ? 'timelineDone' : ''} key={signal.label}><i>{signal.ready ? '✓' : index + 1}</i><strong>{signal.label}</strong><span>{signal.value}</span></div>)}</div>
         </section>
 
         <section className="portalFeatureCard span12">
-          <div className="eyebrow">MULTI-GOAL READINESS</div>
-          <h2>Choose what you want to finance next.</h2>
-          <p>Each goal uses the shared passport plus goal-specific factors. Readiness is assessed separately for each financing objective.</p>
-          <div className="portalSourceGrid">
-            {goals.map((goal) => <Link className="portalSourceCard" href={goal.href} key={goal.label}><strong>New850 {goal.label}</strong><span>{goal.detail}</span><b>Open goal →</b></Link>)}
+          <div className="pageVisualBand">
+            <div><div className="eyebrow">MULTI-GOAL READINESS</div><h2>Choose what you want to finance next.</h2><p>Each goal uses the shared passport plus goal-specific factors. Readiness is assessed separately for each financing objective.</p></div>
+            <FinancialVisual variant="readiness" compact label="Goal-specific readiness" />
           </div>
+          <div className="portalSourceGrid">{goals.map((goal) => <Link className="portalSourceCard" href={goal.href} key={goal.label}><strong>New850 {goal.label}</strong><span>{goal.detail}</span><b>Open goal →</b></Link>)}</div>
         </section>
 
-        <section className="portalFeatureCard span6">
-          <div className="eyebrow">NEXT BEST ACTION</div>
-          <h2>{analysisConsent && reports.length ? 'Start a goal-specific readiness assessment.' : 'Complete the passport foundation first.'}</h2>
-          <p>{analysisConsent && reports.length ? 'Your core credit-analysis foundation is available. Choose a financing goal to measure the additional factors that matter for that journey.' : 'Activate credit-analysis authorization and place a current credit report on file before relying on a readiness assessment.'}</p>
-          <Link className="primaryButton" href={analysisConsent && reports.length ? '/marketplace' : '/portal/reports'}>{analysisConsent && reports.length ? 'Explore financial goals' : 'Complete credit foundation'}</Link>
-        </section>
-
-        <section className="portalFeatureCard span6">
-          <div className="eyebrow">PRIVACY & CONTROL</div>
-          <h2>Your passport is not an application.</h2>
-          <p>New850 uses your stored information for readiness planning only within the permissions you grant. A partner application or data handoff requires its own appropriate consent and disclosures.</p>
-          <Link className="secondaryButton" href="/portal/consents">Review authorizations</Link>
-        </section>
+        <section className="portalFeatureCard span6"><div className="eyebrow">NEXT BEST ACTION</div><h2>{analysisConsent && reports.length ? 'Start a goal-specific readiness assessment.' : 'Complete the passport foundation first.'}</h2><p>{analysisConsent && reports.length ? 'Your core credit-analysis foundation is available. Choose a financing goal to measure the additional factors that matter for that journey.' : 'Activate credit-analysis authorization and place a current credit report on file before relying on a readiness assessment.'}</p><Link className="primaryButton" href={analysisConsent && reports.length ? '/marketplace' : '/portal/reports'}>{analysisConsent && reports.length ? 'Explore financial goals' : 'Complete credit foundation'}</Link></section>
+        <section className="portalFeatureCard span6"><FinancialVisual variant="security" compact label="Privacy and data control" /><div className="eyebrow">PRIVACY & CONTROL</div><h2>Your passport is not an application.</h2><p>New850 uses your stored information for readiness planning only within the permissions you grant. A partner application or data handoff requires its own appropriate consent and disclosures.</p><Link className="secondaryButton" href="/portal/consents">Review authorizations</Link></section>
       </section>
     </main>
   );

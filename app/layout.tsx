@@ -17,10 +17,10 @@ import "./new850-unified-polish.css";
 import "./auth-premium.css";
 import "./cinematic-v10.css";
 import type { Metadata, Viewport } from "next";
-import Link from "next/link";
 import { ReferenceAppFrame } from "@/components/reference-app-frame";
 import { GlobalLanguageSwitcher } from "@/components/global-language-switcher";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { GlobalHomeButton } from "@/components/global-home-button";
 
 // Production release marker: world-class financial design + imagery.
 export const metadata: Metadata = {
@@ -48,9 +48,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       <body>
         <ReferenceAppFrame>{children}</ReferenceAppFrame>
         <ThemeToggle />
-        <Link className="globalHomeButton" href="/" aria-label="Back to New850 home" data-no-translate>
-          <span aria-hidden="true">←</span><strong>Back to Home</strong>
-        </Link>
+        <GlobalHomeButton />
         <GlobalLanguageSwitcher />
       </body>
     </html>

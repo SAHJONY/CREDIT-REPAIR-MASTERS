@@ -11,13 +11,13 @@
     "check:core": "tsc --noEmit --strict --skipLibCheck --target ES2022 --module ESNext --moduleResolution Bundler --lib ES2022,DOM lib/types.ts lib/case-types.ts lib/credit-engine.ts lib/compliance.ts lib/orchestrator.ts lib/brain-memory.ts lib/brain-tools.ts lib/brain-trace.ts lib/agent-council.ts lib/openai-brain.ts lib/platform-types.ts lib/rbac.ts lib/platform-store.ts lib/neon-store.ts lib/agent-registry.ts lib/agent-router.ts lib/security-guard.ts lib/workflow-engine.ts lib/model-budget.ts lib/agent-evals.ts lib/api-auth.ts lib/telemetry.ts lib/evidence-integrity.ts lib/dispute-intelligence.ts lib/readiness.ts lib/production-readiness.ts lib/evidence-vault.ts lib/session-access.ts lib/credit-data-providers.ts lib/mfa.ts lib/service-catalog.ts lib/billing-policy.ts lib/customer-portal.ts lib/payment-providers.ts lib/growth-leads.ts lib/loan-readiness-engine.ts lib/loan-readiness-store.ts"
   },
   "dependencies": {
-    "@neondatabase/auth": "0.4.2-beta",
+    "@neondatabase/auth": "^0.5.0-beta",
     "@neondatabase/serverless": "^1.0.2",
     "@vercel/blob": "2.6.1",
     "next": "^16.0.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "workflow": "4.2.5",
+    "workflow": "^4.8.4",
     "zod": "^3.25.0"
   },
   "devDependencies": {

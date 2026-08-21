@@ -16,7 +16,7 @@ export default async function NationwideCompliancePage() {
 
   return <main>
     <header className="appHeader">
-      <div><div className="kicker">CREDIT REPAIR MASTERS / NATIONWIDE COMPLIANCE</div><h1>Nationwide Automation Control Plane</h1><p className="subtitle">Versioned jurisdiction rules determine when contracts, billing, communications, and external actions may run autonomously.</p></div>
+      <div><div className="kicker">NEW850.COM / NATIONWIDE COMPLIANCE</div><h1>Nationwide Automation Control Plane</h1><p className="subtitle">Versioned jurisdiction rules determine when contracts, billing, communications, and external actions may run autonomously.</p></div>
       <div className="headerActions"><Link className="secondaryButton" href="/dashboard">Dashboard</Link><Link className="secondaryButton" href="/billing">Billing</Link><SignOutButton /></div>
     </header>
 

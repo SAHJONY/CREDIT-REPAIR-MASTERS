@@ -7,9 +7,9 @@ export default function ResetPasswordPage() {
   return (
     <main className="authShell">
       <section className="authCard">
-        <div className="kicker">CREDIT REPAIR MASTERS</div>
+        <div className="kicker">NEW850.COM</div>
         <h1>Set new owner password</h1>
-        <p className="subtitle">Complete the secure Neon Auth recovery flow with the reset link sent to the approved owner email.</p>
+        <p className="subtitle">Complete the secure New850 recovery flow with the reset link sent to the approved owner email.</p>
         <PasswordResetForm />
         <div style={{ marginTop: 16 }}>
           <Link className="secondaryButton" href="/auth/forgot-password">Request a new reset link</Link>

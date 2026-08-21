@@ -48,7 +48,7 @@ export default async function DemoCommandCenterPage() {
     <main>
       <header className="appHeader">
         <div>
-          <div className="kicker">CREDIT REPAIR MASTERS / DEMO OS / v3.2</div>
+          <div className="kicker">NEW850.COM / DEMO OS / v3.2</div>
           <h1>Demo Command Center</h1>
           <p className="subtitle">Three isolated fixtures demonstrate personal credit, billing, and business credit workflows without representing real customers or real revenue.</p>
         </div>

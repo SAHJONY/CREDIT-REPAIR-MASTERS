@@ -9,10 +9,10 @@ export default async function ClientPortalActivatePage({ searchParams }: { searc
   return (
     <main className="authShell">
       <section className="authCard">
-        <div className="kicker">CREDIT REPAIR MASTERS / CLIENT PORTAL</div>
+        <div className="kicker">NEW850.COM / CLIENT PORTAL</div>
         <h1>Activate your secure portal</h1>
-        <p className="subtitle">Use the email address your account manager invited. Your activation link is client-specific and time-limited.</p>
-        {token ? <ClientPortalActivationForm token={token} /> : <div className="formError">This activation link is incomplete. Request a new invitation from CREDIT REPAIR MASTERS.</div>}
+        <p className="subtitle">Use the email address your New850 account manager invited. Your activation link is client-specific and time-limited.</p>
+        {token ? <ClientPortalActivationForm token={token} /> : <div className="formError">This activation link is incomplete. Request a new invitation from New850.</div>}
         <div className="authActions"><Link className="secondaryButton" href="/portal/sign-in">Already activated? Sign in</Link></div>
         <div className="guardrail">Never share bureau passwords. Portal access is limited to your own client profile and records.</div>
       </section>

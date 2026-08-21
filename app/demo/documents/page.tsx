@@ -6,6 +6,13 @@ import { getBusinessSession } from '@/lib/session-access';
 
 export const dynamic = 'force-dynamic';
 
+function brandText(value: string) {
+  return value
+    .replaceAll('CREDIT REPAIR MASTERS', 'NEW850.COM')
+    .replaceAll('Credit Repair Masters', 'New850.com')
+    .replaceAll('credit repair masters', 'New850.com');
+}
+
 export default async function DemoDocumentsPage() {
   const session = await getBusinessSession();
   if (!session) redirect('/auth/sign-in');
@@ -17,7 +24,7 @@ export default async function DemoDocumentsPage() {
     <main>
       <header className="appHeader">
         <div>
-          <div className="kicker">CREDIT REPAIR MASTERS / DOCUMENT REFERENCE LIBRARY</div>
+          <div className="kicker">NEW850.COM / DOCUMENT REFERENCE LIBRARY</div>
           <h1>Document Reference Texts</h1>
           <p className="subtitle">Reference material for consumer credit, Florida disclosures, evidence, billing, compliance, business credit, and historical dispute examples.</p>
         </div>
@@ -40,14 +47,14 @@ export default async function DemoDocumentsPage() {
           const isDisputeCategory = category.toLowerCase().includes('dispute');
           return (
             <div className="card span6" key={category}>
-              <div className="label">{category}</div>
+              <div className="label">{brandText(category)}</div>
               <h2>{isDisputeCategory ? 'Historical / reference examples' : 'Full-text documents'}</h2>
               {isDisputeCategory ? <div className="guardrail" style={{ marginBottom: 12 }}>REFERENCE ONLY — Do not copy these dispute examples into a real client file. Use the client-voice drafting workflow for live cases.</div> : null}
               {documentLibrary.filter((document) => document.category === category).map((document) => (
                 <Link className="listRow" href={`/demo/documents/${document.slug}`} key={document.slug}>
                   <div>
-                    <strong>{document.name}</strong>
-                    <div className="small">{document.use}</div>
+                    <strong>{brandText(document.name)}</strong>
+                    <div className="small">{brandText(document.use)}</div>
                     <div className="small" style={{ marginTop: 4 }}>{isDisputeCategory ? 'Read reference text →' : 'Read full text →'}</div>
                   </div>
                   <span className={`pill ${isDisputeCategory ? 'medium' : document.status === 'post-performance' ? 'low' : 'medium'}`}>{isDisputeCategory ? 'reference only' : document.status}</span>

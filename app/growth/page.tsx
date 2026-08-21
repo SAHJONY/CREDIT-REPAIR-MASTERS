@@ -132,7 +132,7 @@ export default async function GrowthPage() {
     <main>
       <header className="appHeader">
         <div>
-          <div className="kicker">CREDIT REPAIR MASTERS / REVENUE PROOF OS / v4.5</div>
+          <div className="kicker">NEW850.COM / REVENUE PROOF OS / v4.5</div>
           <h1>Prove demand, margin, recurrence and compliance.</h1>
           <p className="subtitle">This control plane uses real tenant clients, PII-minimized lead events, billing invoices, payment settlement state, operating cost snapshots and policy decisions. Missing evidence stays INCOMPLETE; forecasts never count as revenue.</p>
         </div>

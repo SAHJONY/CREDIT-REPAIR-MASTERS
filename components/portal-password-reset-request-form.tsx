@@ -22,7 +22,7 @@ export function PortalPasswordResetRequestForm() {
         setError(result.error.message || 'Unable to start portal password recovery.');
         return;
       }
-      setMessage('If this customer portal has already been activated, a password reset link has been sent. If the portal has never been activated, use the secure activation link from CREDIT REPAIR MASTERS first.');
+      setMessage('If this New850 client portal has already been activated, a password reset link has been sent. If the portal has never been activated, use the secure activation link from New850 first.');
     } catch {
       setError('Unable to start portal password recovery.');
     } finally {

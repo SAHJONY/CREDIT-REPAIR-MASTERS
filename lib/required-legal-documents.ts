@@ -22,7 +22,7 @@ export const requiredLegalDocuments: DemoDocument[] = [
       {
         heading: 'Consumer acknowledgment',
         lines: [
-          'I acknowledge that CREDIT REPAIR MASTERS provided this statement to me as a document separate from the service agreement before I signed any credit-repair agreement.',
+          'I acknowledge that New850.com / {{provider.legalEntity}} provided this statement to me as a document separate from the service agreement before I signed any credit-repair agreement.',
           'Client legal name: {{client.legalName}}',
           'Client signature: {{signature.client}}',
           'Date: {{signature.date}}',
@@ -42,7 +42,7 @@ export const requiredLegalDocuments: DemoDocument[] = [
         heading: 'NOTICE OF CANCELLATION',
         lines: [
           'You may cancel this contract, without any penalty or obligation, at any time before midnight of the 3rd day which begins after the date the contract is signed by you.',
-          'To cancel this contract, mail or deliver a signed, dated copy of this cancellation notice, or any other written notice to CREDIT REPAIR MASTERS / {{provider.legalEntity}} at {{provider.principalAddress}} before midnight on {{contract.federalCancellationDeadline}}.',
+          'To cancel this contract, mail or deliver a signed, dated copy of this cancellation notice, or any other written notice to New850.com / {{provider.legalEntity}} at {{provider.principalAddress}} before midnight on {{contract.federalCancellationDeadline}}.',
           'I hereby cancel this transaction.',
           'Date: ____________________',
           'Purchaser signature: ____________________'
@@ -68,19 +68,19 @@ export const requiredLegalDocuments: DemoDocument[] = [
         lines: [
           'You have the right under federal law to review consumer-reporting information maintained about you by a consumer reporting agency. You may obtain disclosures directly from the consumer reporting agencies and through official free-disclosure channels for which you qualify.',
           'If you request your file from a consumer reporting agency within 30 days after receiving notice that credit has been denied, Florida law requires this statement to inform you that you may review that file at no charge.',
-          'Approximate price to review your file through the official free consumer-disclosure channels used in this workflow: $0. If you choose a different paid product or monitoring service, the consumer reporting agency controls and discloses that price; purchasing such a product is not required to use CREDIT REPAIR MASTERS.'
+          'Approximate price to review your file through the official free consumer-disclosure channels used in this workflow: $0. If you choose a different paid product or monitoring service, the consumer reporting agency controls and discloses that price; purchasing such a product is not required to use New850.com.'
         ]
       },
       {
         heading: 'Your right to dispute directly',
         lines: [
-          'You have the right to dispute directly with a consumer reporting agency the completeness or accuracy of any item contained in a file about you maintained by that agency. You do not have to hire CREDIT REPAIR MASTERS to exercise that right.'
+          'You have the right to dispute directly with a consumer reporting agency the completeness or accuracy of any item contained in a file about you maintained by that agency. You do not have to hire New850.com / {{provider.legalEntity}} to exercise that right.'
         ]
       },
       {
         heading: 'Accurate information cannot be permanently removed merely because it is negative',
         lines: [
-          'Accurate information cannot be permanently removed from a consumer reporting agency file merely because it is adverse. CREDIT REPAIR MASTERS does not promise removal of accurate, current, and verifiable information.'
+          'Accurate information cannot be permanently removed from a consumer reporting agency file merely because it is adverse. New850.com / {{provider.legalEntity}} does not promise removal of accurate, current, and verifiable information.'
         ]
       },
       {
@@ -127,7 +127,7 @@ export const requiredLegalDocuments: DemoDocument[] = [
           'You may cancel this contract, without any penalty or obligation, within 5 days from the date the contract is signed.',
           'If you cancel any payment made by you under this contract, it will be returned within 10 days following receipt by the credit service organization of your cancellation notice.',
           'To cancel this contract, mail or deliver a signed dated copy of this cancellation notice, or any other written notice to:',
-          'CREDIT REPAIR MASTERS / {{provider.legalEntity}}',
+          'New850.com / {{provider.legalEntity}}',
           '{{provider.principalAddress}}',
           '{{provider.placeOfBusiness}}',
           'not later than midnight {{contract.floridaCancellationDeadline}}.',

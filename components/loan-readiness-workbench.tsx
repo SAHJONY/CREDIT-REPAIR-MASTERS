@@ -64,7 +64,7 @@ export function LoanReadinessWorkbench() {
       <section className="card span12">
         <div className="row">
           <div>
-            <div className="label">CREDIT REPAIR MASTERS · APPROVAL READINESS</div>
+            <div className="label">NEW850.COM · APPROVAL READINESS</div>
             <h1 style={{ marginBottom: 6 }}>{assessment.target.label} Readiness</h1>
             <div className="small">{selectedClient ? `${selectedClient.displayName} · ${selectedClient.state} · ${selectedClient.kind}` : 'Select a client'} · Assessment planning workspace</div>
           </div>

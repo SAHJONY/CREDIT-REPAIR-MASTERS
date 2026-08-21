@@ -7,9 +7,9 @@ export default function PortalResetPasswordPage() {
   return (
     <main className="authShell">
       <section className="authCard">
-        <div className="kicker">CREDIT REPAIR MASTERS / CLIENT PORTAL</div>
+        <div className="kicker">NEW850.COM / CLIENT PORTAL</div>
         <h1>Set new portal password</h1>
-        <p className="subtitle">Complete the secure customer portal recovery flow.</p>
+        <p className="subtitle">Complete the secure New850 client portal recovery flow.</p>
         <PortalPasswordResetForm />
         <div style={{ marginTop: 16 }}>
           <Link className="secondaryButton" href="/portal/forgot-password">Request a new customer reset link</Link>

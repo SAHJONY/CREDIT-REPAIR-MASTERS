@@ -17,7 +17,7 @@ export default async function GrowthLeadsPage() {
     <main>
       <header className="appHeader">
         <div>
-          <div className="kicker">CREDIT REPAIR MASTERS / GROWTH / LEAD INBOX</div>
+          <div className="kicker">NEW850.COM / GROWTH / LEAD INBOX</div>
           <h1>Delivered qualification requests.</h1>
           <p className="subtitle">Tenant-scoped durable lead delivery. Synthetic verification records are excluded from real demand counts.</p>
         </div>

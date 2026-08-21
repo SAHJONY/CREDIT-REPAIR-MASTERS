@@ -122,8 +122,8 @@ export async function beginMfaEnrollment(input: { organizationId: string; userId
   await sql()`insert into mfa_enrollments (id, organization_id, user_id, secret_ciphertext, backup_codes_hash, enabled, failed_attempts, locked_until, created_at, updated_at)
     values (${id}, ${input.organizationId}, ${input.userId}, ${encrypted}, ${hashes}, false, 0, null, now(), now())
     on conflict (organization_id, user_id) do update set secret_ciphertext = excluded.secret_ciphertext, backup_codes_hash = excluded.backup_codes_hash, enabled = false, verified_at = null, failed_attempts = 0, locked_until = null, updated_at = now()`;
-  const issuer = encodeURIComponent('CREDIT REPAIR MASTERS');
-  const label = encodeURIComponent(`CREDIT REPAIR MASTERS:${input.email}`);
+  const issuer = encodeURIComponent('New850.com');
+  const label = encodeURIComponent(`New850.com:${input.email}`);
   return { secret, recoveryCodes: codes, otpauthUri: `otpauth://totp/${label}?secret=${secret}&issuer=${issuer}&algorithm=SHA1&digits=6&period=30` };
 }
 

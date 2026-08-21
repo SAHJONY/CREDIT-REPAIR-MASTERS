@@ -1,10 +1,11 @@
-# CREDIT REPAIR MASTERS OS
+# New850.com
 
-AI-agentic operating system for lawful consumer and business credit improvement workflows.
+Financial readiness and approval-preparation operating platform for consumers, businesses and governed financial-readiness workflows.
 
 ## Current architecture — v1.2
 
-- Credit Digital Twin and deterministic credit analytics.
+- New850 Readiness Score and deterministic credit/readiness analytics.
+- Financial Passport for reusable goal-specific readiness context.
 - ChatGPT/OpenAI AI Credit CEO using the Responses API.
 - 12-agent registry with explicit authority classes, risk ceilings, bounded tools and evidence requirements.
 - Risk-aware routing, model/tool budgets, prompt-injection defense and PII minimization.
@@ -19,9 +20,20 @@ AI-agentic operating system for lawful consumer and business credit improvement 
 - Deterministic safety eval suite and independent policy gateway.
 - External dispute, payment, new-credit and identity-theft execution remains disabled until verified production gates are satisfied.
 
+## Brand architecture
+
+- Canonical consumer and company brand: **New850.com**
+- Product shorthand: **New850**
+- Consumer planning metric: **New850 Readiness Score**
+- Reusable customer profile: **Financial Passport**
+- Private operator surface: **New850 Owner OS**
+- Marketplace principle: **Prepare First · Compare Second**
+
+The historical repository name is a legacy infrastructure identifier only and must not be exposed as the customer-facing brand.
+
 ## Production release candidate
 
-The current `main` line includes the Neon typing correction using `NeonQueryFunction<false, false>` and upgrades Workflow to the supported `4.2.5` release line. Builds must be executed from the latest `main`; the historical v1.1 preview commit `c93396c` is obsolete and should not be redeployed.
+The current `main` line includes the Neon typing correction using `NeonQueryFunction<false, false>` and upgrades Workflow to the supported `4.2.5` release line. Builds must be executed from the latest `main`; obsolete historical previews should not be redeployed.
 
 ## Run
 
@@ -37,7 +49,7 @@ Set `OPENAI_API_KEY`, `CREDIT_OS_API_TOKEN`, and `DATABASE_URL` only on the serv
 
 ## Key API surfaces
 
-- `GET /api/brain` — deterministic Credit OS snapshot.
+- `GET /api/brain` — deterministic readiness operations snapshot.
 - `POST /api/chatgpt-brain` — ChatGPT AI Credit CEO with bounded tool orchestration.
 - `GET /api/agents` — specialized agent registry and authority summary.
 - `POST /api/agent-router` — risk-aware routing + deterministic workflow plan.

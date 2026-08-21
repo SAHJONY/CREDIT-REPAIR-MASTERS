@@ -10,6 +10,13 @@ export function generateStaticParams() {
   return documentLibrary.map((document) => ({ slug: document.slug }));
 }
 
+function brandText(value: string) {
+  return value
+    .replaceAll('CREDIT REPAIR MASTERS', 'NEW850.COM')
+    .replaceAll('Credit Repair Masters', 'New850.com')
+    .replaceAll('credit repair masters', 'New850.com');
+}
+
 export default async function DocumentReader({ params }: { params: Promise<{ slug: string }> }) {
   const session = await getBusinessSession();
   if (!session) redirect('/auth/sign-in');
@@ -24,9 +31,9 @@ export default async function DocumentReader({ params }: { params: Promise<{ slu
     <main>
       <header className="appHeader">
         <div>
-          <div className="kicker">CREDIT REPAIR MASTERS / DOCUMENT REFERENCE / {document.category}</div>
-          <h1>{document.name}</h1>
-          <p className="subtitle">{document.use}</p>
+          <div className="kicker">NEW850.COM / DOCUMENT REFERENCE / {document.category}</div>
+          <h1>{brandText(document.name)}</h1>
+          <p className="subtitle">{brandText(document.use)}</p>
         </div>
         <div className="headerActions">
           {isLegacyDispute ? <Link className="primaryButton" href="/documents">Create client-voice draft</Link> : null}
@@ -50,13 +57,13 @@ export default async function DocumentReader({ params }: { params: Promise<{ slu
         </div>
 
         <div className="card span12" style={{ maxWidth: 920, margin: '0 auto', width: '100%' }}>
-          <div className="label">CREDIT REPAIR MASTERS</div>
-          <h2 style={{ marginBottom: 22 }}>{document.name.replace(' — PRODUCTION DRAFT', '')}</h2>
+          <div className="label">NEW850.COM</div>
+          <h2 style={{ marginBottom: 22 }}>{brandText(document.name.replace(' — PRODUCTION DRAFT', ''))}</h2>
           {document.sections.map((section) => (
             <section key={section.heading} style={{ marginBottom: 26 }}>
-              <h3>{section.heading}</h3>
+              <h3>{brandText(section.heading)}</h3>
               <div style={{ marginTop: 10 }}>
-                {section.lines.map((line, index) => line === '' ? <div key={`${section.heading}-${index}`} style={{ height: 12 }} /> : <p key={`${section.heading}-${index}`} style={{ margin: '6px 0', lineHeight: 1.65, whiteSpace: 'pre-wrap' }}>{line}</p>)}
+                {section.lines.map((line, index) => line === '' ? <div key={`${section.heading}-${index}`} style={{ height: 12 }} /> : <p key={`${section.heading}-${index}`} style={{ margin: '6px 0', lineHeight: 1.65, whiteSpace: 'pre-wrap' }}>{brandText(line)}</p>)}
               </div>
             </section>
           ))}

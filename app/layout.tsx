@@ -12,6 +12,7 @@ import "./v7-consistency.css";
 import "./v9-cta-visibility.css";
 import "./new850-8k.css";
 import "./world-class-finance.css";
+import "./responsive-hardening.css";
 import type { Metadata } from "next";
 import { ReferenceAppFrame } from "@/components/reference-app-frame";
 import { GlobalLanguageSwitcher } from "@/components/global-language-switcher";

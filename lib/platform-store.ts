@@ -20,7 +20,7 @@ export interface PlatformStore {
 }
 
 const now = new Date().toISOString();
-const demoOrg: Organization = { id: "org_demo", name: "CREDIT REPAIR MASTERS", mode: "demo", createdAt: now };
+const demoOrg: Organization = { id: "org_demo", name: "NEW850.COM", mode: "demo", createdAt: now };
 const demoUsers: AppUser[] = [
   { id: "usr_owner", organizationId: demoOrg.id, email: "owner@example.invalid", role: "owner", status: "active", createdAt: now },
   { id: "usr_compliance", organizationId: demoOrg.id, email: "compliance@example.invalid", role: "compliance_reviewer", status: "active", createdAt: now }

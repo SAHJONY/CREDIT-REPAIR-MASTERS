@@ -12,9 +12,9 @@ export default async function ActivateOwnerPage() {
   return (
     <main className="authShell">
       <section className="authCard">
-        <div className="kicker">CREDIT REPAIR MASTERS</div>
+        <div className="kicker">NEW850.COM</div>
         <h1>Activate owner access</h1>
-        <p className="subtitle">First-time credential setup is restricted to active owner emails already approved in the production organization.</p>
+        <p className="subtitle">First-time credential setup is restricted to active New850 owner emails already approved in the production organization.</p>
         <OwnerActivationForm />
         <div style={{ marginTop: 16 }}><Link className="secondaryButton" href="/auth/sign-in">Back to sign in</Link></div>
       </section>

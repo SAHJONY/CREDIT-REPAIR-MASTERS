@@ -1,6 +1,6 @@
 import type { Route } from 'next';
 import Link from 'next/link';
-import { FinancialVisual } from '@/components/financial-visual';
+import { CinematicPhoto } from '@/components/cinematic-photo';
 
 type SearchParams = Promise<{ utm_source?: string; utm_medium?: string; utm_campaign?: string; ref?: string }>;
 
@@ -68,7 +68,7 @@ export default async function Home({ searchParams }: { searchParams: SearchParam
 
         <section className="pageVisualBand">
           <div><span className="referencePill">ONE PROFILE · MULTIPLE GOALS</span><h2>Your financial life should connect.</h2><p>New850 organizes readiness for loans, vehicles, mortgages and business funding around one reusable financial profile, while keeping each goal-specific assessment separate and explainable.</p><div className="referenceHeroButtons"><Link className="referencePrimary" href="/portal/passport">Explore Financial Passport →</Link><Link className="referenceSecondary" href="/marketplace">View marketplace</Link></div></div>
-          <FinancialVisual variant="passport" label="Financial Passport" />
+          <CinematicPhoto variant="horizon" label="A clear path toward financial readiness" />
         </section>
 
         <section className="referenceMetricGrid">
@@ -76,7 +76,7 @@ export default async function Home({ searchParams }: { searchParams: SearchParam
         </section>
 
         <section className="pageVisualBand">
-          <FinancialVisual variant="marketplace" label="Goal-first financial marketplace" />
+          <CinematicPhoto variant="mobility" label="Confident mobility and financial progress" />
           <div><span className="referencePill">PREPARE FIRST · COMPARE SECOND</span><h2>A marketplace that starts with readiness.</h2><p>Compare participating financing categories only when your profile is better prepared. New850 keeps marketplace eligibility separate from lender underwriting and partner economics.</p><Link className="referencePrimary" href="/marketplace">Explore the marketplace →</Link></div>
         </section>
 

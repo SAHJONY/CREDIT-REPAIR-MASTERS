@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { FinancialVisual } from '@/components/financial-visual';
+import { CinematicPhoto } from '@/components/cinematic-photo';
 import './auto.css';
 
 const readiness = [
@@ -42,7 +42,7 @@ export default function AutoPage() {
           </div>
           <div className="autoTrust"><span>Budget-first</span><span>0–100 readiness</span><span>Payment-aware</span><span>No approval promises</span></div>
         </div>
-        <div className="autoHeroVisual"><FinancialVisual variant="auto" label="New850 Auto readiness" /></div>
+        <div className="autoHeroVisual"><CinematicPhoto variant="mobility" label="A premium vehicle on the road ahead" priority compact /></div>
       </section>
 
       <section className="autoPlanBand">
@@ -71,7 +71,7 @@ export default function AutoPage() {
 
       <section className="autoSection" id="auto-paths">
         <div className="autoSplit">
-          <FinancialVisual variant="auto" label="Auto financing marketplace" />
+          <CinematicPhoto variant="mobility" label="Prepare before entering the auto marketplace" />
           <div><div className="cinematicEyebrow">AUTO MARKETPLACE</div><h2>Organize the entire purchase around customer fit.</h2><p>Financing, vehicle selection, trade-in and dealer participation should reinforce the readiness plan—not replace it.</p></div>
         </div>
         <div className="autoPathGrid">{paths.map(([title,text,href]) => <Link href={href} key={title}><span>PARTNER-LED</span><h3>{title}</h3><p>{text}</p><strong>Explore →</strong></Link>)}</div>

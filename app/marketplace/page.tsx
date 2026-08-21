@@ -49,7 +49,6 @@ export default function MarketplacePage() {
             <span>Goal-first</span><span>0–100 readiness</span><span>Consent-controlled</span><span>Partner-led decisions</span>
           </div>
         </div>
-        <div className="mpHeroVisual"><CinematicPhoto variant="mobility" label="A premium marketplace built around your next goal" priority compact /></div>
       </section>
 
       <section className="mpPassportBand">
@@ -105,7 +104,7 @@ export default function MarketplacePage() {
 
       <section className="mpSection">
         <div className="mpSplit">
-          <CinematicPhoto variant="horizon" label="One profile connecting your financial goals" />
+          <CinematicPhoto variant="black-couple" label="One profile connecting your financial goals" />
           <div>
             <div className="cinematicEyebrow">WHY NEW850 BEFORE APPLYING</div>
             <h2>Fewer blind applications. Better-prepared decisions.</h2>

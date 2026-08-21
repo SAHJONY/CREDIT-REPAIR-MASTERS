@@ -43,7 +43,6 @@ export default function BusinessFundingPage() {
           </div>
           <div className="bzTrustStrip"><span>Goal-first</span><span>0–100 readiness</span><span>Cash-flow aware</span><span>Provider-led decisions</span></div>
         </div>
-        <div className="bzHeroVisual"><FinancialVisual variant="business" label="New850 business funding readiness" /></div>
       </section>
 
       <section className="bzPlanBand">

@@ -24,7 +24,7 @@ export interface CreditDataProvider {
 }
 
 /**
- * Lawful no-cost consumer disclosure sources that can feed CREDIT REPAIR MASTERS
+ * Lawful no-cost consumer disclosure sources that can feed New850
  * through consumer-controlled import. Entries must never be treated as an
  * unattended bureau API unless a separate contracted commercial integration is configured.
  *

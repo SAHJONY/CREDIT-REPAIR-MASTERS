@@ -16,9 +16,9 @@ export default async function MfaPage() {
     <main>
       <header className="appHeader">
         <div>
-          <div className="kicker">CREDIT REPAIR MASTERS / PRIVILEGED ACCESS</div>
+          <div className="kicker">NEW850.COM / PRIVILEGED ACCESS</div>
           <h1>Multi-factor authentication</h1>
-          <p className="subtitle">Owner and admin access requires a second factor before privileged operations are available.</p>
+          <p className="subtitle">New850 owner and admin access requires a second factor before privileged operations are available.</p>
         </div>
         <div className="headerActions"><Link className="secondaryButton" href="/auth/sign-in">Sign in</Link><SignOutButton /></div>
       </header>

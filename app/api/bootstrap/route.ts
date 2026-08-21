@@ -16,7 +16,7 @@ export async function POST(request: NextRequest) {
 
     const organization = await store.upsertOrganization({
       id: auth.organizationId,
-      name: "CREDIT REPAIR MASTERS",
+      name: "NEW850.COM",
       mode: auth.mode === "demo" ? "demo" : "production",
       createdAt: new Date().toISOString()
     });

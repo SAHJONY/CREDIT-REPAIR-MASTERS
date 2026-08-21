@@ -50,7 +50,7 @@ export default async function Home({ searchParams }: { searchParams: SearchParam
           <div className="referenceHeroImage" aria-hidden="true" />
           <div className="referenceHeroCopy">
             <span className="referencePill">FINANCIAL READINESS & APPROVAL PREPARATION PLATFORM</span>
-            <h1>Know What Is Holding You Back. <span>Apply Better Prepared.</span></h1>
+            <h1>Know what&apos;s holding you back. <span>Apply better prepared.</span></h1>
             <p>Measure the credit, debt, payment, inquiry and reserve factors affecting your next financing goal. Then follow a quantified plan designed to improve the factors you can control before you shop for credit.</p>
             <div className="referenceHeroButtons"><Link className="referencePrimary" href={funnelHref(params, 'approval-blueprint')}>Get Your Approval Blueprint <span>→</span></Link>{' '}<Link className="referenceSecondary" href="/marketplace">Explore Marketplace</Link></div>
           </div>

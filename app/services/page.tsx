@@ -23,7 +23,7 @@ export default function ServicesPage() {
   ];
 
   return (
-    <main className="commercialCinema">
+    <main className="commercialCinema commercialCinema--services">
       <section className="commercialHero">
         <div className="commercialHeroImage" aria-hidden="true" />
         <div className="commercialHeroShade" />

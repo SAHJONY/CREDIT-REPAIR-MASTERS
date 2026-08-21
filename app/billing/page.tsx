@@ -40,7 +40,7 @@ export default async function BillingPage() {
 
   return <main>
     <header className="appHeader">
-      <div><div className="kicker">CREDIT REPAIR MASTERS / REVENUE</div><h1>Billing Command Center</h1><p className="subtitle">Post-performance invoicing, payment collection, and settlement reconciliation. Demo fixtures are excluded from real financial KPIs.</p></div>
+      <div><div className="kicker">NEW850.COM / REVENUE</div><h1>Billing Command Center</h1><p className="subtitle">Post-performance invoicing, payment collection, and settlement reconciliation. Demo fixtures are excluded from real financial KPIs.</p></div>
       <div className="headerActions"><Link className="secondaryButton" href="/launch">Launch Center</Link><Link className="secondaryButton" href="/demo">Demo OS</Link><Link className="secondaryButton" href="/clients">Clients</Link><Link className="secondaryButton" href="/dashboard">Dashboard</Link><SignOutButton /></div>
     </header>
     <section className="grid">

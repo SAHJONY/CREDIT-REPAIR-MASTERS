@@ -39,7 +39,7 @@ function providerErrorCode(value: unknown): string | null {
 function activationFailure(providerCode: string | null) {
   console.warn(JSON.stringify({
     level: 'warn',
-    service: 'credit-repair-masters',
+    service: 'new850',
     event: 'owner_activation.provider_rejected',
     providerCode: providerCode || 'UNKNOWN'
   }));
@@ -67,7 +67,7 @@ export async function POST(request: NextRequest) {
     const result = await getNeonAuth().signUp.email({
       email: parsed.data.email,
       password: parsed.data.password,
-      name: 'CREDIT REPAIR MASTERS Owner'
+      name: 'New850 Owner'
     });
     if (result && typeof result === 'object' && 'error' in result && result.error) {
       return activationFailure(providerErrorCode(result));

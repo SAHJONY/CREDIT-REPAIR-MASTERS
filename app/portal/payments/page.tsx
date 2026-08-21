@@ -27,13 +27,13 @@ export default async function PortalPaymentsPage() {
   return (
     <main className="portalShell">
       <header className="portalHeader">
-        <div><div className="portalBrand">CREDIT REPAIR MASTERS</div><div className="eyebrow portalPageEyebrow">SECURE BILLING</div><h1>Payments</h1><p className="subtitle">Review approved invoices, pay securely, and access your payment history.</p></div>
+        <div><div className="portalBrand">NEW850.COM</div><div className="eyebrow portalPageEyebrow">SECURE BILLING</div><h1>Payments</h1><p className="subtitle">Review approved invoices, pay securely, and access your payment history.</p></div>
         <PortalNav />
       </header>
 
       <section className="portalPaymentHero">
         <div><div className="eyebrow">AMOUNT DUE</div><div className="portalBalance">{money(balance)}</div><p>{due.length ? `${due.length} approved invoice${due.length === 1 ? '' : 's'} ready for payment.` : 'You have no payment due right now.'}</p></div>
-        <div className="portalPaymentStatus"><span>Secure checkout</span><strong>{secureCheckoutReady ? 'Available' : 'Not yet configured'}</strong><small>Your card information is entered directly with the payment processor and is not stored by CREDIT REPAIR MASTERS.</small></div>
+        <div className="portalPaymentStatus"><span>Secure checkout</span><strong>{secureCheckoutReady ? 'Available' : 'Not yet configured'}</strong><small>Your card information is entered directly with the payment processor and is not stored by New850.</small></div>
       </section>
 
       <section className="grid">
@@ -43,7 +43,7 @@ export default async function PortalPaymentsPage() {
         </section>
 
         <section className="portalFeatureCard span8"><div className="eyebrow">PAYMENT HISTORY</div><h2>Receipts</h2>{paid.length ? paid.map((invoice) => { const service = getCommercialService(invoice.serviceId); return <div className="portalRecord" key={invoice.id}><div><strong>{service?.name || invoice.serviceId}</strong><span>{invoice.milestoneLabel} · {invoice.paidAt ? new Date(invoice.paidAt).toLocaleDateString() : 'Payment verified'}</span></div><b>{money(invoice.amountCents)} · Paid</b></div>; }) : <div className="portalNotice">No completed payments yet.</div>}</section>
-        <section className="portalFeatureCard span4"><div className="eyebrow">PAYMENT SECURITY</div><h2>Protected checkout</h2><p>Payments are completed on secure processor-hosted checkout. CREDIT REPAIR MASTERS does not store your full card number.</p><div className="portalTrustList"><span>✓ Approved invoices only</span><span>✓ Secure hosted checkout</span><span>✓ Verified payment receipts</span></div></section>
+        <section className="portalFeatureCard span4"><div className="eyebrow">PAYMENT SECURITY</div><h2>Protected checkout</h2><p>Payments are completed on secure processor-hosted checkout. New850 does not store your full card number.</p><div className="portalTrustList"><span>✓ Approved invoices only</span><span>✓ Secure hosted checkout</span><span>✓ Verified payment receipts</span></div></section>
       </section>
     </main>
   );

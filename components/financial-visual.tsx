@@ -1,45 +1,15 @@
 import type { New850VerticalId } from '@/lib/new850-platform';
+import { CinematicPhoto, type CinematicPhotoVariant } from '@/components/cinematic-photo';
 
 type FinancialVisualVariant = New850VerticalId | 'passport' | 'owner' | 'growth' | 'documents' | 'security' | 'readiness';
 
 export function FinancialVisual({ variant, compact = false, label }: { variant: FinancialVisualVariant; compact?: boolean; label?: string }) {
-  return (
-    <figure className={`financialVisual ${compact ? 'compact' : ''} visual-${variant}`} aria-label={label || `${variant} financial illustration`}>
-      <svg viewBox="0 0 1200 720" role="img" aria-hidden="true" preserveAspectRatio="xMidYMid slice">
-        <defs>
-          <linearGradient id={`bg-${variant}`} x1="0" x2="1" y1="0" y2="1">
-            <stop offset="0" stopColor="#0d1520" />
-            <stop offset="0.55" stopColor="#07101a" />
-            <stop offset="1" stopColor="#03070c" />
-          </linearGradient>
-          <linearGradient id={`blue-${variant}`} x1="0" x2="1">
-            <stop offset="0" stopColor="#2f7df7" />
-            <stop offset="1" stopColor="#8ed0ff" />
-          </linearGradient>
-          <radialGradient id={`glow-${variant}`} cx="50%" cy="50%" r="55%">
-            <stop offset="0" stopColor="#5aa7ff" stopOpacity=".34" />
-            <stop offset="1" stopColor="#5aa7ff" stopOpacity="0" />
-          </radialGradient>
-          <filter id={`blur-${variant}`}><feGaussianBlur stdDeviation="26" /></filter>
-        </defs>
-        <rect width="1200" height="720" rx="44" fill={`url(#bg-${variant})`} />
-        <circle cx="910" cy="190" r="260" fill={`url(#glow-${variant})`} filter={`url(#blur-${variant})`} />
-        <path d="M70 606 C250 510 340 548 500 430 S840 250 1130 306" fill="none" stroke="#142336" strokeWidth="2" />
-        <path d="M70 610 C250 520 355 560 515 442 S850 266 1130 320" fill="none" stroke={`url(#blue-${variant})`} strokeWidth="7" strokeLinecap="round" opacity=".9" />
-        <g opacity=".2" stroke="#b8dcff"><path d="M90 150H1110"/><path d="M90 270H1110"/><path d="M90 390H1110"/><path d="M90 510H1110"/></g>
-        {variant === 'auto' ? <AutoArt /> : null}
-        {variant === 'mortgage' ? <MortgageArt /> : null}
-        {variant === 'business' || variant === 'growth' ? <BusinessArt /> : null}
-        {variant === 'loans' ? <LoansArt /> : null}
-        {variant === 'marketplace' ? <MarketplaceArt /> : null}
-        {variant === 'passport' || variant === 'security' ? <PassportArt /> : null}
-        {variant === 'owner' ? <OwnerArt /> : null}
-        {variant === 'documents' ? <DocumentsArt /> : null}
-        {variant === 'readiness' ? <ReadinessArt /> : null}
-      </svg>
-      <figcaption><span>NEW850</span><strong>{label || visualLabel(variant)}</strong></figcaption>
-    </figure>
-  );
+  const photoByVariant: Record<FinancialVisualVariant, CinematicPhotoVariant> = {
+    loans: 'horizon', auto: 'mobility', mortgage: 'home', business: 'horizon',
+    marketplace: 'mobility', passport: 'horizon', owner: 'horizon', growth: 'mobility',
+    documents: 'home', security: 'horizon', readiness: 'horizon'
+  };
+  return <CinematicPhoto variant={photoByVariant[variant]} compact={compact} label={label || visualLabel(variant)} />;
 }
 
 function visualLabel(variant: FinancialVisualVariant) {

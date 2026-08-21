@@ -43,7 +43,6 @@ export default function MortgagePage() {
           </div>
           <div className="hmTrustStrip"><span>Goal-first</span><span>Affordability-aware</span><span>Document-ready</span><span>Licensed partner decisions</span></div>
         </div>
-        <div className="hmHeroVisual"><CinematicPhoto variant="home" label="A modern home representing the goal ahead" priority compact /></div>
       </section>
 
       <section className="hmPlanBand">
@@ -67,7 +66,7 @@ export default function MortgagePage() {
 
       <section className="hmSection">
         <div className="hmSplit">
-          <CinematicPhoto variant="home" label="Prepare your profile for the home you want" />
+          <CinematicPhoto variant="multiracial" label="Prepare your profile for the home you want" />
           <div><div className="cinematicEyebrow">READY FILE, CLEARER NEXT STEP</div><h2>Organize the numbers and the documents together.</h2><p>A mortgage-ready profile should connect affordability, reserves and credit with the evidence a future provider may ask to review.</p><div className="hmPrinciples"><article><h3>Affordability before price</h3><p>Start with sustainable payment capacity instead of a headline home price.</p></article><article><h3>Reserves after closing</h3><p>Plan for liquidity beyond the down payment and expected closing costs.</p></article><article><h3>Documentation completeness</h3><p>Identify missing income and financial records before provider handoff.</p></article><article><h3>Controlled sharing</h3><p>Customer information moves only with explicit, purpose-specific consent.</p></article></div></div>
         </div>
       </section>

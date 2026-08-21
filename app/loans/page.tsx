@@ -43,7 +43,6 @@ export default function LoansPage() {
           </div>
           <div className="lnTrustStrip"><span>Goal-first</span><span>0–100 readiness</span><span>Affordability-aware</span><span>Partner-led decisions</span></div>
         </div>
-        <div className="lnHeroVisual"><FinancialVisual variant="loans" label="New850 loans readiness" /></div>
       </section>
 
       <section className="lnPlanBand">

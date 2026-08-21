@@ -1,0 +1,7 @@
+.vercel
+.env*
+.next/
+.swc/
+node_modules/
+package-lock.json
+*.tsbuildinfo

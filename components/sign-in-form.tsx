@@ -29,10 +29,10 @@ export function SignInForm() {
 
   return (
     <form className="appForm" onSubmit={submit}>
-      <label>Email<input type="email" value={email} onChange={(e) => setEmail(e.target.value)} autoComplete="email" required /></label>
-      <label>Password<input type="password" value={password} onChange={(e) => setPassword(e.target.value)} autoComplete="current-password" required /></label>
-      {error ? <div className="formError">{error}</div> : null}
-      <button className="primaryButton" disabled={busy} type="submit">{busy ? 'Signing in…' : 'Sign in'}</button>
+      <label>Work email<input type="email" value={email} onChange={(e) => setEmail(e.target.value)} autoComplete="email" placeholder="you@company.com" required /></label>
+      <label>Password<input type="password" value={password} onChange={(e) => setPassword(e.target.value)} autoComplete="current-password" placeholder="Enter your password" required /></label>
+      {error ? <div className="formError" role="alert">{error}</div> : null}
+      <button className="primaryButton authSubmit" disabled={busy} type="submit"><span>{busy ? 'Signing in…' : 'Sign in securely'}</span><span aria-hidden="true">→</span></button>
     </form>
   );
 }

@@ -59,7 +59,7 @@ async function sendResendEmail(lead: GrowthLeadNotification) {
       reply_to: lead.email,
       subject: `New ${lead.audience.toUpperCase()} lead — ${lead.serviceName} — ${lead.state}`,
       html: `
-        <h2>New CREDIT REPAIR MASTERS lead</h2>
+        <h2>New New850.com lead</h2>
         <p><strong>Reference:</strong> ${escapeHtml(lead.reference)}</p>
         <p><strong>Name:</strong> ${escapeHtml(lead.name)}</p>
         <p><strong>Email:</strong> ${escapeHtml(lead.email)}</p>

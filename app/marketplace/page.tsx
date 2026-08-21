@@ -18,6 +18,12 @@ const principles = [
   ['Independent governance', 'Partner compensation must never silently override fit, eligibility, licensing or required disclosures.']
 ] as const;
 
+const readinessStates = [
+  ['BUILDING', 'Strengthen the profile', 'Important blockers remain. Focus on the factors you can improve before adding more applications.'],
+  ['NEAR READY', 'Close the final gaps', 'The profile is moving in the right direction, but a few material issues may still affect shopping readiness.'],
+  ['READY TO SHOP', 'Compare deliberately', 'The planning threshold is met for comparison. Providers still make their own underwriting and eligibility decisions.']
+] as const;
+
 const journey = [
   ['01', 'Choose your goal', 'Tell New850 what you are trying to finance or purchase.'],
   ['02', 'Build your Financial Passport', 'Measure credit, debt, affordability, reserves and documentation in one reusable profile.'],
@@ -37,7 +43,7 @@ export default function MarketplacePage() {
           <p>One readiness-first marketplace for loans, credit cards, auto financing, mortgages and business funding—built to help you prepare before you apply.</p>
           <div className="publicCinemaActions">
             <Link className="goldButton" href="/get-started?service=approval-blueprint">Check my readiness first <span>→</span></Link>
-            <Link className="glassButton" href="#categories">Explore financial categories</Link>
+            <Link className="glassButton" href="/marketplace#categories">Explore financial categories</Link>
           </div>
           <div className="mpTrustStrip" aria-label="Marketplace principles">
             <span>Goal-first</span><span>0–100 readiness</span><span>Consent-controlled</span><span>Partner-led decisions</span>
@@ -56,6 +62,22 @@ export default function MarketplacePage() {
           <small>READINESS</small><strong>82</strong><span>Illustrative planning score</span>
           <div className="mpScoreBar"><i /></div>
           <div className="mpScoreMeta"><span>Credit profile</span><b>Measured</b><span>Affordability</span><b>Measured</b><span>Documentation</span><b>Measured</b></div>
+        </div>
+      </section>
+
+      <section className="mpStateSection" aria-labelledby="readiness-states-heading">
+        <div className="mpSectionHead">
+          <div><div className="cinematicEyebrow">READINESS STATES</div><h2 id="readiness-states-heading">Know what the score means before you shop.</h2></div>
+          <p>The score is a planning signal, not a lender decision. New850 uses readiness states to separate preparation from comparison.</p>
+        </div>
+        <div className="mpStateGrid">
+          {readinessStates.map(([state, title, text], index) => (
+            <article key={state} className={index === 2 ? 'isReady' : ''}>
+              <span>{state}</span>
+              <h3>{title}</h3>
+              <p>{text}</p>
+            </article>
+          ))}
         </div>
       </section>
 

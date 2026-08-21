@@ -42,7 +42,7 @@ export default async function LaunchCenterPage() {
   return (
     <main>
       <header className="appHeader">
-        <div><div className="kicker">CREDIT REPAIR MASTERS / PRODUCTION / v4.0</div><h1>Production Launch Center</h1><p className="subtitle">One place to decide whether the operating system is safe to launch, bill, and scale.</p></div>
+        <div><div className="kicker">NEW850.COM / PRODUCTION / v4.0</div><h1>Production Launch Center</h1><p className="subtitle">One place to decide whether the operating system is safe to launch, bill, and scale.</p></div>
         <div className="headerActions"><Link className="secondaryButton" href="/dashboard">Dashboard</Link><Link className="secondaryButton" href="/billing">Billing</Link><Link className="secondaryButton" href="/demo">Demo OS</Link><SignOutButton /></div>
       </header>
 

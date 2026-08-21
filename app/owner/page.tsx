@@ -19,7 +19,7 @@ type ModuleCard = {
 
 const modules: ModuleCard[] = [
   { label: 'CUSTOMERS', title: 'Client Operations', detail: 'Intake, onboarding, readiness plans, progress, cases and customer lifecycle.', href: '/clients', cta: 'Open clients' },
-  { label: 'READINESS', title: 'Readiness Engine', detail: 'Goal-specific scoring, blocker analysis, 7/30/60/90-day plans and Ready-to-Shop gates.', href: '/loan-readiness', cta: 'Open readiness' },
+  { label: 'READINESS', title: 'Readiness Engine', detail: 'Goal-specific scoring, blocker analysis, 7/30/60/90-day plans and Ready-to-Shop gates.', href: '/owner/readiness', cta: 'Open readiness' },
   { label: 'MARKETPLACE', title: 'Partner Marketplace', detail: 'Partner eligibility, consented handoffs, outcome attribution and marketplace revenue.', href: '/owner/marketplace', cta: 'Open marketplace' },
   { label: 'EVIDENCE', title: 'Document Vault', detail: 'Customer evidence, authorizations, reports, supporting documents and governed records.', href: '/documents', cta: 'Open documents' },
   { label: 'REVENUE', title: 'Billing & Offers', detail: 'Commercial services, invoice eligibility, settlement controls and revenue operations.', href: '/billing', cta: 'Open billing' },
@@ -66,7 +66,7 @@ export default async function OwnerPage() {
           <p className="subtitle">Control customers, readiness, Financial Passport, marketplace partners, handoffs, outcomes, revenue, compliance, growth, AI operations and production release gates.</p>
         </div>
         <div className="ownerNav">
-          <Link className="primaryButton" href="/loan-readiness">Readiness</Link>
+          <Link className="primaryButton" href="/owner/readiness">Readiness</Link>
           <Link className="secondaryButton" href="/owner/marketplace">Marketplace</Link>
           <Link className="secondaryButton" href="/clients">Clients</Link>
           <Link className="secondaryButton" href="/billing">Revenue</Link>

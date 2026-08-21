@@ -19,7 +19,7 @@ export default async function PortalAccessPage() {
   return (
     <main>
       <header className="appHeader">
-        <div><div className="kicker">CREDIT REPAIR MASTERS / CUSTOMER PORTAL</div><h1>Portal Access</h1><p className="subtitle">Provision secure customer access without exposing internal staff tools.</p></div>
+        <div><div className="kicker">NEW850.COM / CUSTOMER PORTAL</div><h1>Portal Access</h1><p className="subtitle">Provision secure customer access without exposing internal staff tools.</p></div>
         <div className="headerActions"><Link className="secondaryButton" href="/clients">Clients</Link><Link className="secondaryButton" href="/dashboard">Dashboard</Link><SignOutButton /></div>
       </header>
       <section className="grid">

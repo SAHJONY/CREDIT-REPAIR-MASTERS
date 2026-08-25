@@ -4,7 +4,7 @@ import { z } from 'zod';
 import { getCustomerPortalSession } from '@/lib/customer-portal';
 import { getPlatformStore } from '@/lib/platform-store';
 import { isDocumentShared } from '@/lib/document-sharing';
-import { signatureMatchesCurrentVersion, signatureRequest } from '@/lib/document-workflow';
+import { signatureMatchesCurrentVersion, signatureRequestMatchesCurrentVersion } from '@/lib/document-workflow';
 
 const bodySchema = z.object({
   signerName: z.string().trim().min(2).max(160),
@@ -27,8 +27,8 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
   ]);
   const document = evidence.find((item) => item.id === id);
   if (!document || !isDocumentShared(audit, id)) return NextResponse.json({ error: 'DOCUMENT_NOT_AVAILABLE' }, { status: 404 });
-  if (!signatureRequest(audit, id)) return NextResponse.json({ error: 'SIGNATURE_NOT_REQUESTED' }, { status: 409 });
   if (!document.sha256) return NextResponse.json({ error: 'DOCUMENT_VERSION_NOT_LOCKED' }, { status: 409 });
+  if (!signatureRequestMatchesCurrentVersion(audit, document)) return NextResponse.json({ error: 'CURRENT_VERSION_SIGNATURE_NOT_REQUESTED' }, { status: 409 });
   if (signatureMatchesCurrentVersion(audit, document)) return NextResponse.json({ signed: true, alreadySigned: true });
 
   const now = new Date().toISOString();

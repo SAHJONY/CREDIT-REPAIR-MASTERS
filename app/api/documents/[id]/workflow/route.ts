@@ -4,7 +4,7 @@ import { z } from 'zod';
 import { authenticateBusinessUser, authorizeRoles } from '@/lib/api-auth';
 import { getPlatformStore } from '@/lib/platform-store';
 import { documentMetadata } from '@/lib/document-sharing';
-import { signatureMatchesCurrentVersion, signatureRecord } from '@/lib/document-workflow';
+import { sentRecord, signatureMatchesCurrentVersion, signatureRecord } from '@/lib/document-workflow';
 
 const bodySchema = z.object({
   clientId: z.string().trim().min(3).max(160),
@@ -89,6 +89,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
     return NextResponse.json({ id, state: 'sent', sentAt: now });
   }
 
+  if (!sentRecord(audit, id)) return NextResponse.json({ error: 'DOCUMENT_NOT_SENT' }, { status: 409 });
   await store.appendAudit(auth.organizationId, {
     id: `audit_${randomUUID()}`,
     organizationId: auth.organizationId,

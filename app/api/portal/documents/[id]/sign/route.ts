@@ -36,7 +36,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
     id: `audit_${randomUUID()}`,
     organizationId: portal.organizationId,
     actorType: 'user',
-    actorId: portal.member.id,
+    actorId: portal.memberId,
     action: 'document.signed',
     resourceType: 'evidence',
     resourceId: document.id,

@@ -5,6 +5,7 @@ import { DocumentUploadForm } from '@/components/document-upload-form';
 import { DocumentShareActions } from '@/components/document-share-actions';
 import { DocumentWorkflowActions } from '@/components/document-workflow-actions';
 import { SignOutButton } from '@/components/sign-out-button';
+import { bureauMailProviderConfigured, creditBureauMailingAddresses } from '@/lib/bureau-mail';
 import { demoDocuments } from '@/lib/demo-documents';
 import { documentMetadata, isDocumentShared, isManagedDocument } from '@/lib/document-sharing';
 import { clientDocumentStatusLabel, documentWorkflowState, signatureMatchesCurrentVersion } from '@/lib/document-workflow';
@@ -21,6 +22,7 @@ export default async function DocumentsCenter() {
 
   const store = getPlatformStore();
   const [clients, audit] = await Promise.all([store.listClients(session.organizationId), store.listAudit(session.organizationId, 500)]);
+  const mailConfigured = bureauMailProviderConfigured();
   const documents = [] as Array<{ clientId: string; clientName: string; evidence: Awaited<ReturnType<typeof store.listEvidence>>[number] }>;
   for (const client of clients) {
     const evidence = await store.listEvidence(session.organizationId, client.id);
@@ -28,10 +30,10 @@ export default async function DocumentsCenter() {
   }
 
   return <main>
-    <header className="appHeader"><div><div className="kicker">NEW850.COM / DOCUMENTS</div><h1>Document & Letter Control Center</h1><p className="subtitle">Private customer files, client-specific letters, electronic signatures, version locks and auditable New850 sending controls.</p></div><div className="headerActions"><Link className="secondaryButton" href="/dashboard">Dashboard</Link><Link className="secondaryButton" href="/demo/documents">Document examples</Link><SignOutButton /></div></header>
+    <header className="appHeader"><div><div className="kicker">NEW850.COM / DOCUMENTS</div><h1>Document & Letter Control Center</h1><p className="subtitle">Private customer files, client-specific letters, electronic signatures, print controls and certified bureau mailing.</p></div><div className="headerActions"><Link className="secondaryButton" href="/dashboard">Dashboard</Link><Link className="secondaryButton" href="/demo/documents">Document examples</Link><SignOutButton /></div></header>
     <section className="grid">
-      <div className="card span5"><div className="label">UPLOAD</div><h2>Add a customer document</h2><p className="small">Files stay private in the Evidence Vault. Ordinary documents may be shared; client letters follow the signature workflow before New850 sends them.</p>{session.member.role === 'auditor' ? <div className="emptyState">Auditors have read-only access.</div> : <DocumentUploadForm clients={clients.map((client) => ({ id: client.id, name: client.displayName }))} />}</div>
-      <div className="card span7"><div className="label">PROPRIETARY WORKFLOW</div><h2>Master templates never enter the client portal</h2><p className="small">Clients review only their final client-specific letter. The system binds their electronic signature to that document's SHA-256 version. If the file changes, a new signature is required.</p><div className="guardrail">New850's master templates, prompts, internal notes and generation logic remain Owner OS only. Required consumer disclosures remain separately deliverable when applicable.</div></div>
+      <div className="card span5"><div className="label">UPLOAD</div><h2>Add a customer document</h2><p className="small">Files stay private in the Evidence Vault. Ordinary documents may be shared; client letters follow the signature workflow before New850 prints or sends them.</p>{session.member.role === 'auditor' ? <div className="emptyState">Auditors have read-only access.</div> : <DocumentUploadForm clients={clients.map((client) => ({ id: client.id, name: client.displayName }))} />}</div>
+      <div className="card span7"><div className="label">PRINT & MAIL</div><h2>{mailConfigured ? 'Certified bureau mail is configured' : 'Printing ready · certified mail setup required'}</h2><p className="small">Signed PDF letters can be printed locally. When the mail provider is configured, New850 submits the exact signed version for USPS First-Class Certified Mail and records the provider ID, tracking data and destination in the audit ledger.</p><div className="guardrail">Current bureau destinations: Equifax — {creditBureauMailingAddresses.equifax.addressLine1}, Atlanta GA {creditBureauMailingAddresses.equifax.zip}; Experian — {creditBureauMailingAddresses.experian.addressLine1}, Allen TX {creditBureauMailingAddresses.experian.zip}; TransUnion — {creditBureauMailingAddresses.transunion.addressLine1}, Chester PA {creditBureauMailingAddresses.transunion.zip}.</div></div>
 
       <div className="card span12">
         <div className="label">CLIENT-VOICE DISPUTE DRAFTING</div>
@@ -55,7 +57,7 @@ export default async function DocumentsCenter() {
           </div>
           <div style={{ display: 'grid', gap: 8, justifyItems: 'end' }}>
             <span className={`pill ${isLetter ? workflowState === 'sent' || workflowState === 'response_received' ? 'low' : workflowState === 'signature_required' ? 'medium' : versionSigned ? 'low' : 'medium' : shared ? 'low' : 'medium'}`}>{isLetter ? workflowState.replaceAll('_',' ').toUpperCase() : shared ? 'SHARED' : 'INTERNAL'}</span>
-            {session.member.role === 'auditor' ? <a className="secondaryButton" href={`/api/documents/${encodeURIComponent(evidence.id)}/content`} target="_blank" rel="noreferrer">View</a> : isLetter ? <><a className="secondaryButton" href={`/api/documents/${encodeURIComponent(evidence.id)}/content`} target="_blank" rel="noreferrer">Review Final</a><DocumentWorkflowActions id={evidence.id} clientId={clientId} state={workflowState} versionSigned={versionSigned} /></> : <DocumentShareActions id={evidence.id} clientId={clientId} shared={shared} />}
+            {session.member.role === 'auditor' ? <a className="secondaryButton" href={`/api/documents/${encodeURIComponent(evidence.id)}/content`} target="_blank" rel="noreferrer">View</a> : isLetter ? <><a className="secondaryButton" href={`/api/documents/${encodeURIComponent(evidence.id)}/content`} target="_blank" rel="noreferrer">Review Final</a><DocumentWorkflowActions id={evidence.id} clientId={clientId} state={workflowState} versionSigned={versionSigned} mailConfigured={mailConfigured} /></> : <DocumentShareActions id={evidence.id} clientId={clientId} shared={shared} />}
           </div>
         </div>;
       }) : <div className="emptyState">No managed customer documents uploaded yet.</div>}</div>

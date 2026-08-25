@@ -76,17 +76,15 @@ type LobLetterResult = {
   carrier?: string;
 };
 
-function lobAddress(address: PostalAddress) {
-  return {
-    ...(address.name ? { name: address.name } : {}),
-    ...(address.company ? { company: address.company } : {}),
-    address_line1: address.addressLine1,
-    ...(address.addressLine2 ? { address_line2: address.addressLine2 } : {}),
-    address_city: address.city,
-    address_state: address.state,
-    address_zip: address.zip,
-    address_country: 'US'
-  };
+function appendAddress(form: FormData, prefix: 'to' | 'from', address: PostalAddress) {
+  if (address.name) form.set(`${prefix}[name]`, address.name);
+  if (address.company) form.set(`${prefix}[company]`, address.company);
+  form.set(`${prefix}[address_line1]`, address.addressLine1);
+  if (address.addressLine2) form.set(`${prefix}[address_line2]`, address.addressLine2);
+  form.set(`${prefix}[address_city]`, address.city);
+  form.set(`${prefix}[address_state]`, address.state);
+  form.set(`${prefix}[address_zip]`, address.zip);
+  form.set(`${prefix}[address_country]`, 'US');
 }
 
 export async function sendCertifiedLetterViaLob(input: {
@@ -107,9 +105,9 @@ export async function sendCertifiedLetterViaLob(input: {
   form.set('color', 'false');
   form.set('double_sided', 'true');
   form.set('use_type', 'operational');
-  form.set('to', JSON.stringify(lobAddress(creditBureauMailingAddresses[input.bureau])));
-  form.set('from', JSON.stringify(lobAddress(from)));
-  form.set('metadata', JSON.stringify(input.metadata));
+  appendAddress(form, 'to', creditBureauMailingAddresses[input.bureau]);
+  appendAddress(form, 'from', from);
+  for (const [key, value] of Object.entries(input.metadata)) form.set(`metadata[${key}]`, value);
   form.set('file', input.pdf, input.filename);
 
   const response = await fetch('https://api.lob.com/v1/letters', {

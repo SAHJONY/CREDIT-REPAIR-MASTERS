@@ -10,7 +10,7 @@ const ownerItems = [
 ] as const;
 
 const portalItems = [
-  ['⌂','Dashboard','/portal'],['◈','Financial Passport','/portal/passport'],['◇','Marketplace','/portal/marketplace'],['↗','Credit Progress','/portal/progress'],['▣','Reports & Scores','/portal/reports'],['▤','Documents','/portal/documents'],['▱','Payments','/portal/payments'],['◎','Account','/portal/account']
+  ['⌂','Dashboard','/portal'],['◉','Secure Connect','/portal/connect'],['◈','Financial Passport','/portal/passport'],['◇','Marketplace','/portal/marketplace'],['↗','Credit Progress','/portal/progress'],['▣','Reports & Scores','/portal/reports'],['▤','Documents','/portal/documents'],['▱','Payments','/portal/payments'],['◎','Account','/portal/account']
 ] as const;
 
 const publicPrefixes = ['/services','/get-started','/loans','/auto','/mortgage','/business-funding','/marketplace','/contact'] as const;

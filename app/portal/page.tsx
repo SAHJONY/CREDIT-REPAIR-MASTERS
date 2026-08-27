@@ -21,6 +21,12 @@ export default async function PortalHome() {
   const progress = Math.round((completed / 3) * 100);
   const firstName = portal.client.displayName?.split(' ')[0] || 'Client';
 
+  const nextAction = !analysisConsent
+    ? { href: '/portal/consents', label: 'Authorize analysis', title: 'Authorize your readiness analysis', detail: 'Review and approve the permission New850 needs before analyzing your credit report.' }
+    : !reports.length
+      ? { href: '/portal/reports', label: 'Get & upload report', title: 'Add your credit report', detail: 'Get your report from an official source and upload it securely. We never ask for bureau passwords.' }
+      : { href: '/portal/progress', label: 'Open action plan', title: 'Review your action plan', detail: 'Your intake is ready. See what New850 recommends next and monitor progress in one place.' };
+
   const steps = [
     { label: 'Account Activated', detail: 'Secure portal', state: 'done' },
     { label: 'Reports Received', detail: reports.length ? `${reports.length} received` : 'Pending', state: reports.length ? 'done' : 'current' },
@@ -36,14 +42,14 @@ export default async function PortalHome() {
         </div>
 
         <nav className={styles.nav} aria-label="Client portal navigation">
-          <Link href="/portal"><span className={styles.icon}>⌂</span>Dashboard</Link>
-          <Link href="/portal/passport"><span className={styles.icon}>◎</span>Financial Passport</Link>
-          <Link href="/portal/progress"><span className={styles.icon}>▥</span>Readiness Progress</Link>
-          <Link href="/portal/reports"><span className={styles.icon}>▥</span>Reports & Scores</Link>
-          <Link href="/portal/documents"><span className={styles.icon}>▤</span>Documents</Link>
+          <Link href="/portal"><span className={styles.icon}>⌂</span>Home</Link>
+          <Link href="/portal/passport"><span className={styles.icon}>◎</span>My Readiness</Link>
+          <Link href="/portal/progress"><span className={styles.icon}>↗</span>Action Plan</Link>
+          <Link href="/portal/documents"><span className={styles.icon}>▤</span>Documents & Letters</Link>
+          <Link href="/portal/marketplace"><span className={styles.icon}>◇</span>Marketplace</Link>
           <Link href="/portal/payments"><span className={styles.icon}>▱</span>Payments</Link>
-          <Link href="/portal/progress"><span className={styles.icon}>◇</span>Education Center</Link>
-          <Link href="/portal/account"><span className={styles.icon}>◯</span>Account</Link>
+          <Link href="/portal/reports"><span className={styles.icon}>▥</span>Credit Reports</Link>
+          <Link href="/portal/account"><span className={styles.icon}>◯</span>Account & Help</Link>
         </nav>
 
         <div className={styles.clientBox}>
@@ -60,8 +66,8 @@ export default async function PortalHome() {
         </div>
 
         <div className={styles.helpBox}>
-          <div><div className={styles.tiny}>Need help?</div><strong>Review your account</strong></div>
-          <Link className={styles.helpButton} href="/portal/account">Open Account</Link>
+          <div><div className={styles.tiny}>Need help?</div><strong>Account & support</strong></div>
+          <Link className={styles.helpButton} href="/portal/account">Get Help</Link>
         </div>
       </aside>
 
@@ -71,59 +77,33 @@ export default async function PortalHome() {
           <div className={styles.heroGlow} aria-hidden="true" />
           <div className={styles.heroInner}>
             <div className={styles.heroCopy}>
-              <p>Good evening,</p>
+              <p>Welcome back,</p>
               <h1><span>{firstName} 👋</span></h1>
-              <p>Here’s where your financial readiness<br/>plan stands today.</p>
-              <Link className={styles.primary} href="/portal/passport">Open Financial Passport <span>→</span></Link>
+              <p>Your next step is ready.<br/>Keep moving toward your financing goal.</p>
+              <Link className={styles.primary} href={nextAction.href}>{nextAction.label} <span>→</span></Link>
             </div>
 
             <div className={styles.scoreCard}>
-              <h3>Overall Plan Health</h3>
+              <h3>Readiness Setup</h3>
               <div>
                 <div><span className={styles.scoreValue}>{progress}%</span><span className={styles.scoreState}>{ready ? 'On track' : 'Building'}</span></div>
-                <div className={styles.scoreMeta}>↑ Secure milestones completed<b>Next Goal: Readiness Review</b>{completed}/3 intake milestones complete</div>
+                <div className={styles.scoreMeta}>Secure milestones completed<b>Next: {nextAction.label}</b>{completed}/3 intake milestones complete</div>
               </div>
               <div className={styles.ring} style={{ '--p': `${progress * 3.6}deg` } as React.CSSProperties}>
-                <div className={styles.ringContent}><b>{progress}%</b><small>to intake ready</small></div>
+                <div className={styles.ringContent}><b>{progress}%</b><small>setup complete</small></div>
               </div>
             </div>
           </div>
         </div>
 
         <main className={styles.main}>
-          <section className={styles.metrics}>
-            <Link className={styles.metric} href="/portal/passport">
-              <div className={styles.metricHeader}><span className={styles.metricIcon}>◎</span>Financial Passport</div>
-              <div className={styles.metricValue}>{progress}%</div>
-              <small>Reusable readiness profile</small>
-              <div className={styles.metricLink}>Open Passport →</div>
-            </Link>
-            <Link className={styles.metric} href="/portal/reports">
-              <div className={styles.metricHeader}><span className={styles.metricIcon}>▣</span>Credit Reports</div>
-              <div className={styles.metricValue}>{reports.length}</div>
-              <small>{reports.length ? 'Reports securely received' : 'Upload your first report'}</small>
-              <div className={styles.metricLink}>View Reports →</div>
-            </Link>
-            <Link className={styles.metric} href="/portal/progress">
-              <div className={styles.metricHeader}><span className={styles.metricIcon}>↗</span>Readiness Progress</div>
-              <div className={styles.metricValue}>{ready ? 'Ready' : completed}</div>
-              <small>{ready ? 'File ready for review' : 'Secure intake milestones active'}</small>
-              <div className={styles.metricLink}>View Progress →</div>
-            </Link>
-            <Link className={styles.metric} href="/portal/documents">
-              <div className={styles.metricHeader}><span className={styles.metricIcon}>▤</span>Documents</div>
-              <div className={styles.metricValue}>{documents.length}</div>
-              <small>Agreements, letters and shared files</small>
-              <div className={styles.metricLink}>View Documents →</div>
-            </Link>
-          </section>
-
           <section className={styles.next}>
             <div className={styles.nextLeft}>
-              <div className={styles.eyebrow}>Next Up</div>
-              <h2>{ready ? 'Your file is ready for the next readiness review.' : reports.length ? 'We’re reviewing your submitted financial information.' : 'Complete your secure intake.'}</h2>
-              <p>{ready ? 'Your authorization and report are on file. Your readiness workflow can continue without another upload.' : 'Complete the remaining secure steps. Credit bureau passwords are never requested.'}</p>
-              <strong className={styles.calm}>◈ {ready ? 'Your next recommendation will appear in your readiness plan.' : 'Your next required action is shown in your progress.'}</strong>
+              <div className={styles.eyebrow}>DO THIS NEXT</div>
+              <h2>{nextAction.title}</h2>
+              <p>{nextAction.detail}</p>
+              <Link className={styles.primary} href={nextAction.href}>{nextAction.label} <span>→</span></Link>
+              <strong className={styles.calm}>◈ One clear next step at a time. Your portal updates as your file moves forward.</strong>
             </div>
             <div className={styles.timeline}>
               {steps.map((step) => (
@@ -135,19 +115,46 @@ export default async function PortalHome() {
             </div>
           </section>
 
+          <section className={styles.metrics}>
+            <Link className={styles.metric} href="/portal/passport">
+              <div className={styles.metricHeader}><span className={styles.metricIcon}>◎</span>My Readiness</div>
+              <div className={styles.metricValue}>{progress}%</div>
+              <small>Your reusable financial readiness profile</small>
+              <div className={styles.metricLink}>Open My Readiness →</div>
+            </Link>
+            <Link className={styles.metric} href="/portal/progress">
+              <div className={styles.metricHeader}><span className={styles.metricIcon}>↗</span>Action Plan</div>
+              <div className={styles.metricValue}>{ready ? 'Ready' : completed}</div>
+              <small>{ready ? 'Your plan is ready for review' : 'Secure setup steps in progress'}</small>
+              <div className={styles.metricLink}>See What To Do →</div>
+            </Link>
+            <Link className={styles.metric} href="/portal/documents">
+              <div className={styles.metricHeader}><span className={styles.metricIcon}>▤</span>Documents & Letters</div>
+              <div className={styles.metricValue}>{documents.length}</div>
+              <small>Files, signature requests and letter status</small>
+              <div className={styles.metricLink}>Open Documents →</div>
+            </Link>
+            <Link className={styles.metric} href="/portal/marketplace">
+              <div className={styles.metricHeader}><span className={styles.metricIcon}>◇</span>Marketplace</div>
+              <div className={styles.metricValue}>{ready ? 'Open' : 'Later'}</div>
+              <small>Compare options when your readiness supports it</small>
+              <div className={styles.metricLink}>Explore Marketplace →</div>
+            </Link>
+          </section>
+
           <section className={styles.bottom}>
             <div className={styles.activity}>
-              <h3>Recent Activity</h3>
-              <div className={styles.activityRow}><span>Current</span><span>Portal account active</span><span>Completed</span></div>
-              <div className={styles.activityRow}><span>Current</span><span>Credit analysis authorization</span><span>{analysisConsent ? 'Completed' : 'Pending'}</span></div>
-              <div className={styles.activityRow}><span>Current</span><span>Credit reports</span><span>{reports.length ? 'Received' : 'Pending'}</span></div>
-              <div className={styles.activityRow}><span>Current</span><span>Readiness intake</span><span>{ready ? 'Ready' : 'In progress'}</span></div>
+              <h3>Your Journey</h3>
+              <div className={styles.activityRow}><span>1</span><span>Authorize secure analysis</span><span>{analysisConsent ? 'Completed' : 'Next'}</span></div>
+              <div className={styles.activityRow}><span>2</span><span>Add your credit report</span><span>{reports.length ? 'Completed' : analysisConsent ? 'Next' : 'Waiting'}</span></div>
+              <div className={styles.activityRow}><span>3</span><span>Follow your action plan</span><span>{ready ? 'Ready' : 'Waiting'}</span></div>
+              <div className={styles.activityRow}><span>4</span><span>Compare financing options when ready</span><span>{ready ? 'Available' : 'Later'}</span></div>
             </div>
             <div className={styles.future}>
               <div className={styles.futureContent}>
-                <h2>Build Your Financial Future</h2>
-                <p>Your readiness profile, goals, documents and progress stay together in one private experience before you compare financing options.</p>
-                <Link href="/portal/passport">Explore Your Financial Passport →</Link>
+                <h2>Everything in one place</h2>
+                <p>Your readiness, action plan, reports, letters, payments and marketplace journey stay together in one private experience.</p>
+                <Link href="/portal/progress">Open Your Action Plan →</Link>
               </div>
             </div>
           </section>

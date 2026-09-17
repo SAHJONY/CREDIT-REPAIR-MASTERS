@@ -1,0 +1,8 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "allowImportingTsExtensions": true,
+    "noEmit": true
+  },
+  "include": ["lib/i18n/**/*.ts", "lib/sofia-credit/**/*.ts", "lib/ops-cycles/**/*.ts"]
+}

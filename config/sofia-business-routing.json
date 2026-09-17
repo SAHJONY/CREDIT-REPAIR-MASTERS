@@ -58,6 +58,11 @@
       "id": "energy",
       "name": "SAHJONY Energy",
       "isolation": "business"
+    },
+    {
+      "id": "credit_repair",
+      "name": "New850 Credit Repair",
+      "isolation": "business"
     }
   ],
   "governance": {

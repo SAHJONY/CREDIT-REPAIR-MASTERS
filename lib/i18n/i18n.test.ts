@@ -1,8 +1,8 @@
 import { describe, it } from "node:test";
 import assert from "node:assert/strict";
-import { es, en } from "./dictionaries.ts";
-import { t } from "./t.ts";
-import { LANGUAGE_DEFAULT } from "./index.ts";
+import { es, en } from "./dictionaries";
+import { t } from "./t";
+import { LANGUAGE_DEFAULT } from "./index";
 import {
   FCRA_RIGHTS_LINE_ES,
   disputeRound1ES,
@@ -11,9 +11,9 @@ import {
   payForDeleteES,
   goodwillES,
   type DisputeRoundInputES,
-} from "../dispute-templates-es.ts";
-import { commsES, commsEN } from "../customer-comms-es.ts";
-import { BANNED_ES, BANNED_EN, scanNoPromises } from "./banned.ts";
+} from "../dispute-templates-es";
+import { commsES, commsEN } from "../customer-comms-es";
+import { BANNED_ES, BANNED_EN, scanNoPromises } from "./banned";
 
 const sampleInput: DisputeRoundInputES = {
   fecha: "17 de septiembre de 2026",

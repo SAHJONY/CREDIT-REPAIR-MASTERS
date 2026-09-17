@@ -1,4 +1,4 @@
-import { dictionaries, type SupportedLang } from "./dictionaries.ts";
+import { dictionaries, type SupportedLang } from "./dictionaries";
 
 /**
  * t(lang, key, vars?) — translate a dictionary key.

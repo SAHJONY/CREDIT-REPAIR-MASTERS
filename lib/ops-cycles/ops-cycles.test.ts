@@ -25,7 +25,7 @@ import {
   runDailySweep,
   type InvestigationWindow,
   type CreditEvent
-} from "./index.ts";
+} from "./index";
 
 // ---------- investigation-windows ----------
 

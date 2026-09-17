@@ -5,9 +5,9 @@
  * hardcoded ES map in components/global-language-switcher.tsx (left
  * untouched; do not modify or break it).
  */
-export { dictionaries, es, en } from "./dictionaries.ts";
-export type { SupportedLang } from "./dictionaries.ts";
-export { t } from "./t.ts";
-export { BANNED_ES, BANNED_EN, scanNoPromises } from "./banned.ts";
+export { dictionaries, es, en } from "./dictionaries";
+export type { SupportedLang } from "./dictionaries";
+export { t } from "./t";
+export { BANNED_ES, BANNED_EN, scanNoPromises } from "./banned";
 
 export const LANGUAGE_DEFAULT = "es" as const;

@@ -31,8 +31,8 @@ import {
   openDisputeWindow,
   describePipelineState,
   advanceIntakeRound,
-} from "./index.ts";
-import { findDormant } from "../ops-cycles/dormant-reengagement.ts";
+} from "./index";
+import { findDormant } from "../ops-cycles/dormant-reengagement";
 
 const ORG = "org_test_intake";
 const ACTOR = "owner-test";

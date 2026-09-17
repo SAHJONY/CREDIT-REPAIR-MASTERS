@@ -21,9 +21,9 @@ import {
   classifyWithPolicy,
   type DraftKind,
   type DraftMessage,
-} from "./concierge.ts";
-import { enqueueDraft, listPending, decideDraft, markSent, maskPhone } from "./queue.ts";
-import { assertDraftOnly, checkConciergeAuthority } from "./guards.ts";
+} from "./concierge";
+import { enqueueDraft, listPending, decideDraft, markSent, maskPhone } from "./queue";
+import { assertDraftOnly, checkConciergeAuthority } from "./guards";
 
 const FAKE_TO = "+15551234567";
 const CASE = { to: FAKE_TO, caseId: "case_test_001", clientName: "María Prueba" };
@@ -133,7 +133,7 @@ describe("guards", () => {
     const draft = statusUpdate({ ...CASE, statusLine: "x" });
     assertDraftOnly(draft);
     assert.throws(() => assertDraftOnly({ ...draft, status: "approved" }));
-    assert.throws(() => assertDraftOnly({ ...draft, authority: "autonomous" }));
+    assert.throws(() => assertDraftOnly({ ...draft, authority: "autonomous" as unknown as DraftMessage["authority"] }));
   });
 
   it("checkConciergeAuthority: concierge absent from registry, never autonomous", () => {

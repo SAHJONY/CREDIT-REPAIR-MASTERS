@@ -12,7 +12,7 @@
  * Pure logic. No I/O, no sends.
  */
 
-import type { DisputeRound, WindowStatus } from "./investigation-windows.ts";
+import type { DisputeRound, WindowStatus } from "./investigation-windows";
 
 export type RoundState = DisputeRound | "done";
 

@@ -9,10 +9,10 @@
  * I/O or sends — queueing/sending belongs to other layers.
  */
 
-export * from "./investigation-windows.ts";
-export * from "./round-sequencer.ts";
-export * from "./dormant-reengagement.ts";
-export * from "./event-feed.ts";
+export * from "./investigation-windows";
+export * from "./round-sequencer";
+export * from "./dormant-reengagement";
+export * from "./event-feed";
 
 import {
   refreshWindows,
@@ -20,14 +20,14 @@ import {
   draftEscalation,
   type InvestigationWindow,
   type EscalationDraft
-} from "./investigation-windows.ts";
+} from "./investigation-windows";
 import {
   findDormant,
   draftNudge,
   type CaseActivity,
   type NudgeDraft
-} from "./dormant-reengagement.ts";
-import { recordEvent, type CreditEvent } from "./event-feed.ts";
+} from "./dormant-reengagement";
+import { recordEvent, type CreditEvent } from "./event-feed";
 
 export type DraftDescriptor = EscalationDraft | NudgeDraft;
 

@@ -333,7 +333,7 @@ describe("pipeline wiring", () => {
 
 describe("draft-only posture", () => {
   it("the module exposes no send/dispatch path", async () => {
-    const mod = (await import("./index.ts")) as unknown as Record<string, unknown>;
+    const mod = (await import("./index")) as unknown as Record<string, unknown>;
     const suspicious = Object.keys(mod).filter((k) => /^(send|markSent|dispatch|transmit)/i.test(k));
     assert.deepEqual(suspicious, []);
   });

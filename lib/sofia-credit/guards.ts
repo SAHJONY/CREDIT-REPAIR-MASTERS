@@ -13,8 +13,8 @@
  * - assertDraftOnly() throws if a draft is not pending approval, so no code
  *   path can silently advance a draft toward a send.
  */
-import { getAgent } from "../agent-registry.ts";
-import type { DraftMessage } from "./concierge.ts";
+import { getAgent } from "../agent-registry";
+import type { DraftMessage } from "./concierge";
 
 export const CONCIERGE_AUTHORITY = "approval_required" as const;
 export const CONCIERGE_AGENT_ID = "sofia-credit-concierge";

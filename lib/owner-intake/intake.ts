@@ -21,9 +21,9 @@ import { appendFileSync, existsSync, mkdirSync, readFileSync, writeFileSync } fr
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { randomUUID } from "node:crypto";
-import { encryptField, decryptField } from "./crypto.ts";
-import { assertNoSsnLike, normalizePhone, validateIntakeFields } from "./guards.ts";
-import { maskPhone } from "../sofia-credit/queue.ts";
+import { encryptField, decryptField } from "./crypto";
+import { assertNoSsnLike, normalizePhone, validateIntakeFields } from "./guards";
+import { maskPhone } from "../sofia-credit/queue";
 
 const MODULE_DIR = dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = join(MODULE_DIR, "..", "..");

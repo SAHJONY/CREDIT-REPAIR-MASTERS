@@ -12,19 +12,19 @@
  * follows the sequencer's own rules, and every customer-facing artifact
  * (dispute letters, nudges) remains draft-only in the approval queue.
  */
-import { nextRound, type RoundInput } from "../ops-cycles/round-sequencer.ts";
+import { nextRound, type RoundInput } from "../ops-cycles/round-sequencer";
 import {
   openWindow,
   type Bureau,
   type DisputeRound,
   type InvestigationWindow
-} from "../ops-cycles/investigation-windows.ts";
-import type { CaseActivity } from "../ops-cycles/dormant-reengagement.ts";
+} from "../ops-cycles/investigation-windows";
+import type { CaseActivity } from "../ops-cycles/dormant-reengagement";
 import {
   updatePipelineFields,
   type IntakeCase,
   type PublicIntakeCase
-} from "./intake.ts";
+} from "./intake";
 
 /** Cases → dormant-nudge activity feed input (uses updatedAt as last activity). */
 export function intakeToActivity(cases: IntakeCase[]): CaseActivity[] {

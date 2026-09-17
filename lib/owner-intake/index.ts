@@ -6,7 +6,7 @@
  * SSNs are never extracted, stored, or logged.
  * Authority: draft-only. This module has no send path.
  */
-export * from "./crypto.ts";
-export * from "./guards.ts";
-export * from "./intake.ts";
-export * from "./pipeline.ts";
+export * from "./crypto";
+export * from "./guards";
+export * from "./intake";
+export * from "./pipeline";

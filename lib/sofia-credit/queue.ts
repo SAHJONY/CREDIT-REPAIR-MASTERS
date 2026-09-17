@@ -14,8 +14,8 @@
 import { appendFileSync, existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import type { DraftMessage } from "./concierge.ts";
-import { assertDraftOnly } from "./guards.ts";
+import type { DraftMessage } from "./concierge";
+import { assertDraftOnly } from "./guards";
 
 const MODULE_DIR = dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = join(MODULE_DIR, "..", "..");

@@ -16,7 +16,7 @@
  * - Bodies are warm, concise (<=400 chars), Spanish by default, with no score
  *   promises and no legal advice.
  */
-import { evaluateAction, type PolicyEvaluation, type ProposedAction } from "../compliance.ts";
+import { evaluateAction, type PolicyEvaluation, type ProposedAction } from "../compliance";
 
 export type DraftKind =
   | "status_update"

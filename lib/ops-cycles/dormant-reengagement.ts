@@ -53,7 +53,7 @@ export function draftNudge(c: DormantCase): NudgeDraft {
   const body = [
     `DRAFT — borrador de mensaje de reactivación (pendiente de aprobación).`,
     ``,
-    `Hola, ¿cómo estás? Soy Sofia, del equipo de Credit Repair Masters.`,
+    `Hola, ¿cómo estás? Soy Sofia, del equipo de New850.`,
     ``,
     `Pasaba a saludarte y ver cómo va todo con tu caso. Si tienes alguna`,
     `pregunta o necesitas ayuda con algún documento, aquí estoy para apoyarte.`,
